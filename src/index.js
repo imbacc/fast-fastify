@@ -10,6 +10,8 @@ require('./router/index')(fastify) 		//注册路由
 
 //启动服务
 fastify.listen(port, (err)=>{
-	if (err) throw err
+	if(err) {
+		throw err
+	}
 	console.log(`服务监听端口: ${port}...`)
 })

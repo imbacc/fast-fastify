@@ -16,11 +16,11 @@ module.exports = (fastify) => {
 		next()
 	})
 
-	fastify.addHook('preHandler', (request, reply, next) => {
-		// some code
-		console.log('preHandler...')
-		next()
-	})
+	// fastify.addHook('preHandler', (request, reply, next) => {
+	// 	// some code
+	// 	console.log('preHandler...')
+	// 	next()
+	// })
 
 	fastify.addHook('onResponse', (res, next) => {
 		// some code

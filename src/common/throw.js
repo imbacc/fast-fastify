@@ -9,7 +9,7 @@ module.exports = (fastify) => {
 	
 	fastify.setErrorHandler((error, reply)=>{
 		console.log('try error...')
-		// console.log(error)
+		console.log(error)
 		// console.log(reply)
 	})
 }

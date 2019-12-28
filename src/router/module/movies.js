@@ -1,4 +1,4 @@
-module.exports = [
+module.exports = (fastify) => [
 	{
 	  method: 'GET',
 	  url: '/movies',

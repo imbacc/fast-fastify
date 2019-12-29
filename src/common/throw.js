@@ -5,6 +5,7 @@ module.exports = (fastify) => {
 		console.log('try 404...')
 		// console.log(request)
 		// console.log(reply)
+		reply.code(404).send()
 	})
 	
 	fastify.setErrorHandler((error, reply)=>{

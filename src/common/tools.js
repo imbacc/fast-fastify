@@ -4,6 +4,4 @@ module.exports = (fastify) => {
 	fastify.register(require('fastify-jwt'), {
 	  secret: 'supersecret'
 	})
-	
-	
 }

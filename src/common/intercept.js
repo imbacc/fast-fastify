@@ -2,10 +2,9 @@ module.exports = (fastify) => {
 	console.log('开启拦截器...')
 
 	//请求
-	fastify.addHook('onRequest', async (req, reply, next) => {
+	fastify.addHook('onRequest', (req, reply, next) => {
 		if(req.req.url === '/favicon.ico') {
 			reply.code(404).send()
-			return
 		}else{
 			console.log({ url: req.req.url, id: req.id }, '请求拦截...')
 			next()

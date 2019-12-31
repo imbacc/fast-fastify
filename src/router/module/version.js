@@ -2,7 +2,7 @@ module.exports = (fastify) => [
 	{
 		method: 'GET',
 		url: '/version',
-		handler: async (request, reply) => {
+		handler: (request, reply) => {
 			console.log(request.query.id)
 			const exec = fastify.exec
 			const token = fastify.jwt.sign({user:'111'})

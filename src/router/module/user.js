@@ -3,7 +3,7 @@ module.exports = (fastify) => [
 	  //
 	  method: 'GET',
 	  url: '/signup',
-	  handler:async (request, reply) => {
+	  handler: (request, reply) => {
 		let token = fastify.jwt.sign({ foo: 'bar' })
 		reply.send(token)
 	  }
@@ -11,7 +11,7 @@ module.exports = (fastify) => [
 	{
 	  method: 'GET',
 	  url: '/login',
-	  handler:async (request, reply) => {
+	  handler: (request, reply) => {
 		reply.send({api: 'is login'})
 	  }
 	}

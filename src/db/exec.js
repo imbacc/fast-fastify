@@ -1,5 +1,6 @@
-const Bean = require('./bean.js')		//抽象实体类
-const config = require('./config.js')	//数据库配置
+const Bean = require('./bean.js')			//抽象实体类
+const config = require('./config.js')		//数据库配置
+const resultful = require('./resultful.js')	//返回数据构造
 
 const bean_list = config.bean
 const bean_class = {}
@@ -19,17 +20,18 @@ class exec {
 	
 	//执行SQL
 	async call(sql,value,fun){
-	    this.pool.getConnection((error,conn)=>{
+	    this.pool.getConnection(async (error,conn)=>{
 	        if(error){
 				console.log('conn err=',error)
-	            fun(false)
+				fun(resultful('WARN',error))
 	        }else{
 	            conn.query(sql,value,(err,res,fields)=>{
 					console.log('执行sql=',sql)
 	                conn.release()
 					if(err === null){
-						fun(res,fields)
+						fun(resultful('SUCCESS',res),fields)
 					}else{
+						fun(resultful('ERROR',err))
 						console.log('query err=',err)
 					}
 	            })

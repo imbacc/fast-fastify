@@ -1,7 +1,7 @@
 module.exports = (fastify) => [{
 	method: 'GET',
 	url: '/movies',
-	handler: (request, reply) => {
+	handler:async (request, reply) => {
 		reply.send({
 			api: 'is movies'
 		})

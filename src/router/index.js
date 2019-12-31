@@ -8,5 +8,5 @@ module.exports = (fastify) => {
 	list.forEach((info)=> info.map((module)=> fastify.route(module))) //循环子模块路由配置 生产路由
 	console.timeEnd('生产路由')
 	
-	console.log(list)
+	// console.log(list)	//打印所有路由
 }

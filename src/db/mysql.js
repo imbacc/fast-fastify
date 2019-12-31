@@ -9,8 +9,8 @@ module.exports = (fastify) => {
   const exec = new Exec(pool)
   fastify.decorate('exec', exec)
   
-  //初始化连接池 创建1个 避免第一次创建长时间
+  //初始化连接池 创建1个测试
   exec.get_table('app_info')
-  const sql = exec.select(['id'],'save','where id = 1')
+  const sql = exec.select(['id'],'save','limit 1')
   exec.call(sql,[],(res)=> console.log(res ? '开启连接池...' : '连接池开启失败...'))
 }

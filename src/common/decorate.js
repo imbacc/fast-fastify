@@ -1,5 +1,5 @@
 module.exports = (fastify) => {
-	console.log('开启装饰器...')
+	console.log('开启装饰器...')	//只配置静态
 	
-	fastify.decorate('mysql', require('./mysql'))
+	fastify.decorate('config',{name:'test'})	//fastify.config.test
 }

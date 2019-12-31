@@ -4,4 +4,7 @@ module.exports = (fastify) => {
 	fastify.register(require('fastify-jwt'), {
 	  secret: 'supersecret'
 	})
+	
+	//数据库
+	// fastify.register(require('../db/mysql.js'))
 }

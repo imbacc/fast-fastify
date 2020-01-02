@@ -12,5 +12,5 @@ module.exports = (fastify) => {
   //初始化连接池 创建1个测试
   exec.get_table('app_info')
   const sql = exec.select(['id'],'save','limit 1')
-  exec.call(sql,[],(res)=> console.log(res ? '开启连接池...' : '连接池开启失败...'))
+  exec.call(sql,[],(res)=> console.log(res.code === 1 ? '开启连接池...' : '连接池开启失败...'))
 }

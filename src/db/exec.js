@@ -23,7 +23,7 @@ class exec {
 	    this.pool.getConnection(async (error,conn)=>{
 	        if(error){
 				console.log('conn err=',error)
-				fun(resultful('WARN',error))
+				fun(resultful('WARN'))
 	        }else{
 	            conn.query(sql,value,(err,res,fields)=>{
 					console.log('执行sql=',sql)

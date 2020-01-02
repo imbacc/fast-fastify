@@ -22,10 +22,14 @@ const APIResultCode = {
 	ERROR:[-1, "请求失败"],
 	WARN:[-2, "网络异常，请稍后重试"],
 	
-	FOUR_ZERO_FOUR_ERROR:[-404, "令牌已失效!"],
-	FOUR_ZERO_Three_ERROR:[-403, "没有访问权限!???"],
-	WHEREIS_CRACK:[-444,"非法访问!???"],
-	CMAKETOKEN_KEY_ERROR:[-999,"不是有效令牌!"],
+	FOUR_ZERO_FOUR_ERROR:[-996, "令牌已失效!"],
+	FOUR_ZERO_Three_ERROR:[-998, "没有访问权限!???"],
+	WHEREIS_CRACK:[-998,"非法访问!???"],
+	
+	UNMAKETOKEN_NULL:[-996,"没有提司腰牌?"],
+	UNMAKETOKEN_HASH:[-997,"哪偷的提司腰牌?"],
+	UNMAKETOKEN_RUBBISH:[-998,"提司腰牌已损坏!"],
+	UNMAKETOKEN_ERROR:[-999,"不是真提司腰牌!"],
 }
 
 //虚拟返回格式

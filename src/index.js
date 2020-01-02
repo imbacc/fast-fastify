@@ -7,7 +7,8 @@ require('./common/throw')(fastify) 		//注册抛异常
 require('./common/middle')(fastify) 	//注册中间件
 require('./common/tools')(fastify) 		//注册插件 
 require('./router/index')(fastify) 		//注册路由
-require('./db/mysql')(fastify) 			//注册数据库
+require('./db/mysql')(fastify) 			//注册Mysql
+require('./db/redis')(fastify) 			//注册Redis
 
 //启动服务
 fastify.listen(port, (err)=>{

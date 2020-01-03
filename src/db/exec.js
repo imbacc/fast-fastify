@@ -2,8 +2,8 @@ const Bean = require('./bean')			//抽象实体类
 const config = require('./config')		//数据库配置
 const resultful = require('./resultful')	//返回数据构造
 
-const bean_list = config.bean
-const bean_class = {}
+const bean_list = config.bean	//数据库表信息
+const bean_class = {}			//表结构实体对象集合
 
 //构造表结构 实体类
 Object.keys(bean_list).forEach((key)=>{

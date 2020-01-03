@@ -1,6 +1,5 @@
 const Redis = require('redis')		//Redis驱动
 const config = require('./config')	//Redis配置
-const synch = require('./redis_synch')
 
 const redis = Redis.createClient(config.redis.port, config.redis.host)
 redis.on('error', (err) => console.log('redis err='+err))
@@ -10,12 +9,7 @@ const get_redis = async (key) => {
 		redis.get(key,(err, res) => resolve(res))
 	})
 	
-	const then = await p.then((res)=>{
-		console.log('pp.then=',res)
-		return res
-	})
-	
-	return then
+	return await p.then((res) => res)
 }
 
 const set_redis = (key, value, time) => {
@@ -28,12 +22,7 @@ const has_redis = async (key,two) => {
 		redis.get(key,(err, res) => resolve((res === two)))
 	})
 	
-	const then = await p.then((res)=>{
-		console.log('pp.then=',res)
-		return res
-	})
-	
-	return then
+	return await p.then((res) => res)
 }
 
 module.exports = (fastify) => {

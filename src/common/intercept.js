@@ -25,23 +25,23 @@ module.exports = (fastify) => {
 	fastify.addHook('preHandler', (request, reply, next) => {
 		let code = 'SUCCESS'
 		const head = request.headers
-		const unmake = fastify.unmake(head.cmaketoken)
-		
-		if(unmake !== true){
-			code = unmake
-		}else if(head.uuid === undefined){
-			code = 'IsNull' 
-		}else if(head.uuid.length < 12){
-			code = 'ValNoCode'
-		}
-		
-		console.log({ id: request.id, code: code },'响应拦截...')
-		
-		if(code === 'SUCCESS'){
-			next()
-		}else{
-			reply.send(resultful(code))
-		}
+		fastify.unmake(head.cmaketoken).then((unmake)=>{
+			if(unmake !== true){
+				code = unmake
+			}else if(head.uuid === undefined){
+				code = 'IsNull' 
+			}else if(head.uuid.length < 12){
+				code = 'ValNoCode'
+			}
+			
+			console.log({ id: request.id, code: code },'响应拦截...')
+			
+			if(code === 'SUCCESS'){
+				next()
+			}else{
+				reply.send(resultful(code))
+			}
+		})
 	})
 
 	//响应 找不到next方法

@@ -10,21 +10,15 @@ const format_data = () => {
 	return (year + '' + month + '' + day)
 }
 
-const unmake_token_fun = (cmake_token,fastify) => {
+const unmake_token_fun = async (cmake_token,fastify) => {
 	
 	if(cmake_token === undefined || cmake_token === '') return 'UNMAKETOKEN_NULL'
 	if(cmake_token.indexOf('.') === -1) return 'UNMAKETOKEN_HASH'
 	
 	let unmake = 'cmaketoken_'+cmake_token
 	
-	let dd = fastify.has_redis(unmake,cmake_token)
-	// let d = fastify.has_redis(unmake,cmake_token).then((res)=>{
-	// 	console.log('then=',res)
-		
-	// 	return 'UNMAKETOKEN_HASH'
-	// })
-	
-	console.log('dd=',dd)
+	let has_redis = await fastify.has_redis(unmake,cmake_token)
+	if(has_redis) return 'UNMAKETOKEN_HASH'
 	
 	let spl = cmake_token.split('.')
 	let token = spl[0], random = spl[1], key = format_data()
@@ -49,7 +43,7 @@ const unmake_token_fun = (cmake_token,fastify) => {
 	
 	if(mine > -1 && mine <= 1){
 		// console.log('有效cmaketoken='+cmake_token)
-		fastify.cache.set(unmake,cmake_token, (60 * 60 * 24)) //秒单位 60秒=1分钟 * 60分钟=1小时 * 24小时=1天
+		fastify.set_redis(unmake, cmake_token, (60 * 60 * 24)) //秒单位 60秒=1分钟 * 60分钟=1小时 * 24小时=1天
 		return true
 	}
 	

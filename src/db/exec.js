@@ -19,8 +19,8 @@ class exec {
 	}
 	
 	//执行SQL
-	async call(sql,value,fun){
-	    this.pool.getConnection(async (error,conn)=>{
+	call(sql,value,fun){
+	    this.pool.getConnection((error,conn)=>{
 	        if(error){
 				console.log('conn err=',error)
 				fun(resultful('WARN'))

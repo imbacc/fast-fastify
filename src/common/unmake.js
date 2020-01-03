@@ -16,16 +16,22 @@ const unmake_token_fun = (cmake_token,fastify) => {
 	if(cmake_token.indexOf('.') === -1) return 'UNMAKETOKEN_NULL'
 	
 	let unmake = 'cmaketoken_'+cmake_token
-	let redis_token = fastify.cache.get(unmake)
 	
-	console.log('equles===================')
-	console.log(cmake_token)
-	console.log(redis_token)
+	let state = {res:false}
+	let d = fastify.has_redis(unmake,cmake_token).then((res)=>{
+		console.log('then=',res)
+		state.res = res
+		
+		if(state.res) return 'UNMAKETOKEN_HASH'
+	})
 	
-	if(redis_token !== undefined){
-		// console.log('已被使用cmaketoken='+cmake_token)
-		if(cmake_token === redis_token) return 'UNMAKETOKEN_HASH'
-	}
+	let d_then = d.then((res)=>{
+		console.log('d.then=',res)
+		return res
+	})
+	
+	console.log('dd=',JSON.stringify(d))
+	console.log('d_then=',d_then)
 	
 	let spl = cmake_token.split('.')
 	let token = spl[0], random = spl[1], key = format_data()
@@ -33,6 +39,7 @@ const unmake_token_fun = (cmake_token,fastify) => {
 	try{
 		token = parseInt(token) - sf_key
 		random = parseInt(random) - sf_key
+		
 		key = parseInt(key)
 	}catch(e){
 		console.log('转int类型出错')

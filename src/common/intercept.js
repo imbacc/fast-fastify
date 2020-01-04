@@ -1,6 +1,46 @@
 const resultful = require('../db/resultful.js')	//返回数据构造
 const apitime = require('./apitime')			//API限流
 
+const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
+	fastify.unmake(head.cmaketoken).then((unmake)=>{
+		if(unmake !== true){
+			code = unmake
+		}else if(head.uuid === undefined){
+			code = 'IsNull' 
+		}else if(head.uuid.length < 12 || head.uuid.length > 30){
+			code = 'ValNoCode'
+		}
+		
+		console.log({ id: req.id, code: code },'拦截状态...')
+		
+		if(code === 'SUCCESS'){
+			const name = 'syscache_'+req.raw.originalUrl
+			
+			//读取是否 接口有redis缓存
+			fastify.get_redis(name).then((cache)=>{
+				if(cache) {
+					console.log('缓存 '+name)
+					reply.send(cache)
+				}else{
+					next()
+				}
+			})
+		}else{
+			reply.code(500).send(resultful(code))
+		}
+	})
+}
+
+const check_jwt = async (fastify,head,req,reply,next) => {
+	req.jwtVerify((err, decoded) => {
+		if(decoded){
+			check_cmake(fastify,head,req,reply,next)
+		}else{
+			check_cmake(fastify,head,req,reply,head.nocheck ? 'SUCCESS' : 'WHEREIS_CRACK',next)
+		}
+	})
+}
+
 module.exports = (fastify) => {
 	console.log('开启拦截器...')
 
@@ -9,7 +49,7 @@ module.exports = (fastify) => {
 		if(req.req.url === '/favicon.ico') {
 			reply.code(404).send()
 		}else{
-			console.log({ url: req.req.url, params: {...req.query}, body: req.body , router_id: req.id }, '请求拦截...')
+			console.log({ url: req.req.url, params: {...req.query}, body: req.body , id: req.id }, '请求拦截...')
 			const head = req.headers
 			
 			if(head.uuid === undefined){
@@ -17,41 +57,27 @@ module.exports = (fastify) => {
 			}
 			
 			apitime(fastify,req.req.url,head.uuid).then((bool)=>{
-				console.log('bool=',bool)
 				if(!bool){
 					// console.log('终止请求...')
-					reply.code(403).send()
+					reply.send(resultful('API_OutTime'))
 				}else{
-					let code = 'SUCCESS'
-					fastify.unmake(head.cmaketoken).then((unmake)=>{
-						if(unmake !== true){
-							code = unmake
-						}else if(head.uuid === undefined){
-							code = 'IsNull' 
-						}else if(head.uuid.length < 12 || head.uuid.length > 30){
-							code = 'ValNoCode'
-						}
-						
-						if(code === 'SUCCESS'){
-							next()
-						}else{
-							reply.send(resultful(code))
-						}
-					})
+					check_jwt(fastify,head,req,reply,next)
 				}
 			})
 		}
 	})
 
 	//预处理 - 当做响应拦截算了
-	fastify.addHook('preHandler', (request, reply, next) => {
-		console.log({ id: req.id, code: code },'响应拦截...')
+	fastify.addHook('preHandler', (req, reply, next) => {
+		console.log({ id: req.id },'响应拦截...')
+		
 		next()
 	})
 
 	//响应 找不到next方法
 	// fastify.addHook('onResponse', (res, next) => {
 	// 	console.log({ id: res.id },'响应拦截...')
-	// 	next()
+	// 	console.log(res)
+	// 	// next()
 	// })
 }

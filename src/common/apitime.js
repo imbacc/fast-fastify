@@ -1,4 +1,5 @@
  /**
+ * 利用redis限流
  * spname参数为api名称命名 例：apitime_sms
  * spid索引 例：apitime_sms_手机号码
  * time 为时间 xx/秒		默认60秒
@@ -6,13 +7,11 @@
  */
 
 const config = require('../db/config.js')
-
-const router = {
-	'/version':[10,5]
-}
+const router = config.limit
 
 module.exports = async (fastify, spname, spid, time = 30, count = 10, update = false) => {
 	
+	//false为关闭redis限流
 	if(!config.apitime) return true
 	
 	const val = spname + '_' + spid

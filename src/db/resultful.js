@@ -9,9 +9,8 @@ const APIResultCode = {
 
 	SMS_ERRPR:[-1001,"短信发送失败"],
 
-	API_ERROR:[-10001,"访问失败"],
-	API_OutTime:[-10002,"服务器繁忙,请稍后访问"],
-	API_Redis_ERROR:[-10003,"Redis存储数据失败"],
+	API_ERROR:[-10000,"访问失败"],
+	API_OutTime:[-10001,"服务器繁忙,请稍后访问"],
 
 	Upload_SUCCESS:[9999, "上传成功"],
 	Upload_ERROR:[-9999, "上传失败"],
@@ -22,9 +21,7 @@ const APIResultCode = {
 	ERROR:[-1, "请求失败"],
 	WARN:[-2, "网络异常，请稍后重试"],
 	
-	FOUR_ZERO_FOUR_ERROR:[-996, "令牌已失效!"],
-	FOUR_ZERO_Three_ERROR:[-998, "没有访问权限!???"],
-	WHEREIS_CRACK:[-998,"非法访问!???"],
+	WHEREIS_CRACK:[-995,"非法访问???"],
 	
 	UNMAKETOKEN_NULL:[-996,"请携带提司腰牌!"],
 	UNMAKETOKEN_HASH:[-997,"这不是提司腰牌!"],

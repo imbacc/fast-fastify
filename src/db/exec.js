@@ -46,7 +46,7 @@ class exec {
 		return bean_class[name]
 	}
 	
-	//获取所有配置表信息
+	//获取所有表配置信息
 	get_table_all(){
 		return bean_class
 	}

@@ -6,14 +6,21 @@ redis.on('error', (err) => console.log('redis err='+err))
 
 const get_redis = async (key) => {
 	const p = new Promise((resolve, reject) => {
-		redis.get(key,(err, res) => resolve(res))
+		redis.get(key,(err, res) => {
+			try{
+				res = JSON.parse(res)
+			}catch(e){
+				
+			}
+			resolve(res)
+		})
 	})
 	
 	return await p.then((res) => res)
 }
 
 const set_redis = (key, value, time) => {
-	redis.set(key, value)
+	redis.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
 	if(time) redis.expire(key, time)
 }
 

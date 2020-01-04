@@ -4,10 +4,13 @@ const format_data = () => {
 	let date = new Date()
 	let time = date.getTime()
 	let year = date.getFullYear()
-	let month = ((date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1))
-	let day = date.getDate() < 10 ?  '0'+date.getDate() : date.getDate()
+	let month = date.getMonth() + 1
+	let day = date.getDate()
 	
-	return (year + '' + month + '' + day)
+	month = (month < 10 ? '0'+month : month)
+	day = day < 10 ?  '0'+day : day
+	
+	return year + '' + month + '' + day
 }
 
 const unmake_token_fun = async (cmake_token,fastify) => {
@@ -43,7 +46,7 @@ const unmake_token_fun = async (cmake_token,fastify) => {
 	
 	if(mine > -1 && mine <= 1){
 		// console.log('有效cmaketoken='+cmake_token)
-		fastify.set_redis(unmake, cmake_token, (60 * 60 * 24)) //秒单位 60秒=1分钟 * 60分钟=1小时 * 24小时=1天
+		fastify.set_redis(unmake, cmake_token, (60 * 10)) //秒单位 60秒=1分钟 * 10
 		return true
 	}
 	

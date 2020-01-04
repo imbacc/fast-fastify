@@ -18,7 +18,7 @@ const unmake_token_fun = async (cmake_token,fastify) => {
 	let unmake = 'cmaketoken_'+cmake_token
 	
 	let has_redis = await fastify.has_redis(unmake,cmake_token)
-	if(has_redis) return 'UNMAKETOKEN_HASH'
+	if(has_redis) return 'UNMAKETOKEN_RUBBISH'
 	
 	let spl = cmake_token.split('.')
 	let token = spl[0], random = spl[1], key = format_data()
@@ -48,7 +48,7 @@ const unmake_token_fun = async (cmake_token,fastify) => {
 	}
 	
 	// console.log('失效cmaketoken='+cmake_token)
-	return 'UNMAKETOKEN_RUBBISH'
+	return 'UNMAKETOKEN_ERROR'
 }
 
 module.exports = (fastify) => {

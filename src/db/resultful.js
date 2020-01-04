@@ -26,10 +26,10 @@ const APIResultCode = {
 	FOUR_ZERO_Three_ERROR:[-998, "没有访问权限!???"],
 	WHEREIS_CRACK:[-998,"非法访问!???"],
 	
-	UNMAKETOKEN_NULL:[-996,"没有提司腰牌?"],
-	UNMAKETOKEN_HASH:[-997,"哪偷的提司腰牌?"],
+	UNMAKETOKEN_NULL:[-996,"请携带提司腰牌!"],
+	UNMAKETOKEN_HASH:[-997,"这不是提司腰牌!"],
 	UNMAKETOKEN_RUBBISH:[-998,"提司腰牌已损坏!"],
-	UNMAKETOKEN_ERROR:[-999,"不是真提司腰牌!"],
+	UNMAKETOKEN_ERROR:[-999,"提司腰牌与身份不匹配!"],
 }
 
 //虚拟返回格式

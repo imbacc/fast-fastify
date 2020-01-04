@@ -1,4 +1,5 @@
 const resultful = require('../db/resultful.js')	//返回数据构造
+const apitime = require('./apitime')			//API限流
 
 module.exports = (fastify) => {
 	console.log('开启拦截器...')
@@ -9,39 +10,43 @@ module.exports = (fastify) => {
 			reply.code(404).send()
 		}else{
 			console.log({ url: req.req.url, params: {...req.query}, body: req.body , router_id: req.id }, '请求拦截...')
+			const head = req.headers
 			
-			// fastify.cache.get(req.headers.uuid)
-			next()
+			if(head.uuid === undefined){
+				reply.code(401).send()
+			}
+			
+			apitime(fastify,req.req.url,head.uuid).then((bool)=>{
+				console.log('bool=',bool)
+				if(!bool){
+					// console.log('终止请求...')
+					reply.code(403).send()
+				}else{
+					let code = 'SUCCESS'
+					fastify.unmake(head.cmaketoken).then((unmake)=>{
+						if(unmake !== true){
+							code = unmake
+						}else if(head.uuid === undefined){
+							code = 'IsNull' 
+						}else if(head.uuid.length < 12 || head.uuid.length > 30){
+							code = 'ValNoCode'
+						}
+						
+						if(code === 'SUCCESS'){
+							next()
+						}else{
+							reply.send(resultful(code))
+						}
+					})
+				}
+			})
 		}
-		// const decoded = fastify.jwt.verify(token)
-		// try {
-		// 	await req.jwtVerify()
-		// } catch (err) {
-		// 	console.log('jwt err=',err)
-		// }
 	})
 
 	//预处理 - 当做响应拦截算了
 	fastify.addHook('preHandler', (request, reply, next) => {
-		let code = 'SUCCESS'
-		const head = request.headers
-		fastify.unmake(head.cmaketoken).then((unmake)=>{
-			if(unmake !== true){
-				code = unmake
-			}else if(head.uuid === undefined){
-				code = 'IsNull' 
-			}else if(head.uuid.length < 12){
-				code = 'ValNoCode'
-			}
-			
-			console.log({ id: request.id, code: code },'响应拦截...')
-			
-			if(code === 'SUCCESS'){
-				next()
-			}else{
-				reply.send(resultful(code))
-			}
-		})
+		console.log({ id: req.id, code: code },'响应拦截...')
+		next()
 	})
 
 	//响应 找不到next方法

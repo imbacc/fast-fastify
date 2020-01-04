@@ -1,4 +1,4 @@
-const fastify = require('fastify')({logger: true})
+const fastify = require('fastify')({logger: false})
 const port = 3000	//默认端口
 
 require('./common/intercept')(fastify) 	//注册拦截器

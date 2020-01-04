@@ -5,5 +5,4 @@ module.exports = (fastify) => {
 	
 	//自己封装的令牌
 	require('./unmake')(fastify)
-	
 }

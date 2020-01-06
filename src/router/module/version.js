@@ -1,3 +1,4 @@
+//版本模块路由
 module.exports = (fastify) => [
 	{
 		method: 'GET',

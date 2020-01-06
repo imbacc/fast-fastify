@@ -1,6 +1,7 @@
 const resultful = require('../db/resultful.js')	//返回数据构造
 const apitime = require('./apitime')			//API限流
 
+//检测CMAKE令牌
 const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
 	fastify.unmake(head.cmaketoken).then((unmake)=>{
 		if(unmake !== true){
@@ -31,11 +32,13 @@ const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
 	})
 }
 
+//检测JWT令牌
 const check_jwt = async (fastify,head,req,reply,next) => {
 	req.jwtVerify((err, decoded) => {
 		if(decoded){
 			check_cmake(fastify,head,req,reply,next)
 		}else{
+			//没有携带令牌时 判断是否时授权路由=>head.nocheck检测true为是,否则返回状态码 WHEREIS_CRACK
 			check_cmake(fastify,head,req,reply,head.nocheck ? 'SUCCESS' : 'WHEREIS_CRACK',next)
 		}
 	})

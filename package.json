@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "babel-loader": "^8.0.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "fastify-webpack-hmr": "^2.1.0"
+  }
+}

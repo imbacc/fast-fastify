@@ -1,8 +1,32 @@
 {
+  "name": "fast-fastify",
+  "version": "1.0.0",
+  "description": "快速构建fastify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imbacc/fast-fastify.git"
+  },
+  "author": "imbacc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imbacc/fast-fastify/issues"
+  },
+  "homepage": "https://github.com/imbacc/fast-fastify#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "fastify": "^2.11.0",
+    "fastify-jwt": "^1.2.1",
+    "fastify-no-icon": "^3.0.0",
+    "hide-powered-by": "^1.1.0",
+    "mysql": "^2.17.1",
+    "redis": "^2.8.0",
+    "x-xss-protection": "^1.3.0"
+  },
   "devDependencies": {
-    "babel-loader": "^8.0.6",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "fastify-webpack-hmr": "^2.1.0"
+	  
   }
 }

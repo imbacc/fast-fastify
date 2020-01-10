@@ -10,7 +10,7 @@ require('./router/index')(fastify) 		//注册路由
 require('./db/mysql')(fastify) 			//注册Mysql	不是fastify-mysql插件
 require('./db/redis')(fastify) 			//注册Redis	不是fastify-redis插件
 
-//启动服务
+//启动服务	nodemon	index
 fastify.listen(port, (err)=>{
 	if(err) {
 		throw err

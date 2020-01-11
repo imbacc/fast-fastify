@@ -47,11 +47,11 @@ module.exports = async (fastify, spname, spid, time = 30, count = 10, update = f
 			if (add > count) {
 				return false
 			} else {
-				fastify.set_redis(key_id2, add)
+				fastify.set_redis(key_id2, add, 60 * 10)
 			}
 		} else {
-			fastify.set_redis(key_id, datestr)
-			fastify.set_redis(key_id2, 1)
+			fastify.set_redis(key_id, datestr, 60 * 10)
+			fastify.set_redis(key_id2, 1, 60 * 10)
 		}
 	}
 	

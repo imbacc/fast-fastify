@@ -2,7 +2,7 @@ const resultful = require('../db/resultful.js')	//返回数据构造
 const apitime = require('./apitime')			//API限流
 
 //检测CMAKE令牌
-const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
+const check_cmake = (fastify,head,req,reply,code = 'SUCCESS',next) => {
 	fastify.unmake(head.cmaketoken).then((unmake)=>{
 		if(unmake !== true){
 			code = unmake
@@ -20,7 +20,7 @@ const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
 			//读取是否 接口有redis缓存
 			fastify.get_redis(name).then((cache)=>{
 				if(cache) {
-					console.log('缓存 '+name)
+					// console.log('缓存 '+name)
 					reply.send(cache)
 				}else{
 					next()
@@ -33,13 +33,13 @@ const check_cmake = async (fastify,head,req,reply,code = 'SUCCESS',next) => {
 }
 
 //检测JWT令牌
-const check_jwt = async (fastify,head,req,reply,next) => {
+const check_jwt = (fastify,head,req,reply,next) => {
 	req.jwtVerify((err, decoded) => {
 		if(decoded){
-			check_cmake(fastify,head,req,reply,next)
+			check_cmake(fastify,head,req,reply,'SUCCESS',next)
 		}else{
-			//没有携带令牌时 判断是否时授权路由=>head.nocheck检测true为是,否则返回状态码 WHEREIS_CRACK
-			check_cmake(fastify,head,req,reply,head.nocheck ? 'SUCCESS' : 'WHEREIS_CRACK',next)
+			//没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
+			check_cmake(fastify,head,req,reply,req.req.url.indexOf('version') !== -1 ? 'SUCCESS' : 'WHEREIS_CRACK',next)
 		}
 	})
 }

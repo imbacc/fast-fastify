@@ -3,33 +3,21 @@ const apitime = require('./apitime')			//API限流
 
 //检测CMAKE令牌
 const check_cmake = (fastify,head,req,reply,code = 'SUCCESS',next) => {
-	fastify.unmake(head.cmaketoken).then((unmake)=>{
-		if(unmake !== true){
-			code = unmake
-		}else if(head.uuid === undefined){
-			code = 'IsNull' 
-		}else if(head.uuid.length < 12 || head.uuid.length > 30){
-			code = 'ValNoCode'
-		}
+	if(code === 'SUCCESS'){
+		const name = 'syscache_'+req.raw.originalUrl
 		
-		console.log({ id: req.id, code: code },'拦截状态...')
-		
-		if(code === 'SUCCESS'){
-			const name = 'syscache_'+req.raw.originalUrl
-			
-			//读取是否 接口有redis缓存
-			fastify.get_redis(name).then((cache)=>{
-				if(cache) {
-					// console.log('缓存 '+name)
-					reply.send(cache)
-				}else{
-					next()
-				}
-			})
-		}else{
-			reply.code(500).send(resultful(code))
-		}
-	})
+		//读取是否 接口有redis缓存
+		fastify.get_redis(name).then((cache)=>{
+			if(cache) {
+				// console.log('缓存 '+name)
+				reply.send(cache)
+			}else{
+				next()
+			}
+		})
+	}else{
+		reply.code(500).send(resultful(code))
+	}
 }
 
 //检测JWT令牌

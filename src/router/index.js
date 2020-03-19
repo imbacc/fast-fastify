@@ -1,7 +1,6 @@
 module.exports = (fastify) => {
 	const list = [
 		require('./module/user')(fastify),		//用户模块路由
-		require('./module/movies')(fastify),	//影视模块路由
 		require('./module/version')(fastify),	//版本模块路由
 	]
 	

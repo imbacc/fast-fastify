@@ -6,18 +6,18 @@ class bean {
 	    args.forEach((col)=> this[col])
 	}
 	
-	set(key,value){
-		this[key] = value
-	}
+	// set(key,value){
+	// 	this[key] = value
+	// }
 	
-	get(key){
-		return this[key]
-	}
+	// get(key){
+	// 	return this[key]
+	// }
 	
 	//获取实体类字段 默认删除法则 [删除:删除原有实体类字段] [保留:匹配字段与实体类字段相符]
 	get_colum(list = [],type = 'del'){
-		const colum = this.colum
-		const copy = Object.assign([],colum)
+		let colum = this.colum
+		let copy = Object.assign([],colum)
 		list = [...new Set(list)]
 		if(type === 'del'){
 			//删除法
@@ -36,7 +36,7 @@ class bean {
 			})
 		}
 		
-		const join = list.join(',')
+		let join = list.join(',')
 		return list.length > 1 ? join.substring(0,join.length) : join
 	}
 	

@@ -31,8 +31,8 @@ class exec {
 					if(err === null){
 						fun(resultful('SUCCESS',res),fields)
 					}else{
-						fun(resultful('ERROR',err))
 						console.log('query err=',err)
+						fun(resultful('ERROR',err))
 					}
 	            })
 	        }
@@ -40,10 +40,16 @@ class exec {
 	}
 	
 	//获取配置的表信息
-	get_table(name){
+	get_table(name,fun_name = false,fun_arg = [],value = []){
 		this.table = name
 		this.bean = bean_class[name]
-		return bean_class[name]
+		if(fun_name){
+			let sql = this[fun_name](...fun_arg)
+			return new Promise((resolve,reject)=>{
+				this.call(sql,value,(res)=> resolve(res))
+			})
+		}
+		return this.bean
 	}
 	
 	//获取所有表配置信息

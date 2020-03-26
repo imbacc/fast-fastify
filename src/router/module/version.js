@@ -3,7 +3,7 @@ module.exports = (fastify) => [
 	{
 		method: 'GET',
 		url: '/version',
-		handler: async (req, reply) => {
+		handler: (req, reply) => {
 			const header = req.headers
 			const name = `api_${header.uuid}_${req.raw.url}`
 			

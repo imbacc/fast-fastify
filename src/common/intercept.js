@@ -23,6 +23,7 @@ const check_cmake = (fastify,head,req,reply,code = 'SUCCESS',next) => {
 //检测JWT令牌
 const check_jwt = (fastify,head,req,reply,next) => {
 	req.jwtVerify((err, decoded) => {
+		//没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
 		let state = req.req.url.indexOf('version') !== -1 ? 'SUCCESS' : 'WHEREIS_CRACK'
 		if(decoded) state = 'SUCCESS'
 		check_cmake(fastify,head,req,reply,state,next)

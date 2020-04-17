@@ -42,9 +42,9 @@ module.exports = (fastify) => {
 			console.log({ url: url, params: {...req.query}, body: req.body , id: req.id }, '请求拦截...')
 			const head = req.headers
 			
-			if(head.uuid === undefined){
-				reply.code(401).send()
-			}
+			// if(head.uuid === undefined){
+			// 	reply.code(401).send()
+			// }
 			
 			apitime(fastify,url,head.uuid).then((bool)=>{
 				if(!bool){

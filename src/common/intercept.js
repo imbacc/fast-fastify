@@ -3,18 +3,35 @@ const apitime = require('./apitime')			//API限流
 
 //检测CMAKE令牌
 const check_cmake = (fastify,head,req,reply,code = 'SUCCESS',next) => {
+	if(code === 'JUMP_CHECK'){
+		console.log('跳过检测 token...')
+		next()
+		return
+	}
+	
+	console.log({ id: req.id, code: code },'拦截状态...')
+	
 	if(code === 'SUCCESS'){
-		const name = 'syscache_'+req.raw.originalUrl
+		let md5 = reply.body ? reply.body.md5 : ''
+		let name = 'api_'+req.raw.originalUrl+md5
+		console.log('api name=',name)
 		
-		//读取是否 接口有redis缓存
-		fastify.get_redis(name).then((cache)=>{
-			if(cache) {
-				// console.log('缓存 '+name)
-				reply.send(cache)
-			}else{
-				next()
-			}
-		})
+		if(req.req.method === 'GET'){
+			//读取是否 接口有redis缓存
+			fastify.get_redis(name).then((cache)=>{
+				if(cache) {
+					reply.header('Cache-control', 'max-age=3600')
+					reply.header('Last-Modified', new Date().toUTCString())
+					console.log('api cache='+name)
+					reply.send(cache)
+				}else{
+					next()
+				}
+			})
+		}else{
+			//POST请求跳过检测缓存直接执行
+			next()
+		}
 	}else{
 		reply.code(500).send(resultful(code))
 	}
@@ -58,10 +75,10 @@ module.exports = (fastify) => {
 	})
 
 	//预处理 - 当做响应拦截算了
-	fastify.addHook('preHandler', (req, reply, next) => {
-		console.log({ id: req.id },'响应拦截...')
-		next()
-	})
+	// fastify.addHook('preHandler', (req, reply, next) => {
+	// 	console.log({ id: req.id },'响应拦截...')
+	// 	next()
+	// })
 
 	//响应 找不到next方法
 	// fastify.addHook('onResponse', (res, next) => {

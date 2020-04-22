@@ -39,6 +39,10 @@ class exec {
 	    })
 	}
 	
+	call_async(sql,value){
+		return new Promise((resolve)=> this.call(sql,value,(res)=> resolve(res)))
+	}
+	
 	//获取配置的表信息
 	get_table(name,fun_name = false,fun_arg = [],value = []){
 		this.table = name

@@ -1,1 +1,0 @@
-cnpm i fastify -S & cnpm i cors -S & cnpm i hide-powered-by -S & cnpm i x-xss-protection -S & cnpm i fastify-jwt -S & cnpm i mysql -S & cnpm i redis -S & cnpm i fastify-no-icon -S & cd ./src & node index & pause

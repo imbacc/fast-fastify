@@ -44,7 +44,7 @@ class bean {
 	get_value(args){
 		let value = ''
 		if(args){
-			Object.keys(args).forEach((key)=> value += key + '= ?, ')
+			Object.keys(args).forEach((key)=> value += key + '= ?,')
 			value = value.substring(0,value.length-1)
 		}
 		

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/imbacc/fast-fastify#readme",
   "dependencies": {
-    "fastify": "3.10.1",
+    "fastify": "3.11.0",
     "fastify-cors": "^5.2.0",
     "fastify-jwt": "^1.2.1",
     "fastify-no-icon": "^3.0.0",

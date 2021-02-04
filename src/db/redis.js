@@ -21,13 +21,13 @@ const set_redis = (key, value, time) => {
   if (time) redisCli.expire(key, time)
 }
 
-const has_redis = async (key, two) => {
-  const p = new Promise((resolve, reject) => redisCli.get(key, (err, res) => resolve(res === two)))
-  return await p.then((res) => res)
-}
+// const has_redis = async (key, two) => {
+//   const p = new Promise((resolve, reject) => redisCli.get(key, (err, res) => resolve(res === two)))
+//   return await p.then((res) => res)
+// }
 
 module.exports = (fastify) => {
   fastify.decorate('get_redis', get_redis)
   fastify.decorate('set_redis', set_redis)
-  fastify.decorate('has_redis', has_redis)
+  // fastify.decorate('has_redis', has_redis)
 }

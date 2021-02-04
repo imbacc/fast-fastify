@@ -67,19 +67,18 @@ module.exports = (fastify) => {
   //请求
   fastify.addHook('onRequest', (reque, reply, next) => {
     const { raw, query, body, id, headers } = reque
-    let url = raw.url
+    const url = raw.url
     if (url === '/favicon.ico') {
       reply.code(404).send()
     } else {
       console.log({ id, url, params: { ...query }, body }, '请求拦截...')
-      let head = headers
-      head.onlyid = fastify.md5(head.authorization) || ''
+      const onlyid = fastify.md5(headers.authorization) || ''
 
       reply.header(...ORIGIN)
       reply.header(...HEADERS)
       reply.header(...METHODS)
 
-      apitime(fastify, url, head.onlyid).then((bool) => {
+      apitime(fastify, url, onlyid).then((bool) => {
         if (!bool) {
           console.log({ id, code: 401 }, '服务器繁忙...')
           reply.code(401).send(resultful('API_OutTime'))

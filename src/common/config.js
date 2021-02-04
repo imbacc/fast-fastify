@@ -121,19 +121,19 @@ const swagger_config = {
     }
   },
   prod: {
-    use: false, // 不注册
-    route: `/swagger/${md5('地址加密')}`,
-    info: {
-      title: 'REST API Spec',
-      description: 'api',
-      version: '1.0.0'
-    },
-    host: 'auto',
-    apiKey: {
-      type: 'apiKey',
-      name: 'apiKey',
-      in: 'header'
-    }
+    use: false // 不注册
+    // route: `/swagger/${md5('地址加密')}`,
+    // info: {
+    //   title: 'REST API Spec',
+    //   description: 'api',
+    //   version: '1.0.0'
+    // },
+    // host: 'auto',
+    // apiKey: {
+    //   type: 'apiKey',
+    //   name: 'apiKey',
+    //   in: 'header'
+    // }
   }
 }
 

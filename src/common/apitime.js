@@ -11,10 +11,10 @@ module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.co
   //false为关闭redis限流
   if (!apitime.open) return Promise.resolve(true)
 
-  let cache_data = global.api_cache
+  let cache = global.api_cache
   let val = `${spname}_${spid}`
-  let key_id_time = `apit_${val}`
-  let key_id_num = `apin_${val}`
+  let key_time = `apit_${val}`
+  let key_num = `apin_${val}`
   let cfg = limit[spname.split('?')[0]]
 
   if (typeof cfg === 'object' && !update) {
@@ -22,8 +22,8 @@ module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.co
     count = cfg[1]
   }
 
-  let api_time = cache_data[key_id_time] || false //获取 访问API时间间隔
-  let api_count = cache_data[key_id_num] || false //获取 访问API次数间隔的时间
+  let api_time = cache[key_time] || false //获取 访问API时间间隔
+  let api_count = cache[key_num] || false //获取 访问API次数间隔的时间
 
   let datetime = new Date().getTime()
 
@@ -38,14 +38,14 @@ module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.co
       //Api次数限制
       let add = parseInt(api_count) + 1
       if (add > count) return Promise.resolve(false)
-      cache_data[key_id_num] = add
+      cache[key_num] = add
     } else {
-      cache_data[key_id_time] = datetime
-      cache_data[key_id_num] = 1
+      cache[key_time] = datetime
+      cache[key_num] = 1
     }
   } else {
-    cache_data[key_id_time] = datetime
-    cache_data[key_id_num] = 1
+    cache[key_time] = datetime
+    cache[key_num] = 1
   }
 
   return Promise.resolve(true)

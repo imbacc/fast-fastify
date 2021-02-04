@@ -3,7 +3,7 @@ const apitime = require('./apitime') //API限流
 const jumpCheck = global.jump_map //跳过检测jwt
 
 //检测CMAKE令牌
-const check_cmake = (fastify, head, reque, reply, code = 'SUCCESS', next) => {
+const check_cmake = (fastify, onlyid, reque, reply, code = 'SUCCESS', next) => {
   if (code === 'JUMP_CHECK') {
     // console.log('跳过检测 token...')
     next()
@@ -14,7 +14,7 @@ const check_cmake = (fastify, head, reque, reply, code = 'SUCCESS', next) => {
   console.log({ id, code }, '拦截状态...')
 
   if (code === 'SUCCESS') {
-    let name = `api_${fastify.md5(raw.url + head.onlyid)}`
+    let name = `api_${fastify.md5(raw.url + onlyid)}`
     // console.log('api name=', name)
 
     if (raw.method === 'GET') {
@@ -37,7 +37,7 @@ const check_cmake = (fastify, head, reque, reply, code = 'SUCCESS', next) => {
 }
 
 //检测JWT令牌
-const check_jwt = (fastify, head, reque, reply, next) => {
+const check_jwt = (fastify, onlyid, reque, reply, next) => {
   const { raw } = reque
   if (raw.method === 'OPTIONS') {
     reply.code(200).send()
@@ -53,7 +53,7 @@ const check_jwt = (fastify, head, reque, reply, next) => {
       return
     }
     if (err === null) state = 'SUCCESS'
-    check_cmake(fastify, head, reque, reply, state, next)
+    check_cmake(fastify, onlyid, reque, reply, state, next)
   })
 }
 
@@ -83,7 +83,7 @@ module.exports = (fastify) => {
           console.log({ id, code: 401 }, '服务器繁忙...')
           reply.code(401).send(resultful('API_OutTime'))
         } else {
-          check_jwt(fastify, head, reque, reply, next)
+          check_jwt(fastify, onlyid, reque, reply, next)
         }
       })
     }

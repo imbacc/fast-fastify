@@ -14,7 +14,9 @@ module.exports = (fastify) => {
     return fastify.exec.call(sql, val).then((res) => {
       const { headers, raw } = reque
       const onlyid = md5(headers.authorization) || ''
-      if (res.code === 1) fastify.set_redis(`api_${md5(raw.url + onlyid)}`, res, time) //默认360分钟一个小时 60 * 60
+      const name = `api_${md5(raw.url + onlyid)}`
+      console.log('name', name)
+      if (res.code === 1) fastify.set_redis(name, res, time) //默认360分钟一个小时 60 * 60
       return res
     })
   })

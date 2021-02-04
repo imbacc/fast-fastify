@@ -1,15 +1,15 @@
 /**
  * spname参数为api名称命名 例：apit_sms
  * spid索引 例：apit_sms_手机号码
- * time 为时间 xx/秒		默认60秒
- * count 为次数			默认 60秒/10次
+ * time 为时间 xx/秒		默认30秒
+ * count 为次数			默认 30秒/15次
  */
 
 const { limit, apitime } = require('./config.js')
 
-module.exports = (fastify, spname, spid, time = 30, count = 10, update = false) => {
+module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.count, update = false) => {
   //false为关闭redis限流
-  if (!apitime) return Promise.resolve(true)
+  if (!apitime.open) return Promise.resolve(true)
 
   let cache_data = global.api_cache
   let val = `${spname}_${spid}`

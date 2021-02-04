@@ -1,9 +1,11 @@
+const { uid } = require('../schema')
+const { version: api } = require('../../common/api')
+
 //版本模块路由
 module.exports = (fastify) => [
   {
-    method: 'GET',
-    url: '/version',
-    handler: (reque, reply) => {
+    ...api.version,
+    handler: async (reque, reply) => {
       const { query } = reque
       const { jwt, exec } = fastify
       const token = jwt.sign({ uuid: query.uuid, by: 'imbacc' }, { expiresIn: 60 * 60 * 1 })
@@ -13,14 +15,7 @@ module.exports = (fastify) => [
       })
     },
     schema: {
-      query: {
-        type: 'object',
-        properties: {
-          id: { type: 'number', maxLength: 1, minimum: 1, maximum: 5 },
-          uuid: { type: 'number', maxLength: 10 }
-        },
-        required: ['id', 'uuid']
-      }
+      query: uid
     }
   }
 ]

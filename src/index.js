@@ -1,4 +1,6 @@
-const fastify = require('fastify')({ logger: false })
+const fastify = require('fastify')({
+  logger: false
+})
 
 const {
   listen: { port, ip, queue }

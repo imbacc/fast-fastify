@@ -74,7 +74,23 @@ const redis_config = {
   }
 }
 
-// redis api限流设置 '路由名字':[每秒,次数]
+// 每个接口限流 也可在Nginx上限流
+const apitime_config = {
+  dev: {
+    open: true, // 或 -> Boolean(env === 'dev')
+    time: 30,
+    count: 15
+  },
+  prod: {
+    open: true,
+    time: 30,
+    count: 15
+  }
+}
+
+// api限流设置 '路由名字':[每秒,次数]
+// time 为时间 xx/秒		默认30秒
+// count 为次数			默认 30秒/15次
 const limit_config = {
   dev: {
     '/version': [10, 5],
@@ -125,7 +141,7 @@ const swagger_config = {
 module.exports.mysql = mysql_config[env]
 module.exports.redis = redis_config[env]
 module.exports.jwtkey = jwt_config[env]
-module.exports.apitime = Boolean(env === 'dev')
+module.exports.apitime = apitime_config[env]
 module.exports.limit = limit_config[env]
 module.exports.listen = listen_config[env]
 module.exports.swagger = swagger_config[env]

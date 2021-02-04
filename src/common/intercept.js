@@ -11,7 +11,7 @@ const check_cmake = (fastify, head, reque, reply, code = 'SUCCESS', next) => {
   }
 
   const { id, raw } = reque
-  console.log({ id: id, code: code }, '拦截状态...')
+  console.log({ id, code }, '拦截状态...')
 
   if (code === 'SUCCESS') {
     let name = `api_${fastify.md5(raw.url + head.onlyid)}`
@@ -22,8 +22,6 @@ const check_cmake = (fastify, head, reque, reply, code = 'SUCCESS', next) => {
       fastify.get_redis(name).then((cache) => {
         if (cache) {
           console.log('api cache=' + name)
-          reply.header('Cache-control', 'max-age=3600')
-          reply.header('Last-Modified', new Date().toUTCString())
           reply.send(cache)
         } else {
           next()
@@ -59,6 +57,10 @@ const check_jwt = (fastify, head, reque, reply, next) => {
   })
 }
 
+const ORIGIN = ['Access-Control-Allow-Origin', '*']
+const HEADERS = ['Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With']
+const METHODS = ['Access-Control-Allow-Methods', 'POST,GET,OPTIONS']
+
 module.exports = (fastify) => {
   console.log('开启拦截器...')
 
@@ -69,17 +71,17 @@ module.exports = (fastify) => {
     if (url === '/favicon.ico') {
       reply.code(404).send()
     } else {
-      console.log({ id: id, url: url, params: { ...query }, body: body }, '请求拦截...')
+      console.log({ id, url, params: { ...query }, body }, '请求拦截...')
       let head = headers
       head.onlyid = fastify.md5(head.authorization) || ''
 
-      reply.header('Access-Control-Allow-Origin', '*')
-      reply.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With')
-      reply.header('Access-Control-Allow-Methods', 'POST,GET,OPTIONS')
+      reply.header(...ORIGIN)
+      reply.header(...HEADERS)
+      reply.header(...METHODS)
 
       apitime(fastify, url, head.onlyid).then((bool) => {
         if (!bool) {
-          console.log({ id: id, code: 401 }, '服务器繁忙...')
+          console.log({ id, code: 401 }, '服务器繁忙...')
           reply.code(401).send(resultful('API_OutTime'))
         } else {
           check_jwt(fastify, head, reque, reply, next)

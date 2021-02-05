@@ -10,9 +10,23 @@ const fs_modules = (fastify) => {
 
 module.exports = (fastify) => {
   const list = fs_modules(fastify)
+  let limit = global.api_limit
+  let jump = global.jump_auth
 
   console.time('生产路由')
-  list.forEach((info) => info.map((module) => fastify.route(module))) //循环子模块路由配置 生产路由
+  list.forEach((info) => {
+    let proxy = false
+    let filter = info.filter((f) => {
+      if (f.is_proxy) proxy = f
+      return !f.is_proxy
+    })
+    filter.map((module) => {
+      if (module.limit && Array.isArray(module.limit)) limit[module.url] = module.limit
+      if (module.jump) jump.set(module.url, true)
+      if (proxy) module.schema = { ...module.schema, ...proxy.swagger }
+      fastify.route(module)
+    })
+  }) //循环子模块路由配置 生产路由
   console.timeEnd('生产路由')
 
   // console.log(list)	//打印所有路由

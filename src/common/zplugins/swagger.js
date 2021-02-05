@@ -1,6 +1,6 @@
 const {
   listen: { port, ip },
-  swagger: { use, route, info, host, apiKey }
+  swagger: { use, route, info, host, tags, apiKey, externalDocs }
 } = require('../config')
 
 module.exports = (fastify) => {
@@ -10,17 +10,24 @@ module.exports = (fastify) => {
     exposeRoute: true,
     swagger: {
       info: info,
-      host: host === 'auto' ? ip : host,
+      host: host === 'auto' ? `${ip}:${port}` : host,
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json'],
       securityDefinitions: {
         apiKey: apiKey
-      }
+      },
+      tags: tags,
+      externalDocs: externalDocs,
+      security: [
+        {
+          apiKey: []
+        }
+      ]
     }
   })
 
-  global.add_jump([
+  global.add_map([
     route,
     `${route}/json`,
     `${route}/static/index.html`,

@@ -1,8 +1,13 @@
-const { uid } = require('../schema')
-const { version: api } = require('../../common/api')
+const { uid, swagger } = require('@/common/schema/version')
+const api = require('@/common/api/version')
 
 //版本模块路由
 module.exports = (fastify) => [
+  {
+    // 全局代理操作 当前js的每个路由 都会代理属性,对象,函数 (除了is_proxy属性外)
+    is_proxy: true,
+    swagger
+  },
   {
     ...api.version,
     handler: async (reque, reply) => {

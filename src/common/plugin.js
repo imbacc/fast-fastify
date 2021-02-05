@@ -6,5 +6,5 @@ module.exports = (fastify) => {
   fastify.register(fastifyJwt, { secret: jwtkey })
 
   // Swagger
-  require('./plugins/swagger')(fastify)
+  require('./zplugins/swagger')(fastify)
 }

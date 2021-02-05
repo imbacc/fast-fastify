@@ -5,12 +5,13 @@
  * count 为次数			默认 30秒/15次
  */
 
-const { limit, apitime } = require('./config.js')
+const { apitime } = require('./config.js')
 
 module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.count, update = false) => {
   //false为关闭redis限流
   if (!apitime.open) return Promise.resolve(true)
 
+  let limit = global.api_limit
   let cache = global.api_cache
   let val = `${spname}_${spid}`
   let key_time = `apit_${val}`

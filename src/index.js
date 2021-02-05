@@ -1,3 +1,4 @@
+const moduleAlias = require('module-alias')
 const fastify = require('fastify')({
   logger: false
 })
@@ -5,6 +6,11 @@ const fastify = require('fastify')({
 const {
   listen: { port, ip, queue }
 } = require('./common/config')
+
+// 添加alias导向
+moduleAlias.addAliases({
+  '@': __dirname
+})
 
 require('./common/decorate')(fastify) //注册装饰器
 require('./common/intercept')(fastify) //注册拦截器

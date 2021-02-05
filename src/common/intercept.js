@@ -1,11 +1,11 @@
 const resultful = require('../db/resultful.js') //返回数据构造
 const apitime = require('./apitime') //API限流
-const jumpCheck = global.jump_map //跳过检测jwt
+const jumpCheck = global.jump_auth //跳过检测jwt
 
 //检测CMAKE令牌
 const check_cmake = (fastify, onlyid, reque, reply, code = 'SUCCESS', next) => {
   if (code === 'JUMP_CHECK') {
-    // console.log('跳过检测 token...')
+    // console.log('JUMP_CHECK TOKEN...')
     next()
     return
   }
@@ -32,7 +32,7 @@ const check_cmake = (fastify, onlyid, reque, reply, code = 'SUCCESS', next) => {
       next()
     }
   } else {
-    reply.code(500).send(resultful(code))
+    reply.code(403).send(resultful(code))
   }
 }
 

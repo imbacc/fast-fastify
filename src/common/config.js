@@ -4,13 +4,14 @@ const md5 = require('md5-node')
 console.log('env=', env)
 
 // 定义全局属性
-global.api_cache = {} //api接口缓存
-global.base64 = (str) => Buffer.from(str).toString('base64') //base64加密
-global.base64_re = (str) => Buffer.from(str, 'base64').toString() //base64解密
-global.jump_map = new Map()
-global.add_jump = (jump = []) => {
+// global.base64 = (str) => Buffer.from(str).toString('base64') //base64加密
+// global.base64_re = (str) => Buffer.from(str, 'base64').toString() //base64解密
+global.api_cache = {} // api接口缓存
+global.api_limit = {} // api限流设置 '路由名字':[每秒,次数]
+global.jump_auth = new Map() // 跳过权限检测
+global.add_map = (jump = []) => {
   //路由不检测 jwt权限
-  const map = global.jump_map
+  const map = global.jump_auth
   jump.forEach((key) => map.set(key, true))
   return map
 }
@@ -22,7 +23,7 @@ const check_auth = {
 }
 
 // 初始化执行
-global.add_jump(check_auth[env])
+global.add_map(check_auth[env])
 
 // 端口信息
 const listen_config = {
@@ -88,50 +89,43 @@ const apitime_config = {
   }
 }
 
-// api限流设置 '路由名字':[每秒,次数]
-// time 为时间 xx/秒		默认30秒
-// count 为次数			默认 30秒/15次
-const limit_config = {
-  dev: {
-    '/version': [10, 5],
-    '/fff': [1, 20],
-    '/ddd': [10, 2]
-  },
-  prod: {
-    '/version': [10, 5],
-    '/fff': [10, 20]
-  }
-}
-
 // swagger信息
 const swagger_config = {
   dev: {
     use: true,
     route: `/swagger/${md5('地址加密')}`,
     info: {
-      title: 'REST API Spec',
-      description: 'api',
-      version: '1.0.0'
+      title: 'REST API',
+      version: '1.0.0',
+      description: 'swagger api description...'
     },
-    host: 'auto', // auto为端口ip
+    host: 'auto', // auto为listen_config 端口 ip
     apiKey: {
       type: 'apiKey',
-      name: 'apiKey',
+      name: 'Authorization',
       in: 'header'
+    },
+    tags: [
+      { name: 'user', description: '这里是用户接口模块' },
+      { name: 'version', description: '这里是授权接口模块' }
+    ],
+    externalDocs: {
+      description: '查看fastify文档',
+      url: 'https://www.w3cschool.cn/fastify/fastify-zopy35zj.html'
     }
   },
   prod: {
     use: false // 不注册
     // route: `/swagger/${md5('地址加密')}`,
     // info: {
-    //   title: 'REST API Spec',
-    //   description: 'api',
-    //   version: '1.0.0'
+    //   title: 'REST API',
+    //   version: '1.0.0',
+    //   description: 'swagger api description...'
     // },
     // host: 'auto',
     // apiKey: {
     //   type: 'apiKey',
-    //   name: 'apiKey',
+    //   name: 'Authorization',
     //   in: 'header'
     // }
   }
@@ -142,6 +136,5 @@ module.exports.mysql = mysql_config[env]
 module.exports.redis = redis_config[env]
 module.exports.jwtkey = jwt_config[env]
 module.exports.apitime = apitime_config[env]
-module.exports.limit = limit_config[env]
 module.exports.listen = listen_config[env]
 module.exports.swagger = swagger_config[env]

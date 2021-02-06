@@ -21,8 +21,15 @@ module.exports = (fastify) => {
       return !f.is_proxy
     })
     filter.map((module) => {
-      if (module.limit && Array.isArray(module.limit)) limit[module.url] = module.limit
-      if (module.jump) jump.set(module.url, true)
+      if (module.sql) delete module.sql
+      if (module.limit && Array.isArray(module.limit)) {
+        limit[module.url] = module.limit
+        delete module.limit
+      }
+      if (module.jump) {
+        jump.set(module.url, true)
+        delete module.jump
+      }
       if (proxy) module.schema = { ...module.schema, ...proxy.swagger }
       fastify.route(module)
     })

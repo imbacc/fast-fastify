@@ -11,7 +11,21 @@ module.exports = (fastify) => [
   {
     ...api.upp,
     handler: async (reque, reply) => {
-      fastify.exec.get_table('update', ['app_info', ['text'], 'where id = ?'], ['text', 1]).then((res) => {
+      fastify.exec.get_table(...api.upp2.table).then((res) => {
+        //只有内容跟数据库不一致 changedRows才会有效
+        if (res.code === 1 && res.data.changedRows > 0) {
+          reply.send(res)
+        } else {
+          // res.data = null
+          reply.send(res)
+        }
+      })
+    }
+  },
+  {
+    ...api.upp2,
+    handler: async (reque, reply) => {
+      fastify.exec.get_table(...api.upp2.table).then((res) => {
         //只有内容跟数据库不一致 changedRows才会有效
         if (res.code === 1 && res.data.changedRows > 0) {
           reply.send(res)
@@ -26,7 +40,7 @@ module.exports = (fastify) => [
     ...api.fff,
     handler: async (reque, reply) => {
       //缓存到redis 60分钟 只GET请求缓存!
-      fastify.cache_sql('select * from app_info where id > ?', [0], 60, reque).then((res) => {
+      fastify.cache_sql(api.ddd.sql, [0], 60, reque).then((res) => {
         reply.send(res)
       })
     }
@@ -34,7 +48,7 @@ module.exports = (fastify) => [
   {
     ...api.ddd,
     handler: async (reque, reply) => {
-      fastify.exec.call('select * from app_info where id > ?', [0]).then((res) => {
+      fastify.exec.call(api.ddd.sql, [0]).then((res) => {
         reply.send(res)
       })
     },
@@ -45,7 +59,7 @@ module.exports = (fastify) => [
   {
     ...api.ttt,
     handler: async (reque, reply) => {
-      fastify.exec.call('select * from app_info where id > ?', [0]).then((res) => {
+      fastify.exec.call(api.ddd.sql, [0]).then((res) => {
         reply.send(reque.body)
       })
     },
@@ -56,7 +70,7 @@ module.exports = (fastify) => [
   {
     ...api.cache,
     handler: async (reque, reply) => {
-      fastify.exec.call('select * from app_info where id > ?', [0]).then((res) => {
+      fastify.exec.call(api.ddd.sql, [0]).then((res) => {
         reply.send(res)
       })
     },

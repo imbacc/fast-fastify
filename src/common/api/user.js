@@ -16,6 +16,12 @@ module.exports = {
     limit: LIMIT,
     jump: true // 跳过权限检测
   },
+  upp2: {
+    url: '/upp2',
+    method: METHOD.POST,
+    limit: LIMIT,
+    table: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]]
+  },
   fff: {
     url: '/fff',
     method: METHOD.GET,
@@ -24,7 +30,8 @@ module.exports = {
   ddd: {
     url: '/ddd',
     method: METHOD.GET,
-    limit: [10, 3]
+    limit: [10, 3],
+    sql: 'select * from app_info where id > ?'
   },
   ttt: {
     url: '/ttt',

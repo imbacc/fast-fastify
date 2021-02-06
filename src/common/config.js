@@ -97,7 +97,7 @@ const swagger_config = {
     info: {
       title: 'REST API',
       version: '1.0.0',
-      description: 'swagger api description...'
+      description: 'swagger api description... 授权格式: Authorization: Bearer token'
     },
     host: 'auto', // auto为listen_config 端口 ip
     apiKey: {

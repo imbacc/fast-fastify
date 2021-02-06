@@ -1,8 +1,20 @@
 # fast-fastify
 
-fastify 框架，构建结构文档说明： <https://www.w3cschool.cn/fastify/>
+> 依赖于 fastify 框架，搭建架构!
 
-`yarn install && yarn run dev`
+## yarn install
+
+```
+yarn install && yarn run dev
+```
+
+or
+
+```
+npm install && npm run dev
+```
+
+## fastify 文档说明： <https://www.w3cschool.cn/fastify/>
 
 ```
   ├── node_modules                依赖包

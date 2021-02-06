@@ -1,16 +1,9 @@
 const schema = require('fluent-schema') // fluent-schema 来更简单地设置 JSON schema，并且复用常量。
-const fileName = __filename.split('\\').pop().replace('.js', '')
 
 // 枚举
 const ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER'
-}
-
-const swagger = {
-  tags: [fileName],
-  summary: '我是用户接口',
-  description: '用户接口的描述啊啊啊啊!'
 }
 
 const foo = schema.object().prop('name', schema.string().required()).description('名字').valueOf()
@@ -29,7 +22,6 @@ const user = schema
 delete foo.$schema
 delete user.$schema
 module.exports = {
-  swagger,
   foo,
   user
 }

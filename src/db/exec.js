@@ -49,8 +49,8 @@ class exec {
    * 新增
    * args参数 必须要和config配置的表信息长度一致 ['aa','bb'] 否则自己定义新增SQL语句
    */
-  insert(table = '', list = [], args = []) {
-    return `INSERT INTO ${table} (${this._get_colum(list)}) VALUES (${this._get_join(args)});`
+  insert(table = '', list = []) {
+    return `INSERT INTO ${table} (${this._get_colum(list)}) VALUES (${this._get_join(list)});`
   }
 
   /**

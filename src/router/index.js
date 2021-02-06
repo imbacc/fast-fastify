@@ -1,5 +1,6 @@
 // 获取module文件下子模块内容
 const fs = require('fs')
+const { type } = require('os')
 const path = './src/router/modules'
 
 const fs_modules = (fastify) => {
@@ -17,11 +18,23 @@ module.exports = (fastify) => {
   list.forEach((info) => {
     let proxy = false
     let filter = info.filter((f) => {
-      if (f.is_proxy) proxy = f
+      if (f.is_proxy) proxy = Object.assign({}, f)
       return !f.is_proxy
     })
+
     filter.map((module) => {
+      if (proxy) {
+        delete proxy.is_proxy
+        for (const key in proxy) {
+          if (key === 'swagger') {
+            module.schema = { ...module.schema, ...proxy.swagger }
+          } else {
+            module[key] = proxy[key]
+          }
+        }
+      }
       if (module.sql) delete module.sql
+      if (module.table) delete module.table
       if (module.limit && Array.isArray(module.limit)) {
         limit[module.url] = module.limit
         delete module.limit
@@ -30,7 +43,10 @@ module.exports = (fastify) => {
         jump.set(module.url, true)
         delete module.jump
       }
-      if (proxy) module.schema = { ...module.schema, ...proxy.swagger }
+      if (module.swagger) {
+        module.schema = { ...module.schema, ...module.swagger }
+        delete module.swagger
+      }
       fastify.route(module)
     })
   }) //循环子模块路由配置 生产路由

@@ -1,26 +1,83 @@
 // method枚举
 const METHOD = {
   POST: 'POST',
-  GET: 'GET'
+  GET: 'GET',
+  DELETE: 'DELETE'
 }
 
 // xx/秒		默认30秒
 // 次数			默认 30秒/15次
-// 当前user统一限制 10秒/5 次访问限制
+// 当前user统一限制 10秒/5次访问限制
 const LIMIT = [10, 5]
 
+// 表暴露字段
+const column = {
+  /**
+   * id int(11)
+   * text varchar(200)
+   * version int(11)
+   * os int(1)
+   * ostext varchar(5)
+   * linkurl varchar(300)
+   */
+  app_info: ['id', 'text', 'version', 'os', 'ostext', 'linkurl']
+}
+
 module.exports = {
+  column,
+  add: {
+    url: '/add',
+    method: METHOD.POST,
+    limit: LIMIT,
+    table: [
+      'insert',
+      ['app_info', [...column.app_info.slice(1, 6)]],
+      ['slice去除了id,当前是text内容', 100, 5, 'add接口', '通过add接口添加,我是linkurl字段']
+    ],
+    swagger: {
+      summary: '我是新增接口',
+      description: '新增接口的描述啊啊啊啊!'
+    }
+  },
   upp: {
     url: '/upp',
     method: METHOD.POST,
     limit: LIMIT,
-    jump: true // 跳过权限检测
+    jump: true, // 跳过权限检测
+    table: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]],
+    swagger: {
+      summary: '我是更新接口 【跳过权限检测开启】',
+      description: '更新接口的描述啊啊啊啊!'
+    }
   },
   upp2: {
     url: '/upp2',
     method: METHOD.POST,
     limit: LIMIT,
-    table: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]]
+    swagger: {
+      summary: '我是更新接口的克隆版',
+      description: '更新接口的克隆版的描述啊啊啊啊!'
+    }
+  },
+  del: {
+    url: '/del',
+    method: METHOD.DELETE,
+    limit: LIMIT,
+    table: ['delete', ['app_info', 'where id = ?']],
+    swagger: {
+      summary: '我是删除接口',
+      description: '删除接口的描述啊啊啊啊!'
+    }
+  },
+  sel: {
+    url: '/sel',
+    method: METHOD.GET,
+    limit: LIMIT,
+    table: ['select', ['app_info', [...column.app_info], 'where id > ?'], ['text', 1]],
+    swagger: {
+      summary: '我是查询接口',
+      description: '查询接口的描述啊啊啊啊!'
+    }
   },
   fff: {
     url: '/fff',

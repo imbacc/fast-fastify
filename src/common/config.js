@@ -1,19 +1,15 @@
-const table = process?.env?.CREATE_TABLE?.trim() || false
-const env = table || process?.env?.NODE_ENV?.trim() || 'dev'
+const env = process.env.NODE_ENV || 'dev'
 const md5 = require('md5-node')
 console.log('env=', env)
 
-// 定义全局属性
-// global.base64 = (str) => Buffer.from(str).toString('base64') //base64加密
-// global.base64_re = (str) => Buffer.from(str, 'base64').toString() //base64解密
-global.api_cache = {} // api接口缓存
-global.api_limit = {} // api限流设置 '路由名字':[每秒,次数]
-global.jump_auth = new Map() // 跳过权限检测
-global.add_map = (jump = []) => {
-  //路由不检测 jwt权限
-  const map = global.jump_auth
-  jump.forEach((key) => map.set(key, true))
-  return map
+// 注入global全局变量和函数
+require('./global.js')
+
+// method枚举
+const METHOD = {
+  POST: 'POST',
+  GET: 'GET',
+  DELETE: 'DELETE'
 }
 
 // 赋予路由跳过检测权限
@@ -23,7 +19,7 @@ const check_auth = {
 }
 
 // 初始化执行
-global.add_map(check_auth[env])
+global.add_jump(check_auth[env])
 
 // 端口信息
 const listen_config = {
@@ -138,3 +134,4 @@ module.exports.jwtkey = jwt_config[env]
 module.exports.apitime = apitime_config[env]
 module.exports.listen = listen_config[env]
 module.exports.swagger = swagger_config[env]
+module.exports.METHOD = METHOD

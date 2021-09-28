@@ -23,7 +23,10 @@ require('./db/redis')(fastify) //注册Redis	不是fastify-redis插件
 
 //启动服务	nodemon	index
 fastify.listen(port, ip, queue, (err) => {
-  if (err) throw err
+  if (err) {
+    throw err
+    fastify.close()
+  }
   console.log(`服务指向IP: ${ip}`)
   console.log(`服务监听端口: ${port}`)
   console.log(`服务已启动: http://${ip}:${port}/`)

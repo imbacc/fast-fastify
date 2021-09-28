@@ -1,5 +1,5 @@
-const { uid, swagger } = require('@/common/schema/version')
-const api = require('@/common/api/version')
+const { uid, swagger } = require('@/schema/version')
+const api = require('@/api/version')
 const fileName = __filename.split('\\').pop().replace('.js', '')
 
 //版本模块路由

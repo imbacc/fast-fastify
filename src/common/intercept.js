@@ -2,91 +2,76 @@ const resultful = require('../db/resultful.js') //返回数据构造
 const apitime = require('./apitime') //API限流
 const jumpCheck = global.jump_auth //跳过检测jwt
 
-//检测CMAKE令牌
-const check_cmake = (fastify, onlyid, reque, reply, code = 'SUCCESS', next) => {
-  if (code === 'JUMP_CHECK') {
-    // console.log('JUMP_CHECK TOKEN...')
-    next()
+const check_code = async (onlyid, reply, code, next) => {
+  console.log({ onlyid, code }, '拦截状态...')
+  if (!(code === 'SUCCESS')) {
+    reply.code(403).send(resultful(code))
     return
   }
-
-  const { id, raw } = reque
-  console.log({ id, code }, '拦截状态...')
-
-  if (code === 'SUCCESS') {
-    let name = `api_${fastify.md5(raw.url + onlyid)}`
-    // console.log('api name=', name)
-
-    if (raw.method === 'GET') {
-      //读取是否 接口有redis缓存
-      fastify.get_redis(name).then((cache) => {
-        if (cache) {
-          console.log('api cache=' + name)
-          reply.send(cache)
-        } else {
-          next()
-        }
-      })
-    } else {
-      //POST请求跳过检测缓存直接执行
-      next()
-    }
-  } else {
-    reply.code(403).send(resultful(code))
-  }
+  next()
 }
 
 //检测JWT令牌
-const check_jwt = (fastify, onlyid, reque, reply, next) => {
-  const { raw } = reque
-  if (raw.method === 'OPTIONS') {
+const check_jwt = async (onlyid, reque, reply, next) => {
+  if (reque.raw.method === 'OPTIONS') {
     reply.code(200).send()
     return
   }
   reque.jwtVerify((err, decoded) => {
-    let url_idx = raw.url.indexOf('?')
-    let url_str = url_idx !== -1 ? raw.url.substring(0, url_idx) : raw.url
     //没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
-    let state = jumpCheck.get(url_str) ? 'JUMP_CHECK' : 'WHEREIS_CRACK'
-    if (err && err.name === 'JsonWebTokenError') {
-      reply.code(403).send(resultful('UNMAKETOKEN_RUBBISH'))
-      return
-    }
-    if (err === null) state = 'SUCCESS'
-    check_cmake(fastify, onlyid, reque, reply, state, next)
+    let code = 'WHEREIS_CRACK'
+    if (err) code = err.name === 'JsonWebTokenError' ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
+    if (err === null) code = 'SUCCESS'
+    check_code(onlyid, reply, code, next)
   })
 }
 
-const ORIGIN = ['Access-Control-Allow-Origin', '*']
-const HEADERS = ['Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With']
-const METHODS = ['Access-Control-Allow-Methods', 'POST,GET,OPTIONS']
+const ICO = '/favicon.ico'
+const H_KEY1 = 'Access-Control-Allow-Origin'
+const H_KEY2 = 'Access-Control-Allow-Headers'
+const H_KEY3 = 'Access-Control-Allow-Methods'
+const H_VAL1 = '*'
+const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With'
+const H_VAL3 = 'POST,GET,OPTIONS'
 
 module.exports = (fastify) => {
   console.log('开启拦截器...')
+  const { md5 } = fastify
 
   //请求
   fastify.addHook('onRequest', (reque, reply, next) => {
-    const { raw, query, body, id, headers } = reque
+    const raw = reque.raw
     const url = raw.url
-    if (url === '/favicon.ico') {
+    if (url === ICO) {
       reply.code(404).send()
-    } else {
-      console.log({ id, url, params: { ...query }, body }, '请求拦截...')
-      const onlyid = fastify.md5(headers.authorization) || ''
-
-      reply.header(...ORIGIN)
-      reply.header(...HEADERS)
-      reply.header(...METHODS)
-
-      apitime(fastify, url, onlyid).then((bool) => {
-        if (!bool) {
-          console.log({ id, code: 401 }, '服务器繁忙...')
-          reply.code(401).send(resultful('API_OutTime'))
-        } else {
-          check_jwt(fastify, onlyid, reque, reply, next)
-        }
-      })
+      return
     }
+
+    // 判断是否跳过白名单，直接next
+    const url_idx = url.indexOf('?')
+    const url_str = url_idx !== -1 ? url.substring(0, url_idx) : url
+    const jump = jumpCheck.get(url_str)
+    if (jump) {
+      next()
+      return
+    }
+
+    reply.header(H_KEY1, H_VAL1)
+    reply.header(H_KEY2, H_VAL2)
+    reply.header(H_KEY3, H_VAL3)
+
+    const { query, body, id, headers } = reque
+    const onlyid = md5(headers.authorization || '')
+    console.log({ id, onlyid, url, params: { ...query }, body }, '请求拦截...')
+
+    apitime(url, onlyid).then((bool) => {
+      if (!bool) {
+        console.log({ id, code: 403 }, '服务器繁忙...')
+        reply.code(403).send(resultful('API_OUTTIME'))
+      } else {
+        check_jwt(onlyid, reque, reply, next)
+      }
+    })
   })
 
   //预处理 - 当做响应拦截算了

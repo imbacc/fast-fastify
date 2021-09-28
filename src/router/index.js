@@ -34,7 +34,7 @@ module.exports = (fastify) => {
         }
       }
       if (module.sql) delete module.sql
-      if (module.table) delete module.table
+      if (module.compose) delete module.compose
       if (module.limit && Array.isArray(module.limit)) {
         limit[module.url] = module.limit
         delete module.limit

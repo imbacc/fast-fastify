@@ -27,7 +27,7 @@ module.exports = (fastify) => {
     }
   })
 
-  global.add_map([
+  global.add_jump([
     route,
     `${route}/json`,
     `${route}/static/index.html`,

@@ -16,8 +16,11 @@ module.exports = (fastify) => {
     if (error.validation) {
       let msg = Array.from(error.validation, ({ message }) => message).join(',')
       let str = `validation failed of the ${error.validationContext}! ${msg}`
-      console.log('try error...', str)
+      console.log('try error verify...', str)
       reply.status(400).send(new Error(str))
+    } else {
+      console.log('try error other...', error)
+      reply.status(400).send(new Error(error))
     }
   })
 }

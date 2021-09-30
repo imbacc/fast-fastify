@@ -6,50 +6,44 @@
  */
 
 const { apitime } = require('./config.js')
+const { open: _open, time: _time, count: _count } = apitime
 
-module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.count, update = false) => {
-  //false为关闭redis限流
-  if (!apitime.open) return Promise.resolve(true)
-
-  console.log('spname', spname)
+module.exports = (spname, spid, time = _time, count = _count, update = false) => {
+  //false为关闭限流
+  if (!_open) return Promise.resolve(true)
 
   let limit = global.api_limit
   let cache = global.api_cache
+  
   let val = `${spname}_${spid}`
   let key_time = `apit_${val}`
   let key_num = `apin_${val}`
   let cfg = limit[spname.split('?')[0]]
 
-  if (typeof cfg === 'object' && !update) {
-    time = cfg[0]
-    count = cfg[1]
+  if (cfg && Array.isArray(cfg) && !update) {
+    const [cfg_time, cfg_count] = cfg
+    time = cfg_time
+    count = cfg_count
   }
 
   let api_time = cache[key_time] || false //获取 访问API时间间隔
   let api_count = cache[key_num] || false //获取 访问API次数间隔的时间
-
   let datetime = new Date().getTime()
 
-  // console.log('api_time=',api_time)
-  // console.log('api_count=',api_count)
   if (api_time && api_count) {
     //Api时间限制
     let second = (datetime - parseInt(api_time)) / 1000
-    // console.log('second='+second)
 
     if (second < time) {
       //Api次数限制
       let add = parseInt(api_count) + 1
       if (add > count) return Promise.resolve(false)
-      cache[key_num] = add
-    } else {
-      cache[key_time] = datetime
-      cache[key_num] = 1
+      global.set_cache(key_num, add)
+      return true
     }
-  } else {
-    cache[key_time] = datetime
-    cache[key_num] = 1
   }
 
+  global.set_cache(key_time, datetime)
+  global.set_cache(key_num, 1)
   return Promise.resolve(true)
 }

@@ -1,5 +1,5 @@
-const { foo, user } = require('@/common/schema/user')
-const api = require('@/common/api/user')
+const { foo, user } = require('@/schema/user')
+const api = require('@/api/user')
 const fileName = __filename.split('\\').pop().replace('.js', '')
 
 //用户模块路由

@@ -57,7 +57,7 @@ module.exports = (fastify) => [
   {
     ...api.del,
     handler: async (reque, reply) => {
-      const table = api.del.table
+      const table = [...api.del.table]
       table.push([reque.body.id])
       fastify.exec.get_table(...table).then((res) => {
         reply.send(res)

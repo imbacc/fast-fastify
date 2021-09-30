@@ -11,6 +11,8 @@ module.exports = (fastify, spname, spid, time = apitime.time, count = apitime.co
   //false为关闭redis限流
   if (!apitime.open) return Promise.resolve(true)
 
+  console.log('spname', spname)
+
   let limit = global.api_limit
   let cache = global.api_cache
   let val = `${spname}_${spid}`

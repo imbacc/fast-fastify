@@ -1,7 +1,7 @@
 const {
   listen: { port, ip },
   swagger: { use, route, info, host, tags, apiKey, externalDocs }
-} = require('../config')
+} = require('../config.js')
 
 module.exports = (fastify) => {
   if (!use) return

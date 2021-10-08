@@ -1,26 +1,29 @@
-const schema = require('fluent-schema') // fluent-schema 来更简单地设置 JSON schema，并且复用常量。
+const schema = require('fluent-schema')
+const { reduce_prop, arr_repeta } = require('@/common/schema_reduce.js')
 
-// 枚举
+// enum
 const ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER'
 }
 
-const foo = schema.object().prop('name', schema.string().required()).description('名字').valueOf()
+// type
+const string_1_20 = ['string', 1, 20, true]
 
-const user = schema
-  .object()
-  .prop('username', schema.string().minLength(6).maxLength(18).required())
-  .description('用户名')
-  .prop('password', schema.string().minLength(32).maxLength(32).required())
-  .description('密码')
-  .prop('email', schema.string().format(schema.FORMATS.EMAIL).required())
-  .description('邮箱')
-  .prop('role', schema.string().enum(Object.values(ROLES)).description('权限').default(ROLES.USER))
-  .valueOf()
+// prop
+const foo_prop = ['name', '名字描述啦', string_1_20]
+const username_prop = ['username', '用户名', arr_repeta(string_1_20, 6, 18)]
+const user_prop = [
+  username_prop,
+  ['password', '密码', arr_repeta(string_1_20, 32, 32)],
+  ['email', '邮箱', [...arr_repeta(string_1_20, 6, 50), { format: schema.FORMATS.EMAIL }]],
+  ['role', '权限', ['enum', Object.values(ROLES), ROLES.USER, true]]
+]
 
-delete foo.$schema
-delete user.$schema
+// create
+const foo = reduce_prop(foo_prop, username_prop)
+const user = reduce_prop(...user_prop)
+
 module.exports = {
   foo,
   user

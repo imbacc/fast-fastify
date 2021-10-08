@@ -1,4 +1,4 @@
-const { jwtkey, swagger } = require('./config')
+const { jwtkey } = require('./config.js')
 const fastifyJwt = require('fastify-jwt')
 
 module.exports = (fastify) => {
@@ -6,5 +6,5 @@ module.exports = (fastify) => {
   fastify.register(fastifyJwt, { secret: jwtkey })
 
   // Swagger
-  require('./zplugins/swagger')(fastify)
+  require('./plugins/swagger')(fastify)
 }

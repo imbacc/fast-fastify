@@ -14,7 +14,7 @@ module.exports = (spname, spid, time = _time, count = _count, update = false) =>
 
   let limit = global.api_limit
   let cache = global.api_cache
-  
+
   let val = `${spname}_${spid}`
   let key_time = `apit_${val}`
   let key_num = `apin_${val}`
@@ -39,7 +39,7 @@ module.exports = (spname, spid, time = _time, count = _count, update = false) =>
       let add = parseInt(api_count) + 1
       if (add > count) return Promise.resolve(false)
       global.set_cache(key_num, add)
-      return true
+      return Promise.resolve(true)
     }
   }
 

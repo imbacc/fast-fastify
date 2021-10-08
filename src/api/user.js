@@ -1,9 +1,6 @@
-// method枚举
-const METHOD = {
-  POST: 'POST',
-  GET: 'GET',
-  DELETE: 'DELETE'
-}
+const { METHOD } = require('@/common/config.js')
+const { foo, user } = require('@/schema/user.js')
+const { id } = require('@/schema/version.js')
 
 // xx/秒		默认30秒
 // 次数			默认 30秒/15次
@@ -29,11 +26,13 @@ module.exports = {
     url: '/add',
     method: METHOD.POST,
     limit: LIMIT,
-    table: [
-      'insert',
-      ['app_info', [...column.app_info.slice(1, 6)]],
-      ['slice去除了id,当前是text内容', 100, 5, 'add接口', '通过add接口添加,我是linkurl字段']
-    ],
+    compose: {
+      add_test: [
+        'insert',
+        ['app_info', [...column.app_info.slice(1, 6)]],
+        ['slice去除了id,当前是text内容', 100, 5, 'add接口', '通过add接口添加,我是linkurl字段']
+      ]
+    },
     swagger: {
       summary: '我是新增接口',
       description: '新增接口的描述啊啊啊啊!'
@@ -44,7 +43,9 @@ module.exports = {
     method: METHOD.POST,
     limit: LIMIT,
     jump: true, // 跳过权限检测
-    table: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]],
+    compose: {
+      update_test: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]]
+    },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
       description: '更新接口的描述啊啊啊啊!'
@@ -63,17 +64,24 @@ module.exports = {
     url: '/del',
     method: METHOD.DELETE,
     limit: LIMIT,
-    table: ['delete', ['app_info', 'where id = ?']],
+    compose: {
+      delete_test: ['delete', ['app_info', 'where id = ?']]
+    },
     swagger: {
       summary: '我是删除接口',
       description: '删除接口的描述啊啊啊啊!'
+    },
+    schema: {
+      body: id
     }
   },
   sel: {
     url: '/sel',
     method: METHOD.GET,
     limit: LIMIT,
-    table: ['select', ['app_info', [...column.app_info], 'where id > ?'], ['text', 1]],
+    compose: {
+      select_test: ['select', ['app_info', [...column.app_info], 'where id > ?'], ['text', 1]]
+    },
     swagger: {
       summary: '我是查询接口',
       description: '查询接口的描述啊啊啊啊!'
@@ -88,11 +96,20 @@ module.exports = {
     url: '/ddd',
     method: METHOD.GET,
     limit: [10, 3],
-    sql: 'select * from app_info where id > ?'
+    sql: {
+      select: 'select * from app_info where id > ?',
+      select2: 'select * from app_info where id > ?'
+    },
+    schema: {
+      query: foo
+    }
   },
   ttt: {
     url: '/ttt',
-    method: METHOD.POST
+    method: METHOD.POST,
+    schema: {
+      body: user
+    }
   },
   cache: {
     url: '/cache/:id',

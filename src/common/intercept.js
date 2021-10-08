@@ -1,11 +1,11 @@
 const resultful = require('../db/resultful.js') //返回数据构造
-const apitime = require('./apitime') //API限流
+const apitime = require('./apitime.js') //API限流
 const jumpCheck = global.jump_auth //跳过检测jwt
 
-const check_code = async (onlyid, reply, code, next) => {
+const check_code = async (onlyid, reply, code, _code, next) => {
   console.log({ onlyid, code }, '拦截状态...')
   if (!(code === 'SUCCESS')) {
-    reply.code(403).send(resultful(code))
+    reply.code(_code).send(resultful(code))
     return
   }
   next()
@@ -13,16 +13,17 @@ const check_code = async (onlyid, reply, code, next) => {
 
 //检测JWT令牌
 const check_jwt = async (onlyid, reque, reply, next) => {
-  if (reque.raw.method === 'OPTIONS') {
-    reply.code(200).send()
-    return
-  }
   reque.jwtVerify((err, decoded) => {
     //没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
-    let code = 'WHEREIS_CRACK'
-    if (err) code = err.name === 'JsonWebTokenError' ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
+    let code = 'WHEREIS_CRACK',
+      _code = 403
+    if (err) {
+      let bool = err.name === 'JsonWebTokenError'
+      code = bool ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
+      _code = bool ? 403 : 401
+    }
     if (err === null) code = 'SUCCESS'
-    check_code(onlyid, reply, code, next)
+    check_code(onlyid, reply, code, _code, next)
   })
 }
 
@@ -40,10 +41,19 @@ module.exports = (fastify) => {
 
   //请求
   fastify.addHook('onRequest', (reque, reply, next) => {
+    reply.header(H_KEY1, H_VAL1)
+    reply.header(H_KEY2, H_VAL2)
+    reply.header(H_KEY3, H_VAL3)
+
     const raw = reque.raw
     const url = raw.url
     if (url === ICO) {
-      reply.code(404).send()
+      next()
+      return
+    }
+
+    if (raw.method === 'OPTIONS') {
+      next()
       return
     }
 
@@ -55,10 +65,6 @@ module.exports = (fastify) => {
       next()
       return
     }
-
-    reply.header(H_KEY1, H_VAL1)
-    reply.header(H_KEY2, H_VAL2)
-    reply.header(H_KEY3, H_VAL3)
 
     const { query, body, id, headers } = reque
     const onlyid = md5(headers.authorization || '')

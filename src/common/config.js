@@ -7,8 +7,9 @@ require('./global.js')
 
 // method枚举
 const METHOD = {
-  POST: 'POST',
   GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
   DELETE: 'DELETE'
 }
 

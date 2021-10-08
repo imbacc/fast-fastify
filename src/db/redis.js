@@ -1,5 +1,5 @@
 const Redis = require('redis') //Redis驱动
-const { redis } = require('../common/config') //Redis配置
+const { redis } = require('@/common/config.js') //Redis配置
 
 const redisCli = Redis.createClient(redis.port, redis.host)
 redisCli.on('error', (err) => console.log('redis err=' + err))

@@ -1,4 +1,5 @@
 const resultful = require('./resultful') //返回数据构造
+const { is_dev } = require('@/common/config.js')
 
 //执行SQL事务封装
 class exec {
@@ -12,21 +13,54 @@ class exec {
    * value 数组格式传入 sql参数 [1,22]
    * then 回调函数
    */
-  call(sql, value) {
+  call(sql, value, code) {
+    const pool = this.pool
     return new Promise((resolve) => {
-      this.pool.getConnection((error, conn) => {
+      pool.getConnection((error, conn) => {
         if (error) {
           console.log('conn err=', error)
           resolve(resultful('WARN'))
         } else {
           conn.query(sql, value, (err, res, fields) => {
-            console.log('执行sql=', sql)
+            if (is_dev) console.log('执行sql=', sql, value)
             conn.release()
             if (err === null) {
-              resolve(resultful('SUCCESS', res), fields)
+              sql = sql.toUpperCase()
+              const sel_bool = ~sql.indexOf('SELECT')
+              if (!sel_bool) {
+                const add_bool = ~sql.indexOf('INSERT INTO')
+                const update_bool = ~sql.indexOf('UPDATE')
+                const delete_bool = ~sql.indexOf('DELETE')
+                let affectedRows = 0,
+                  changedRows = 0,
+                  insertId = 0
+                if (Array.isArray(res)) {
+                  const sum = res.reduce((t, v) => {
+                    if (!t.affectedRows) t.affectedRows = 0
+                    t.affectedRows += v.affectedRows
+                    if (!t.changedRows) t.changedRows = 0
+                    t.changedRows += v.changedRows
+                    return t
+                  }, {})
+                  affectedRows = sum.affectedRows
+                  changedRows = sum.changedRows
+                } else {
+                  affectedRows = res.affectedRows
+                  changedRows = res.changedRows
+                  insertId = res.insertId
+                }
+                console.log('res', res)
+                if (add_bool) res = affectedRows >= 1 ? { affectedRows, id: insertId } : false
+                if (update_bool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
+                if (delete_bool) res = affectedRows >= 1 ? { affectedRows } : false
+              }
+              resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res), fields)
             } else {
+              delete err.sql
+              delete err.sqlState
+              delete err.sqlMessage
               console.log('query err=', err)
-              resolve(resultful('ERROR', err))
+              resolve(resultful('API_ERROR'))
             }
           })
         }

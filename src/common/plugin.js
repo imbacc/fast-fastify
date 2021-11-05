@@ -1,5 +1,5 @@
-const { jwtkey } = require('./config.js')
 const fastifyJwt = require('fastify-jwt')
+const { jwtkey } = require('./config.js')
 
 module.exports = (fastify) => {
   // JWT令牌

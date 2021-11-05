@@ -1,5 +1,14 @@
-const api = require('@/api/user')
 const fileName = __filename.split('\\').pop().replace('.js', '')
+
+// api
+const api = require('@/api/user.js')
+
+// sql
+const { add_test } = api.api_testAdd.sql
+const { update_test } = api.api_testUpp.sql
+const { delete_test } = api.api_testDel.sql
+const { select_test } = api.api_testSel.sql
+const { select, select2 } = api.api_testDdd.sql
 
 //用户模块路由
 module.exports = (fastify) => {
@@ -17,95 +26,69 @@ module.exports = (fastify) => {
       }
     },
     {
-      ...api.add,
+      ...api.api_testSel,
       handler: async (reque, reply) => {
-        exec.get_table(...api.add.compose.add_test).then((res) => {
-          //只有内容跟数据库不一致 changedRows才会有效
-          reply.send(res)
-        })
+        const res = await exec.call(add_test)
+        reply.send(res)
       }
     },
     {
-      ...api.upp,
+      ...api.api_testUpp,
       handler: async (reque, reply) => {
-        exec.get_table(...api.upp.compose.update_test).then((res) => {
-          //只有内容跟数据库不一致 changedRows才会有效
-          if (res.code === 1 && res.data.changedRows > 0) {
-            reply.send(res)
-          } else {
-            // res.data = null
-            reply.send(res)
-          }
-        })
+        const res = await exec.call(update_test)
+        reply.send(res)
       }
     },
     {
-      ...api.upp2,
+      ...api.api_testUpp2,
       handler: async (reque, reply) => {
-        exec.get_table(...api.upp.compose.update_test).then((res) => {
-          res.description = '我是更新接口的克隆版, 复用api.upp.table'
-          reply.send(res)
-        })
+        const res = await exec.call(update_test)
+        res.description = '我是更新接口的克隆版, 复用sql'
+        reply.send(res)
       }
     },
     {
-      ...api.del,
+      ...api.api_testDel,
       handler: async (reque, reply) => {
-        const table = [...api.del.compose.delete_test, reque.body.id]
-        exec.get_table(...table).then((res) => {
-          reply.send(res)
-        })
+        const res = await exec.call(delete_test, [reque.body.id])
+        reply.send(res)
       }
     },
     {
-      ...api.sel,
+      ...api.api_testSel,
       handler: async (reque, reply) => {
-        exec.get_table(...api.sel.compose.select_test).then((res) => {
-          reply.send(res)
-        })
+        const res = await exec.call(select_test)
+        reply.send(res)
       }
     },
     {
-      ...api.fff,
+      ...api.api_testFff,
       handler: async (reque, reply) => {
         //缓存到redis 60分钟 只GET请求缓存!
-        fastify.cache_sql(api.ddd.sql.select, [0], 60, reque).then((res) => {
-          reply.send(res)
-        })
+        //const res = await fastify.cache_sql(select_test, [0], 60, reque)
+        //reply.send(res)
       }
     },
     {
-      ...api.ddd,
+      ...api.api_testDdd,
       handler: async (reque, reply) => {
-        exec.call(api.ddd.sql.select, [0]).then((res) => {
-          reply.send(res)
-        })
+        const res = await exec.call(select_test)
+        reply.send(res)
       }
     },
     {
-      ...api.ttt,
+      ...api.api_testTtt,
       handler: async (reque, reply) => {
-        exec.call(api.ddd.sql.select2, [0]).then((res) => {
-          reply.send(reque.body)
-        })
+        const res = await exec.call(select_test, [0])
+        reply.send(reque.body)
       }
     },
     {
-      ...api.cache,
+      ...api.api_testCache,
       handler: async (reque, reply) => {
-        exec.call(api.ddd.sql.select2, [0]).then((res) => {
-          reply.send(res)
-        })
+        const res = await exec.call(select_test, [0])
+        reply.send(res)
       }
-      // schema: {
-      //   params: {
-      //     type: 'object',
-      //     properties: {
-      //       id: { type: 'string', description: '路由PATH参数ID' }
-      //     },
-      //     required: ['id']
-      //   }
-      // }
     }
   ]
 }

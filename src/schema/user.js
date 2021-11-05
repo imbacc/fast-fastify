@@ -1,5 +1,6 @@
 const schema = require('fluent-schema')
 const { reduce_prop, arr_repeta } = require('@/common/schema_reduce.js')
+const { number_0_1, string_1_10, array_20_number, page_prop, size_prop } = require('./global.js')
 
 // enum
 const ROLES = {
@@ -8,7 +9,7 @@ const ROLES = {
 }
 
 // type
-const string_1_20 = ['string', 1, 20, true]
+const string_1_20 = arr_repeta(string_1_10, 1, 20)
 
 // prop
 const foo_prop = ['name', '名字描述啦', string_1_20]
@@ -21,10 +22,10 @@ const user_prop = [
 ]
 
 // create
-const foo = reduce_prop(foo_prop, username_prop)
-const user = reduce_prop(...user_prop)
+const foo_schema = reduce_prop(foo_prop, username_prop)
+const user_schema = reduce_prop(...user_prop)
 
 module.exports = {
-  foo,
-  user
+  foo_schema,
+  user_schema
 }

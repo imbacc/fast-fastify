@@ -4,6 +4,8 @@
 
 ## yarn install
 
+### 测试需要先创建数据库 -> 创建数据库名 test -> 导入 app_info.sql 语句执行
+
 ```
 yarn install && yarn run dev
 ```

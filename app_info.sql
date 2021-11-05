@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 本地
-Source Server Version : 80012
+Source Server         : 本地数据库
+Source Server Version : 50726
 Source Host           : localhost:3306
-Source Database       : capp
+Source Database       : test
 
 Target Server Type    : MYSQL
-Target Server Version : 80012
+Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-13 10:13:25
+Date: 2021-11-05 17:22:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,12 +26,12 @@ CREATE TABLE `app_info` (
   `ostext` varchar(5) DEFAULT NULL,
   `linkurl` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of app_info
 -- ----------------------------
-INSERT INTO `app_info` VALUES ('1', '1.修复爱奇艺和腾讯搜索抓取错误\\n 2.播放白屏问题', '101', '1', '安卓', 'http://xxxxx/download/capp-2019-2-12.apk');
-INSERT INTO `app_info` VALUES ('2', '1.修复爱奇艺和腾讯搜索抓取错误\\n 2.播放白屏问题', '100', '2', '苹果', null);
-INSERT INTO `app_info` VALUES ('3', '1.修复爱奇艺和腾讯搜索抓取错误\\n 2.播放白屏问题', '0', '3', '网页下载', null);
-INSERT INTO `app_info` VALUES ('4', '我看到你访问我了哦！', '0', '4', 'token', null);
+INSERT INTO `app_info` VALUES ('1', '111111111', '101', '1', '安卓', 'http://xxxxx/download/capp-2019-2-12.apk');
+INSERT INTO `app_info` VALUES ('2', '222222222222222', '105', '2', '苹果', null);
+INSERT INTO `app_info` VALUES ('3', '33333333333333333333', '102', '3', '网页下载', null);
+INSERT INTO `app_info` VALUES ('4', '444444444444444', '100', '5', 'add接口', '通过add接口添加,我是linkurl字段');

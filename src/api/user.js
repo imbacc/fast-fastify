@@ -1,57 +1,49 @@
 const { METHOD } = require('@/common/config.js')
-const { foo, user } = require('@/schema/user.js')
-const { id } = require('@/schema/version.js')
+const schema = require('@/schema/user.js')
+const version_schema = require('@/schema/version.js')
+const composeTable = require('@/common/compose_table.js')
 
 // xx/秒		默认30秒
 // 次数			默认 30秒/15次
 // 当前user统一限制 10秒/5次访问限制
 const LIMIT = [10, 5]
 
-// 表暴露字段
-const column = {
-  /**
-   * id int(11)
-   * text varchar(200)
-   * version int(11)
-   * os int(1)
-   * ostext varchar(5)
-   * linkurl varchar(300)
-   */
-  app_info: ['id', 'text', 'version', 'os', 'ostext', 'linkurl']
-}
+// `id` int(11) NOT NULL AUTO_INCREMENT,
+// `text` varchar(200) DEFAULT NULL,
+// `version` int(11) DEFAULT NULL,
+// `os` int(1) DEFAULT NULL,
+// `ostext` varchar(5) DEFAULT NULL,
+// `linkurl` varchar(300) DEFAULT NULL,
+const key_list = ['id', 'text', 'version', 'os', 'ostext', 'linkurl']
+const table = new composeTable('app_info', key_list)
 
 module.exports = {
-  column,
-  add: {
+  api_testAdd: {
     url: '/add',
     method: METHOD.POST,
     limit: LIMIT,
-    compose: {
-      add_test: [
-        'insert',
-        ['app_info', [...column.app_info.slice(1, 6)]],
-        ['slice去除了id,当前是text内容', 100, 5, 'add接口', '通过add接口添加,我是linkurl字段']
-      ]
+    sql: {
+      add_test: table.crud_insert().get_sql()
     },
     swagger: {
       summary: '我是新增接口',
       description: '新增接口的描述啊啊啊啊!'
     }
   },
-  upp: {
+  api_testUpp: {
     url: '/upp',
     method: METHOD.POST,
     limit: LIMIT,
     jump: true, // 跳过权限检测
-    compose: {
-      update_test: ['update', ['app_info', ['text'], 'where id = ?'], ['text', 1]]
+    sql: {
+      update_test: table.clear_key().append_key('text').curd_updateById().get_sql()
     },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
       description: '更新接口的描述啊啊啊啊!'
     }
   },
-  upp2: {
+  api_testUpp2: {
     url: '/upp2',
     method: METHOD.POST,
     limit: LIMIT,
@@ -60,58 +52,59 @@ module.exports = {
       description: '更新接口的克隆版的描述啊啊啊啊!'
     }
   },
-  del: {
+  api_testDel: {
     url: '/del',
     method: METHOD.DELETE,
     limit: LIMIT,
-    compose: {
-      delete_test: ['delete', ['app_info', 'where id = ?']]
+    sql: {
+      delete_test: table.curd_deleteById().get_sql()
     },
     swagger: {
       summary: '我是删除接口',
       description: '删除接口的描述啊啊啊啊!'
     },
     schema: {
-      body: id
+      body: version_schema.id_schema
     }
   },
-  sel: {
+  api_testSel: {
     url: '/sel',
     method: METHOD.GET,
     limit: LIMIT,
-    compose: {
-      select_test: ['select', ['app_info', [...column.app_info], 'where id > ?'], ['text', 1]]
+    sql: {
+      select_test: table.curd_selectById().get_sql(),
+      test_connect: table.clear_key().append_key('id').select('limit 1')
     },
     swagger: {
       summary: '我是查询接口',
       description: '查询接口的描述啊啊啊啊!'
     }
   },
-  fff: {
+  api_testFff: {
     url: '/fff',
     method: METHOD.GET,
     limit: LIMIT
   },
-  ddd: {
+  api_testDdd: {
     url: '/ddd',
     method: METHOD.GET,
     limit: [10, 3],
     sql: {
-      select: 'select * from app_info where id > ?',
-      select2: 'select * from app_info where id > ?'
+      select: table.curd_selectById().get_sql(),
+      select2: table.filter_key('version').select('where id = ? and id > 0').get_sql()
     },
     schema: {
-      query: foo
+      query: schema.foo_schema
     }
   },
-  ttt: {
+  api_testTtt: {
     url: '/ttt',
     method: METHOD.POST,
     schema: {
-      body: user
+      body: schema.user_schema
     }
   },
-  cache: {
+  api_testCache: {
     url: '/cache/:id',
     method: METHOD.GET,
     limit: [10, 5],

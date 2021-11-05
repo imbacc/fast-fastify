@@ -1,18 +1,15 @@
 const { reduce_prop, arr_repeta } = require('@/common/schema_reduce.js')
-
-// type
-const number_1_5 = ['number', 1, 5, true]
-const string_1_10 = ['string', 1, 10, true]
+const { number_0_1, string_1_10, array_20_number, page_prop, size_prop } = require('./global.js')
 
 // prop
-const id_prop = ['id', '授权ID', number_1_5]
-const uuid_prop = ['uuid', '授权用户ID', string_1_10]
+const id_prop = ['id', '授权ID', arr_repeta(number_0_1, 1, 5)]
+const uuid_prop = ['uuid', '授权用户ID', arr_repeta(string_1_10, 1, 10)]
 
 // create
-const id = reduce_prop(id_prop)
-const uid = reduce_prop(id_prop, uuid_prop)
+const id_schema = reduce_prop(id_prop)
+const uid_schema = reduce_prop(id_prop, uuid_prop)
 
 module.exports = {
-  id,
-  uid
+  id_schema,
+  uid_schema
 }

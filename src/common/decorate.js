@@ -10,14 +10,13 @@ module.exports = (fastify) => {
   fastify.decorate('md5', md5)
 
   // 缓存get请求 配置到全局
-  fastify.decorate('cache_sql', (sql, val, time, reque) => {
-    return fastify.exec.call(sql, val).then((res) => {
-      const { headers, raw } = reque
-      const onlyid = md5(headers.authorization) || ''
-      const name = `api_${md5(raw.url + onlyid)}`
-      console.log('name', name)
-      if (res.code === 1) fastify.set_redis(name, res, time) //默认360分钟一个小时 60 * 60
-      return res
-    })
-  })
+  // fastify.decorate('cache_sql', (sql, val, time, reque) => {
+  //   return fastify.exec.call(sql, val).then((res) => {
+  //     const { headers, raw } = reque
+  //     const onlyid = md5(headers.authorization) || ''
+  //     const name = `api_${md5(raw.url + onlyid)}`
+  //     if (res.code === 0) fastify.set_redis(name, res, time) //默认360分钟一个小时 60 * 60
+  //     return res
+  //   })
+  // })
 }

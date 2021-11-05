@@ -29,14 +29,11 @@ const create_prop = (name, desc, [type, n1, n2, required, append], object) => {
   if (!object) object = create_object()
   let prop = _type[type](n1, n2)
   if (append) {
-    const append_type = append.constructor
-    if (append_type === Array) {
+    const append_type = toString.call(append)
+    if (append_type === '[object Array]') {
       append.forEach((key) => (prop = prop[key]()))
-    } else if (append_type === Object) {
-      for (const key in append) {
-        let val = append[key]
-        prop = prop[key](val)
-      }
+    } else if (append_type === '[object Object]') {
+      Object.entries(append).forEach(([key, val]) => (prop = prop[key](val)))
     }
   }
   if (required) prop = prop.required()

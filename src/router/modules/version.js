@@ -1,5 +1,13 @@
-const api = require('@/api/version')
 const fileName = __filename.split('\\').pop().replace('.js', '')
+
+// 复用
+const { api_testSel } = require('@/api/user.js')
+
+// api
+const api = require('@/api/version.js')
+
+// sql 复用user的sql
+const { select_test } = api_testSel.sql
 
 //版本模块路由
 module.exports = (fastify) => {
@@ -16,14 +24,13 @@ module.exports = (fastify) => {
       }
     },
     {
-      ...api.version,
+      ...api.api_version,
       handler: async (reque, reply) => {
         const { uuid, id } = reque.query
         const token = fastify.jwt.sign({ uuid, by: 'imbacc' }, { expiresIn: 60 * 60 * 1 })
-        exec.get_table('select', ['app_info', [], 'where id = ?'], [id]).then((res) => {
-          res.token = `Bearer ${token}`
-          reply.send(res)
-        })
+        const res = await exec.call(select_test, [id])
+        res.token = `Bearer ${token}`
+        reply.send(res)
       }
     }
   ]

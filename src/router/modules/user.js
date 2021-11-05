@@ -56,6 +56,7 @@ module.exports = (fastify) => {
     },
     {
       ...api.api_testSel,
+      url: '/sel2',
       handler: async (reque, reply) => {
         const res = await exec.call(select_test)
         reply.send(res)

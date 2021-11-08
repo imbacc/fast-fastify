@@ -1,6 +1,6 @@
 const { METHOD } = require('@/common/config.js')
-const schema = require('@/schema/user.js')
-const version_schema = require('@/schema/version.js')
+const schema = require('@/schema/appinfo.js')
+const token_schema = require('@/schema/token.js')
 const composeTable = require('@/common/compose_table.js')
 
 // xx/秒		默认30秒
@@ -28,19 +28,25 @@ module.exports = {
     swagger: {
       summary: '我是新增接口',
       description: '新增接口的描述啊啊啊啊!'
+    },
+    schema: {
+      body: schema.add_schema
     }
   },
   api_testUpp: {
     url: '/upp',
     method: METHOD.POST,
     limit: LIMIT,
-    jump: true, // 跳过权限检测
     sql: {
-      update_test: table.clear_key().append_key('text').curd_updateById().get_sql()
+      update_test: table.curd_updateById().get_sql(),
+      update_text_test: table.clear_key().append_key('text').curd_deleteById().get_sql() // 清除key 只更新text属性根据id更新
     },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
       description: '更新接口的描述啊啊啊啊!'
+    },
+    schema: {
+      body: schema.update_schema
     }
   },
   api_testUpp2: {
@@ -50,6 +56,9 @@ module.exports = {
     swagger: {
       summary: '我是更新接口的克隆版',
       description: '更新接口的克隆版的描述啊啊啊啊!'
+    },
+    schema: {
+      body: schema.update_schema
     }
   },
   api_testDel: {
@@ -64,7 +73,7 @@ module.exports = {
       description: '删除接口的描述啊啊啊啊!'
     },
     schema: {
-      body: version_schema.id_schema
+      body: token_schema.id_schema
     }
   },
   api_testSel: {
@@ -72,18 +81,19 @@ module.exports = {
     method: METHOD.GET,
     limit: LIMIT,
     sql: {
-      select_test: table.curd_selectById().get_sql(),
-      test_connect: table.clear_key().append_key('id').select('limit 1')
+      select_test: table.select().get_sql(),
+      test_connect: table.clear_key().append_key('id').select('limit 1').get_sql()
     },
     swagger: {
-      summary: '我是查询接口',
+      summary: '我是查询接口！ 从api -> appinfo.js -> swagger 设置summary,description 简介和描述!',
       description: '查询接口的描述啊啊啊啊!'
     }
   },
   api_testFff: {
     url: '/fff',
     method: METHOD.GET,
-    limit: LIMIT
+    limit: LIMIT,
+    jump: true // 跳过权限检测
   },
   api_testDdd: {
     url: '/ddd',
@@ -92,16 +102,14 @@ module.exports = {
     sql: {
       select: table.curd_selectById().get_sql(),
       select2: table.filter_key('version').select('where id = ? and id > 0').get_sql()
-    },
-    schema: {
-      query: schema.foo_schema
     }
   },
   api_testTtt: {
     url: '/ttt',
     method: METHOD.POST,
-    schema: {
-      body: schema.user_schema
+    onRequest: (reque, reply, done) => {
+      console.log('得经过老子!')
+      done()
     }
   },
   api_testCache: {

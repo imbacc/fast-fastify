@@ -1,6 +1,7 @@
 const env = process.env.NODE_ENV || 'dev'
 const md5 = require('md5-node')
 console.log('env=', env)
+console.log('env=', env === 'dev')
 
 // 注入global全局变量和函数
 require('./global.js')
@@ -15,8 +16,8 @@ const METHOD = {
 
 // 赋予路由跳过检测权限
 const check_auth = {
-  dev: ['/version'],
-  prod: ['/version']
+  dev: ['/token'],
+  prod: ['/token']
 }
 
 // 初始化执行
@@ -103,8 +104,8 @@ const swagger_config = {
       in: 'header'
     },
     tags: [
-      { name: 'user', description: '这里是用户接口模块' },
-      { name: 'version', description: '这里是授权接口模块' }
+      { name: 'appinfo', description: '这里是appinfo接口模块' },
+      { name: 'token', description: '这里是授权接口模块' }
     ],
     externalDocs: {
       description: '查看fastify文档',
@@ -135,4 +136,5 @@ module.exports.jwtkey = jwt_config[env]
 module.exports.apitime = apitime_config[env]
 module.exports.listen = listen_config[env]
 module.exports.swagger = swagger_config[env]
+module.exports.is_dev = Boolean(env === 'dev')
 module.exports.METHOD = METHOD

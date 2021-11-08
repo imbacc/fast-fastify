@@ -82,7 +82,7 @@ class composeTable {
 
   // 根据ID更新
   curd_updateById() {
-    return this.update('where id = ?')
+    return this.filter_key('id').update('where id = ?')
   }
 
   // 根据ID删除

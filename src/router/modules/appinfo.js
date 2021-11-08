@@ -1,7 +1,7 @@
 const fileName = __filename.split('\\').pop().replace('.js', '')
 
 // api
-const api = require('@/api/user.js')
+const api = require('@/api/appinfo.js')
 
 // sql
 const { add_test } = api.api_testAdd.sql
@@ -21,28 +21,36 @@ module.exports = (fastify) => {
       // jump: true, // 跳过权限检测
       swagger: {
         tags: [fileName],
-        summary: '我是用户接口 - 默认简介!',
-        description: '用户接口 - 默认描述!'
+        summary: '我是appinfo - 默认简介 is_proxy: true代理当前js所有路由!',
+        description: 'appinfo - 默认描述 is_proxy: true代理当前js所有路由!'
       }
     },
     {
-      ...api.api_testSel,
+      ...api.api_testAdd,
       handler: async (reque, reply) => {
-        const res = await exec.call(add_test)
+        const { text, version, os, ostext, linkurl } = reque.body
+        const body = [text, version, os, ostext, linkurl]
+        // 或者
+        // const body = Object.values(reque.body)
+        const res = await exec.call(add_test, body)
         reply.send(res)
       }
     },
     {
       ...api.api_testUpp,
       handler: async (reque, reply) => {
-        const res = await exec.call(update_test)
+        const { id, text, version, os, ostext, linkurl } = reque.body
+        const body = [text, version, os, ostext, linkurl, id]
+        const res = await exec.call(update_test, body)
         reply.send(res)
       }
     },
     {
       ...api.api_testUpp2,
       handler: async (reque, reply) => {
-        const res = await exec.call(update_test)
+        const { id, text, version, os, ostext, linkurl } = reque.body
+        const body = [text, version, os, ostext, linkurl, id]
+        const res = await exec.call(update_test, body)
         res.description = '我是更新接口的克隆版, 复用sql'
         reply.send(res)
       }
@@ -56,7 +64,6 @@ module.exports = (fastify) => {
     },
     {
       ...api.api_testSel,
-      url: '/sel2',
       handler: async (reque, reply) => {
         const res = await exec.call(select_test)
         reply.send(res)
@@ -67,7 +74,7 @@ module.exports = (fastify) => {
       handler: async (reque, reply) => {
         //缓存到redis 60分钟 只GET请求缓存!
         //const res = await fastify.cache_sql(select_test, [0], 60, reque)
-        //reply.send(res)
+        reply.send('设置了jump: true 老子跳过了权限检测！')
       }
     },
     {

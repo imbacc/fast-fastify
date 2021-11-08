@@ -50,6 +50,5 @@ module.exports = (fastify) => {
     })
   }) //循环子模块路由配置 生产路由
   console.timeEnd('生产路由')
-
-  // console.log(list)	//打印所有路由
+  // console.log(list) //打印所有路由
 }

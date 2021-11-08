@@ -51,16 +51,17 @@ class exec {
                   changedRows = res.changedRows
                   insertId = res.insertId
                 }
-                console.log('res', res)
                 if (add_bool) res = affectedRows >= 1 ? { affectedRows, id: insertId } : false
                 if (update_bool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
                 if (delete_bool) res = affectedRows >= 1 ? { affectedRows } : false
               }
               resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res), fields)
             } else {
-              delete err.sql
-              delete err.sqlState
-              delete err.sqlMessage
+              if (!is_dev) {
+                delete err.sql
+                delete err.sqlState
+                delete err.sqlMessage
+              }
               console.log('query err=', err)
               resolve(resultful('API_ERROR'))
             }

@@ -3,9 +3,9 @@ const Exec = require('./exec.js') //执行器封装
 const { mysql } = require('@/common/config.js') //数据库配置
 
 // 复用
-const { api_testSel } = require('@/api/user.js')
+const { api_testSel } = require('@/api/appinfo.js')
 // api
-const api = require('@/api/version.js')
+const api = require('@/api/token.js')
 // sql 复用user的sql
 const { test_connect } = api_testSel.sql
 

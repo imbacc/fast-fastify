@@ -1,4 +1,5 @@
 const fileName = __filename.split('\\').pop().replace('.js', '')
+// const schema = require('@/schema/user.js')
 
 // api
 const api = require('@/api/appinfo.js')

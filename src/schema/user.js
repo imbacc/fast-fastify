@@ -1,4 +1,4 @@
-const schema = require('fluent-schema')
+const schema = require('fluent-json-schema')
 const { reduce_prop, arr_repeta } = require('@/common/schema_reduce.js')
 const { number_0_1, string_1_10, array_20_number, page_prop, size_prop } = require('./global.js')
 

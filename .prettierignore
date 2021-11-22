@@ -3,5 +3,8 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-.history
 jsconfig.json
+*.local
+.pnpm-debug.log
+.history
+.vscode

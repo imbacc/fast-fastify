@@ -2,18 +2,12 @@
 
 > 依赖于 fastify 框架，搭建架构!
 
-## yarn install
+## pnpm install
 
 ### 测试需要先创建数据库 -> 创建数据库名 test -> 导入 app_info.sql 语句执行
 
 ```
-yarn install && yarn run dev
-```
-
-or
-
-```
-npm install && npm run dev
+pnpm install && pnpm run dev
 ```
 
 ## fastify 文档说明： <https://www.w3cschool.cn/fastify/>

@@ -1,4 +1,4 @@
-const schema = require('fluent-schema')
+const schema = require('fluent-json-schema')
 const _number = schema.number()
 const _string = schema.string()
 const _array = schema.array()

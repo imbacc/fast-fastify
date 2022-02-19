@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "baseUrl": "./",
+    "strict": true,
+    "jsx": "Preserve",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "lib": ["es6"],
+    "alwaysStrict": true,
+    "declaration": true,
+    "removeComments": true,
+    "diagnostics": true,
+    "incremental": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "types": ["node"],
+    "typeRoots": ["src/types", "node_modules/@types"],
+    "paths": {
+      "@/*": ["src/*"],
+      "#/*": ["src/types/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["node_modules", "dist", "tests", ".history"]
+}

@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@types/module-alias': ^2.0.1
   '@types/node': ^17.0.18
   cross-env: ^7.0.3
   fastify: 3.11.0
@@ -10,12 +11,12 @@ specifiers:
   fastify-swagger: ^4.0.1
   fluent-json-schema: ^3.0.1
   md5-node: ^1.0.1
+  module-alias: ^2.2.2
   mysql: ^2.17.1
   nodemon: ^2.0.7
   redis: ^3.1.1
   ts-node: ^10.5.0
   typescript: ^4.5.5
-  typescript-module-alias: ^1.0.2
 
 dependencies:
   fastify: registry.npmmirror.com/fastify/3.11.0
@@ -29,12 +30,13 @@ dependencies:
   redis: registry.npmmirror.com/redis/3.1.2
 
 devDependencies:
+  '@types/module-alias': registry.npmmirror.com/@types/module-alias/2.0.1
   '@types/node': registry.npmmirror.com/@types/node/17.0.18
   cross-env: registry.nlark.com/cross-env/7.0.3
+  module-alias: registry.npmmirror.com/module-alias/2.2.2
   nodemon: registry.npmmirror.com/nodemon/2.0.15
   ts-node: registry.npmmirror.com/ts-node/10.5.0_f3bd4037939c2ed2942ba074291f8ef2
   typescript: registry.npmmirror.com/typescript/4.5.5
-  typescript-module-alias: registry.npmmirror.com/typescript-module-alias/1.0.2
 
 packages:
 
@@ -1352,6 +1354,12 @@ packages:
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
     dev: false
 
+  registry.npmmirror.com/@types/module-alias/2.0.1:
+    resolution: {integrity: sha512-DN/CCT1HQG6HquBNJdLkvV+4v5l/oEuwOHUPLxI+Eub0NED+lk0YUfba04WGH90EINiUrNgClkNnwGmbICeWMQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/module-alias/-/module-alias-2.0.1.tgz}
+    name: '@types/module-alias'
+    version: 2.0.1
+    dev: true
+
   registry.npmmirror.com/@types/node/17.0.18:
     resolution: {integrity: sha512-eKj4f/BsN/qcculZiRSujogjvp5O/k4lOW5m35NopjZM/QwLOR075a8pJW5hD+Rtdm2DaCVPENS6KtSQnUD6BA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-17.0.18.tgz}
     name: '@types/node'
@@ -1477,13 +1485,6 @@ packages:
       readdirp: registry.nlark.com/readdirp/3.6.0
     optionalDependencies:
       fsevents: registry.npmmirror.com/fsevents/2.3.2
-    dev: true
-
-  registry.npmmirror.com/commander/5.1.0:
-    resolution: {integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/commander/-/commander-5.1.0.tgz}
-    name: commander
-    version: 5.1.0
-    engines: {node: '>= 6'}
     dev: true
 
   registry.npmmirror.com/create-require/1.1.1:
@@ -1916,6 +1917,12 @@ packages:
     hasBin: true
     dev: false
 
+  registry.npmmirror.com/module-alias/2.2.2:
+    resolution: {integrity: sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/module-alias/-/module-alias-2.2.2.tgz}
+    name: module-alias
+    version: 2.2.2
+    dev: true
+
   registry.npmmirror.com/ms/2.0.0:
     resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/download/ms-2.0.0.tgz?cache=0&sync_timestamp=1632788710719&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fms%2Fdownload%2Fms-2.0.0.tgz}
     name: ms
@@ -2196,25 +2203,6 @@ packages:
     name: type-fest
     version: 0.20.2
     engines: {node: '>=10'}
-    dev: true
-
-  registry.npmmirror.com/typescript-module-alias/1.0.2:
-    resolution: {integrity: sha512-w0EC3miNR7ilWRCcMO0FxjmYBrF3yD2yEORN6mF1HEUn+kXoLf+Bf+ocXGFoqCMCxT73mEF5e1RLFEDXk2vQIg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/typescript-module-alias/-/typescript-module-alias-1.0.2.tgz}
-    name: typescript-module-alias
-    version: 1.0.2
-    hasBin: true
-    dependencies:
-      commander: registry.npmmirror.com/commander/5.1.0
-      make-error: registry.npmmirror.com/make-error/1.3.6
-      typescript: registry.npmmirror.com/typescript/3.9.10
-    dev: true
-
-  registry.npmmirror.com/typescript/3.9.10:
-    resolution: {integrity: sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/typescript/-/typescript-3.9.10.tgz}
-    name: typescript
-    version: 3.9.10
-    engines: {node: '>=4.2.0'}
-    hasBin: true
     dev: true
 
   registry.npmmirror.com/typescript/4.5.5:

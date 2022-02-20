@@ -1,17 +1,27 @@
-import FASTIFY from 'fastify'
+import fastifyFrame from 'fastify'
+import moduleAlias from 'module-alias'
+moduleAlias.addAliases({ '@': __dirname }) // 添加alias导向
+const fastify = fastifyFrame({ logger: false })
+
 import { listen } from '@/common/config.js'
+import decorate from '@/common/decorate.js'
+import intercept from '@/common/intercept.js'
+import throws from '@/common/throw.js'
+import middle from '@/common/middle.js'
+import plugin from '@/common/plugin.js'
+import mysql from '@/db/mysql.js'
+import redis from '@/db/redis.js'
+import router from '@/router/index.js'
 
-const fastify = FASTIFY({ logger: true })
 const { port, ip, queue } = listen
-
-require('./common/decorate.js')(fastify) //注册装饰器
-require('./common/intercept.js')(fastify) //注册拦截器
-require('./common/throw.js')(fastify) //注册抛异常
-require('./common/middle.js')(fastify) //注册中间件
-require('./common/plugin.js')(fastify) //注册插件
-require('./db/mysql.js')(fastify) //注册Mysql	不是fastify-mysql插件
-require('./db/redis.js')(fastify) //注册Redis	不是fastify-redis插件
-require('./router/index.js')(fastify) //注册路由
+decorate(fastify) //注册装饰器
+intercept(fastify) //注册拦截器
+throws(fastify) //注册抛异常
+middle(fastify) //注册中间件
+plugin(fastify) //注册插件
+mysql(fastify) //注册Mysql	不是fastify-mysql插件
+redis(fastify) //注册Redis	不是fastify-redis插件
+router(fastify) //注册路由
 
 //启动服务	nodemon	index
 fastify.listen(port, ip, queue, (err: Error) => {

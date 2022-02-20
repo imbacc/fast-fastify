@@ -129,13 +129,13 @@ const swagger_config = {
 }
 
 // 按需导出
-// module.exports.mysql = mysql_config[env]
-// module.exports.redis = redis_config[env]
-// module.exports.jwtkey = jwt_config[env]
-// module.exports.apitime = apitime_config[env]
-// module.exports.listen = listen_config[env]
-// module.exports.swagger = swagger_config[env]
-// module.exports.is_dev = Boolean(env === 'dev')
-// module.exports.METHOD = METHOD
+module.exports.mysql = mysql_config[env]
+module.exports.redis = redis_config[env]
+module.exports.jwtkey = jwt_config[env]
+module.exports.apitime = apitime_config[env]
+module.exports.listen = listen_config[env]
+module.exports.swagger = swagger_config[env]
+module.exports.is_dev = Boolean(env === 'dev')
+module.exports.METHOD = METHOD
 
-export const listen = apitime_config[env]
+export const listen = listen_config[env]

@@ -1,9 +1,12 @@
+import { initGlobal } from './global'
+
 const env = process.env.NODE_ENV || 'dev'
 const md5 = require('md5-node')
 console.log('env=', env)
 
 // 注入global全局变量和函数
-require('./global.js')
+
+initGlobal()
 
 // method枚举
 const METHOD = {
@@ -14,13 +17,13 @@ const METHOD = {
 }
 
 // 赋予路由跳过检测权限
-const check_auth = {
+const checkAuth = {
   dev: ['/token'],
   prod: ['/token']
 }
 
 // 初始化执行
-global.add_jump(check_auth[env])
+global.addJump(checkAuth[env as 'dev'])
 
 // 端口信息
 const listen_config = {

@@ -20,14 +20,15 @@
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
+    "rootDir": "src",
     "outDir": "dist",
     "types": ["node"],
-    "typeRoots": ["src/types", "node_modules/@types"],
+    // "typeRoots": ["src/types", "node", "fastify", "node_modules/@types"],
     "paths": {
       "@/*": ["src/*"],
       "#/*": ["src/types/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/types/**/*.d.ts", "src/**/*.js"],
   "exclude": ["node_modules", "dist", "tests", ".history"]
 }

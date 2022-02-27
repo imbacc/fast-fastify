@@ -1,5 +1,5 @@
 module.exports = {
-  printWidth: 140, // 单行输出（不折行）的（最大）长度
+  printWidth: 110, // 单行输出（不折行）的（最大）长度
   tabs: true, // 使用制表符 (tab) 缩进行而不是空格 (space)。
   semi: false, // 是否在语句末尾打印分号
   singleQuote: true, // 是否使用单引号

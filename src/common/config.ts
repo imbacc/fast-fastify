@@ -1,32 +1,34 @@
-import { initGlobal } from './global'
+import type {
+  CONFIG_DTYPE,
+  checkAuth_DTYPE,
+  listenConfig_DTYPE,
+  jwtConfig_DTYPE,
+  mysqlConfig_DTYPE,
+  redisConfig_DTYPE,
+  apiTimeConfig_DTYPE,
+  swaggerConfig_DTYPE
+} from '#/config'
 
-const env = process.env.NODE_ENV || 'dev'
-const md5 = require('md5-node')
+import { initGlobal } from './global'
+import md5 from '@/common/MD5'
+
+const env = (process.env.NODE_ENV || 'dev') as keyof CONFIG_DTYPE
 console.log('env=', env)
 
 // 注入global全局变量和函数
-
 initGlobal()
 
-// method枚举
-const METHOD = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  DELETE: 'DELETE'
-}
-
 // 赋予路由跳过检测权限
-const checkAuth = {
+const checkAuth: checkAuth_DTYPE = {
   dev: ['/token'],
   prod: ['/token']
 }
 
 // 初始化执行
-global.addJump(checkAuth[env as 'dev'])
+global.addJump(checkAuth[env])
 
 // 端口信息
-const listen_config = {
+const listenConfig: listenConfig_DTYPE = {
   dev: {
     port: 3000, // 默认端口
     ip: '127.0.0.1', // 指定监听的地址 当部署在 Docker 或其它容器上时，明智的做法是监听 0.0.0.0
@@ -40,13 +42,13 @@ const listen_config = {
 }
 
 // 全局配置
-const jwt_config = {
+const jwtConfig: jwtConfig_DTYPE = {
   dev: md5('imbacc'),
   prod: md5('by imbacc')
 }
 
 // mysql
-const mysql_config = {
+const mysqlConfig: mysqlConfig_DTYPE = {
   dev: {
     host: '127.0.0.1',
     user: 'root',
@@ -64,7 +66,7 @@ const mysql_config = {
 }
 
 // redis
-const redis_config = {
+const redisConfig: redisConfig_DTYPE = {
   dev: {
     host: '127.0.0.1',
     port: 6379
@@ -76,7 +78,7 @@ const redis_config = {
 }
 
 // 每个接口限流 也可在Nginx上限流
-const apitime_config = {
+const apiTimeConfig: apiTimeConfig_DTYPE = {
   dev: {
     open: true, // 或 -> Boolean(env === 'dev')
     time: 30,
@@ -90,7 +92,7 @@ const apitime_config = {
 }
 
 // swagger信息
-const swagger_config = {
+const swaggerConfig: swaggerConfig_DTYPE = {
   dev: {
     use: true,
     route: `/swagger/${md5('地址加密')}`,
@@ -99,7 +101,7 @@ const swagger_config = {
       version: '1.0.0',
       description: 'swagger api description... 授权格式: Authorization: Bearer token'
     },
-    host: 'auto', // auto为listen_config 端口 ip
+    host: 'auto', // auto为listenConfig 端口 ip
     apiKey: {
       type: 'apiKey',
       name: 'Authorization',
@@ -115,30 +117,14 @@ const swagger_config = {
     }
   },
   prod: {
-    use: false // 不注册
-    // route: `/swagger/${md5('地址加密')}`,
-    // info: {
-    //   title: 'REST API',
-    //   version: '1.0.0',
-    //   description: 'swagger api description...'
-    // },
-    // host: 'auto',
-    // apiKey: {
-    //   type: 'apiKey',
-    //   name: 'Authorization',
-    //   in: 'header'
-    // }
+    use: false
   }
 }
 
-// 按需导出
-module.exports.mysql = mysql_config[env]
-module.exports.redis = redis_config[env]
-module.exports.jwtkey = jwt_config[env]
-module.exports.apitime = apitime_config[env]
-module.exports.listen = listen_config[env]
-module.exports.swagger = swagger_config[env]
-module.exports.is_dev = Boolean(env === 'dev')
-module.exports.METHOD = METHOD
-
-export const listen = listen_config[env]
+export const mysql = mysqlConfig[env]
+export const redis = redisConfig[env]
+export const jwtkey = jwtConfig[env]
+export const apitime = apiTimeConfig[env]
+export const listen = listenConfig[env]
+export const swagger = swaggerConfig[env]
+export const isDev = Boolean(env === 'dev')

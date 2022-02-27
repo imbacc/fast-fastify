@@ -1,6 +1,6 @@
-const md5 = require('md5-node')
+import md5 from '@/common/MD5'
 
-module.exports = (fastify) => {
+export default (fastify) => {
   console.log('开启装饰器...') //只配置静态
 
   // fastify.child.send -> solo

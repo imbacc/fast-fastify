@@ -1,3 +1,4 @@
+// 待改成new 对象类型
 export declare global {
   // base64加密
   var base64: Function<string>

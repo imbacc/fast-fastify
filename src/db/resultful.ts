@@ -1,5 +1,9 @@
+export interface APIResultCode_DTYPE {
+  [key: string]: [number, string]
+}
+
 //虚拟枚举类型 自己定义
-const APIResultCode = {
+export const APIResultCode: APIResultCode_DTYPE = {
   // 0到999 请求成功类
   SUCCESS: [0, '请求成功'],
   SUCCESS_NULL: [1, '没有相应数据'],
@@ -35,9 +39,19 @@ const APIResultCode = {
   UNMAKETOKEN_FAIL: [-99999, '提司腰牌与身份不匹配!']
 }
 
+export interface APIResultful_DTYPE {
+  code: number
+  msg: string
+  data: any
+}
+
 //虚拟返回格式
-class APIResultful {
-  constructor(code, msg, data) {
+class APIResultful implements APIResultful_DTYPE {
+  code: number = 0
+  msg: string = ''
+  data: any = null
+
+  constructor(code: number, msg: string, data: any) {
     this.code = code
     this.msg = msg
     this.data = data || null
@@ -49,4 +63,4 @@ class APIResultful {
   }
 }
 
-module.exports = (key, data) => new APIResultful(...APIResultCode[key], data).result()
+export default (key: string, data?: any) => new APIResultful(...APIResultCode[key], data).result()

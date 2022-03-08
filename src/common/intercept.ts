@@ -1,29 +1,32 @@
-const resultful = require('../db/resultful.js') //返回数据构造
-const apitime = require('./apitime.js') //API限流
-const jumpCheck = global.jump_auth //跳过检测jwt
+import type { FastifyInstance } from 'fastify'
 
-const check_code = async (onlyid, reply, code, _code, next) => {
+import md5 from './MD5'
+import resultful from '@/db/resultful' //返回数据构造
+import apitime from './apitime' //API限流
+const jumpCheck = global.jumpAuth //跳过检测jwt
+
+const checkCode = async (onlyid: string, reply: any, code: string, httpCode: number, next: Function) => {
   console.log({ onlyid, code }, '拦截状态...')
   if (!(code === 'SUCCESS')) {
-    reply.code(_code).send(resultful(code))
+    reply.code(httpCode).send(resultful(code))
     return
   }
   next()
 }
 
 //检测JWT令牌
-const check_jwt = async (onlyid, reque, reply, next) => {
-  reque.jwtVerify((err, decoded) => {
+const checkJwt = async (onlyid: string, reque: any, reply: any, next: Function) => {
+  reque.jwtVerify((err: any) => {
     //没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
     let code = 'WHEREIS_CRACK',
-      _code = 403
+      httpCode = 403
     if (err) {
       let bool = err.name === 'JsonWebTokenError'
       code = bool ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
-      _code = bool ? 403 : 401
+      httpCode = bool ? 403 : 401
     }
     if (err === null) code = 'SUCCESS'
-    check_code(onlyid, reply, code, _code, next)
+    checkCode(onlyid, reply, code, httpCode, next)
   })
 }
 
@@ -35,9 +38,8 @@ const H_VAL1 = '*'
 const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With'
 const H_VAL3 = 'POST,GET,OPTIONS'
 
-module.exports = (fastify) => {
+export default (fastify: FastifyInstance) => {
   console.log('开启拦截器...')
-  const { md5 } = fastify
 
   //请求
   fastify.addHook('onRequest', (reque, reply, next) => {
@@ -75,7 +77,7 @@ module.exports = (fastify) => {
         console.log({ id, code: 403 }, '服务器繁忙...')
         reply.code(403).send(resultful('API_OUTTIME'))
       } else {
-        check_jwt(onlyid, reque, reply, next)
+        checkJwt(onlyid, reque, reply, next)
       }
     })
   })

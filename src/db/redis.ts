@@ -1,12 +1,14 @@
-const Redis = require('redis') //Redis驱动
-const { redis } = require('@/common/config.js') //Redis配置
+import type { FastifyInstance } from 'fastify'
+
+import Redis from 'redis' //Redis驱动
+import { redis } from '@/common/config' //Redis配置
 
 const redisCli = Redis.createClient(redis.port, redis.host)
-redisCli.on('error', (err) => console.log('redis err=' + err))
+redisCli.on('error', (err: any) => console.log('redis err=' + err))
 
-const get_redis = async (key) => {
+const get_redis = async (key: string) => {
   const p = new Promise((resolve) => {
-    redisCli.get(key, (err, res) => {
+    redisCli.get(key, (err: any, res: any) => {
       try {
         res = JSON.parse(res)
       } catch (e) {}
@@ -16,7 +18,7 @@ const get_redis = async (key) => {
   return await p.then((res) => res)
 }
 
-const set_redis = (key, value, time) => {
+const set_redis = (key: string, value: any, time: number) => {
   redisCli.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
   if (time) redisCli.expire(key, time)
 }
@@ -26,7 +28,7 @@ const set_redis = (key, value, time) => {
 //   return await p.then((res) => res)
 // }
 
-module.exports = (fastify) => {
+export default (fastify: FastifyInstance) => {
   fastify.decorate('get_redis', get_redis)
   fastify.decorate('set_redis', set_redis)
   // fastify.decorate('has_redis', has_redis)

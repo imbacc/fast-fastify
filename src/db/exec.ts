@@ -1,10 +1,16 @@
-const resultful = require('./resultful') //返回数据构造
-const { is_dev } = require('@/common/config.js')
-const log = async (...args) => console.log(...args)
+import type { Pool } from 'mysql'
+import type { APIResultful_DTYPE, APIResultCode } from './resultful'
+
+import resultful from './resultful'
+import { isDev } from '@/common/config'
+
+const log = async (...args: any) => console.log(...args)
 
 //执行SQL事务封装
 class exec {
-  constructor(pool) {
+  private pool: Pool
+
+  constructor(pool: Pool) {
     this.pool = pool
   }
 
@@ -15,7 +21,7 @@ class exec {
    * then 回调函数
    * result 不经过resultful直接返回结果 默认false
    */
-  call(sql, value, code) {
+  call(sql: string, value?: Array<number>, code?: string): Promise<APIResultful_DTYPE> {
     const pool = this.pool
     return new Promise((resolve) => {
       pool.getConnection((error, conn) => {
@@ -24,7 +30,7 @@ class exec {
           resolve(resultful('WARN'))
         } else {
           conn.query(sql, value, (err, res, fields) => {
-            if (is_dev) log('执行sql=', sql, value === undefined ? '' : value)
+            if (isDev) log('执行sql=', sql, value === undefined ? '' : value)
             conn.release()
             if (err === null) {
               sql = sql.toUpperCase()
@@ -55,9 +61,10 @@ class exec {
                 if (update_bool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
                 if (delete_bool) res = affectedRows >= 1 ? { affectedRows } : false
               }
-              resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res), fields)
+              console.error('fields=', fields)
+              resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res))
             } else {
-              if (!is_dev) {
+              if (!isDev) {
                 delete err.sql
                 delete err.sqlState
                 delete err.sqlMessage
@@ -72,4 +79,4 @@ class exec {
   }
 }
 
-module.exports = exec
+export default exec

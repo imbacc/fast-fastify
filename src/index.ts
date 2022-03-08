@@ -1,18 +1,20 @@
+import type { FastifyInstance } from 'fastify'
+
 import fastifyFrame from 'fastify'
 import moduleAlias from 'module-alias'
 moduleAlias.addAliases({ '@': __dirname }) // 添加alias导向
 
 import { listen } from '@/common/config'
-import decorate from '@/common/decorate.js'
-import intercept from '@/common/intercept.js'
-import throws from '@/common/throw.js'
-import middle from '@/common/middle.js'
-import plugin from '@/common/plugin.js'
-import mysql from '@/db/mysql.js'
-import redis from '@/db/redis.js'
-import router from '@/router/index.js'
+import decorate from '@/common/decorate'
+import intercept from '@/common/intercept'
+import throws from '@/common/throw'
+import middle from '@/common/middle'
+import plugin from '@/common/plugin'
+import mysql from '@/db/mysql'
+import redis from '@/db/redis'
+import router from '@/router/index'
 
-const fastify = fastifyFrame({ logger: false })
+const fastify: FastifyInstance = fastifyFrame({ logger: false })
 const { port, ip, queue } = listen
 decorate(fastify) //注册装饰器
 intercept(fastify) //注册拦截器

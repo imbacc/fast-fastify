@@ -122,7 +122,7 @@ const swaggerConfig: swaggerConfig_DTYPE = {
 }
 
 export const mysql = mysqlConfig[env]
-export const redis = redisConfig[env]
+export const redis = redisConfig[env] as redisConfig_DTYPE
 export const jwtkey = jwtConfig[env]
 export const apitime = apiTimeConfig[env]
 export const listen = listenConfig[env]

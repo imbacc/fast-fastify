@@ -1,7 +1,9 @@
-module.exports = (fastify) => {
+import type { FastifyInstance } from 'fastify'
+
+export default (fastify: FastifyInstance) => {
   console.log('开启抛异常...')
 
-  fastify.setNotFoundHandler((reque, reply) => {
+  fastify.setNotFoundHandler((request: any, reply: any) => {
     console.log('try 404...')
     // console.log(reque)
     // console.log(reply)
@@ -11,7 +13,7 @@ module.exports = (fastify) => {
     })
   })
 
-  fastify.setErrorHandler((error, request, reply) => {
+  fastify.setErrorHandler((error: any, request: any, reply: any) => {
     // error.validationContext 是 [body, params, querystring, headers] 之中的值
     if (error.validation) {
       let msg = Array.from(error.validation, ({ message }) => message).join(',')

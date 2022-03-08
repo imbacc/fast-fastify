@@ -19,3 +19,8 @@ export declare global {
   // 设置缓存
   var setCache: Function<Array<string, any>>
 }
+
+export declare module 'redis' {
+  const redis = require('redis')
+  export default redis
+}

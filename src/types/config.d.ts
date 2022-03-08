@@ -8,7 +8,8 @@ export enum METHOD {
 // CONFIG
 export interface CONFIG<T, P> {
   dev: T
-  prod: P extends T ? P : T
+  prod: P | T
+  // prod: P extends T ? P : T
   // dev: T extends infer R ? R : T
   // prod: (P | T) extends infer R ? R : T
 }
@@ -70,5 +71,7 @@ type swaggerConfigType = {
   tags?: Array<{ name: string; description: string }>
   externalDocs?: { description: string; url: string }
 }
-type swaggerConfigType_Prod = Omit<swaggerConfigType, 'use'>
-export interface swaggerConfig_DTYPE extends CONFIG<swaggerConfigType, Partial<typeof swaggerConfigType_Prod>> {}
+type swaggerConfigType_Prod_omit = Omit<swaggerConfigType, 'use'>
+type swaggerConfigType_Prod_pick = Pick<swaggerConfigType, 'use'>
+type swaggerConfigType_Prod = Partial<swaggerConfigType_Prod_omit> & swaggerConfigType_Prod_pick
+export interface swaggerConfig_DTYPE extends CONFIG<swaggerConfigType, swaggerConfigType_Prod> {}

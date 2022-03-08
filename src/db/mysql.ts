@@ -1,11 +1,11 @@
-const mysqlDrive = require('mysql') //数据库驱动
-const Exec = require('./exec.js') //执行器封装
-const { mysql } = require('@/common/config.js') //数据库配置
+import type { FastifyInstance } from 'fastify'
+
+import mysqlDrive from 'mysql'
+import Exec from './exec' //执行器封装
+import { mysql } from '@/common/config' //数据库配置
 
 // 复用
-const { api_testSel } = require('@/api/appinfo.js')
-// api
-const api = require('@/api/token.js')
+import { api_testSel } from '@/api/appinfo'
 // sql 复用user的sql
 const { test_connect } = api_testSel.sql
 
@@ -13,7 +13,7 @@ const { test_connect } = api_testSel.sql
 const pool = mysqlDrive.createPool(mysql)
 const exec = new Exec(pool)
 
-module.exports = (fastify) => {
+export default (fastify: FastifyInstance) => {
   fastify.decorate('exec', exec)
 
   //初始化连接池 创建1个测试

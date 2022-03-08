@@ -1,13 +1,12 @@
-import md5 from '@/common/MD5'
+import type { FastifyInstance } from 'fastify'
 
-export default (fastify) => {
+export default (fastify: FastifyInstance) => {
   console.log('开启装饰器...') //只配置静态
 
   // fastify.child.send -> solo
   fastify.decorate('child', { send: 'solo' })
 
   // md5配置到全局
-  fastify.decorate('md5', md5)
 
   // 缓存get请求 配置到全局
   // fastify.decorate('cache_sql', (sql, val, time, reque) => {

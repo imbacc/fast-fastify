@@ -2,7 +2,9 @@ lockfileVersion: 5.3
 
 specifiers:
   '@types/module-alias': ^2.0.1
+  '@types/mysql': ^2.15.21
   '@types/node': ^17.0.18
+  '@types/redis': ^4.0.11
   cross-env: ^7.0.3
   fastify: 3.11.0
   fastify-cors: ^5.2.0
@@ -29,7 +31,9 @@ dependencies:
 
 devDependencies:
   '@types/module-alias': registry.npmmirror.com/@types/module-alias/2.0.1
+  '@types/mysql': registry.npmmirror.com/@types/mysql/2.15.21
   '@types/node': registry.npmmirror.com/@types/node/17.0.18
+  '@types/redis': registry.npmmirror.com/@types/redis/4.0.11
   cross-env: registry.nlark.com/cross-env/7.0.3
   module-alias: registry.npmmirror.com/module-alias/2.2.2
   nodemon: registry.npmmirror.com/nodemon/2.0.15
@@ -305,7 +309,6 @@ packages:
     name: denque
     version: 1.5.1
     engines: {node: '>=0.10'}
-    dev: false
 
   registry.nlark.com/depd/1.1.2:
     resolution: {integrity: sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/depd/download/depd-1.1.2.tgz}
@@ -1358,10 +1361,27 @@ packages:
     version: 2.0.1
     dev: true
 
+  registry.npmmirror.com/@types/mysql/2.15.21:
+    resolution: {integrity: sha512-NPotx5CVful7yB+qZbWtXL2fA4e7aEHkihHLjklc6ID8aq7bhguHgeIoC1EmSNTAuCgI6ZXrjt2ZSaXnYX0EUg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/mysql/-/mysql-2.15.21.tgz}
+    name: '@types/mysql'
+    version: 2.15.21
+    dependencies:
+      '@types/node': registry.npmmirror.com/@types/node/17.0.18
+    dev: true
+
   registry.npmmirror.com/@types/node/17.0.18:
     resolution: {integrity: sha512-eKj4f/BsN/qcculZiRSujogjvp5O/k4lOW5m35NopjZM/QwLOR075a8pJW5hD+Rtdm2DaCVPENS6KtSQnUD6BA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-17.0.18.tgz}
     name: '@types/node'
     version: 17.0.18
+
+  registry.npmmirror.com/@types/redis/4.0.11:
+    resolution: {integrity: sha512-bI+gth8La8Wg/QCR1+V1fhrL9+LZUSWfcqpOj2Kc80ZQ4ffbdL173vQd5wovmoV9i071FU9oP2g6etLuEwb6Rg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/redis/-/redis-4.0.11.tgz}
+    name: '@types/redis'
+    version: 4.0.11
+    deprecated: This is a stub types definition. redis provides its own type definitions, so you do not need this installed.
+    dependencies:
+      redis: registry.npmmirror.com/redis/3.1.2
+    dev: true
 
   registry.npmmirror.com/abstract-logging/2.0.1:
     resolution: {integrity: sha1-aww3HfIS23EptX0uf88oK4vxyDk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/abstract-logging/download/abstract-logging-2.0.1.tgz}
@@ -2013,14 +2033,12 @@ packages:
     resolution: {integrity: sha1-Fab+otWCgeJ7HNGs+0spPieMOok=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis-commands/download/redis-commands-1.7.0.tgz}
     name: redis-commands
     version: 1.7.0
-    dev: false
 
   registry.npmmirror.com/redis-errors/1.2.0:
     resolution: {integrity: sha1-62LSrbFeTq9GEMBK/hUpOEJQq60=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis-errors/download/redis-errors-1.2.0.tgz}
     name: redis-errors
     version: 1.2.0
     engines: {node: '>=4'}
-    dev: false
 
   registry.npmmirror.com/redis-parser/3.0.0:
     resolution: {integrity: sha1-tm2CjNyv5rS4pCin3vTGvKwxyLQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis-parser/download/redis-parser-3.0.0.tgz}
@@ -2029,7 +2047,6 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       redis-errors: registry.npmmirror.com/redis-errors/1.2.0
-    dev: false
 
   registry.npmmirror.com/redis/3.1.2:
     resolution: {integrity: sha1-dmhREX6AZT0j4O1TYlRnerZHY4w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis/download/redis-3.1.2.tgz}
@@ -2041,7 +2058,6 @@ packages:
       redis-commands: registry.npmmirror.com/redis-commands/1.7.0
       redis-errors: registry.npmmirror.com/redis-errors/1.2.0
       redis-parser: registry.npmmirror.com/redis-parser/3.0.0
-    dev: false
 
   registry.npmmirror.com/rfdc/1.3.0:
     resolution: {integrity: sha1-0LfEQasnINBdxM8m4ByJYx2doIs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rfdc/download/rfdc-1.3.0.tgz}

@@ -1,7 +1,8 @@
-const { METHOD } = require('@/common/config.js')
-const schema = require('@/schema/token.js')
+import { METHOD } from '@/common/config'
 
-module.exports = {
+import schema from '@/schema/token'
+
+export default {
   api_token: {
     url: '/token',
     method: METHOD.GET,

@@ -1,11 +1,15 @@
-const {
-  listen: { port, ip },
-  swagger: { use, route, info, host, tags, apiKey, externalDocs }
-} = require('../config.js')
+import type { FastifyInstance } from 'fastify'
 
-module.exports = (fastify) => {
+import fastifySwagger from 'fastify-swagger'
+
+import { listen, swagger } from '@/common/config'
+
+const { port, ip } = listen
+const { use, route, info, host, tags, apiKey, externalDocs } = swagger
+
+export default (fastify: FastifyInstance) => {
   if (!use) return
-  fastify.register(require('fastify-swagger'), {
+  fastify.register(fastifySwagger, {
     routePrefix: route,
     exposeRoute: true,
     swagger: {
@@ -27,7 +31,7 @@ module.exports = (fastify) => {
     }
   })
 
-  global.add_jump([
+  global.addJump([
     route,
     `${route}/json`,
     `${route}/static/index.html`,

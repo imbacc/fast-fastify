@@ -1,7 +1,7 @@
-const { METHOD } = require('@/common/config.js')
-const schema = require('@/schema/appinfo.js')
-const token_schema = require('@/schema/token.js')
-const composeTable = require('@/common/compose_table.js')
+import { METHOD } from '@/common/config'
+import schema from '@/schema/appinfo'
+import tokenSchema from '@/schema/token'
+import composeTable from '@/common/composeTable'
 
 // xx/秒		默认30秒
 // 次数			默认 30秒/15次
@@ -17,7 +17,7 @@ const LIMIT = [10, 5]
 const key_list = ['id', 'text', 'version', 'os', 'ostext', 'linkurl']
 const table = new composeTable('app_info', key_list)
 
-module.exports = {
+export default {
   api_testAdd: {
     url: '/add',
     method: METHOD.POST,
@@ -73,7 +73,7 @@ module.exports = {
       description: '删除接口的描述啊啊啊啊!'
     },
     schema: {
-      body: token_schema.id_schema
+      body: tokenSchema.id_schema
     }
   },
   api_testSel: {
@@ -107,8 +107,8 @@ module.exports = {
   api_testTtt: {
     url: '/ttt',
     method: METHOD.POST,
-    onRequest: (reque, reply, done) => {
-      console.log('得经过老子!')
+    onRequest: (reque: any, reply: any, done: Function) => {
+      // console.log('得经过老子!')
       done()
     }
   },
@@ -117,26 +117,26 @@ module.exports = {
     method: METHOD.GET,
     limit: [10, 5],
     // 路由选项文档 https://www.w3cschool.cn/fastify/fastify-ko5l35zk.html
-    onRequest: (reque, reply, done) => {
+    onRequest: (reque: any, reply: any, done: Function) => {
       // 箭头函数会破坏this实列对象
       // 开启浏览器缓存 Cache-control 3600秒
       reply.header('Cache-control', 'max-age=3600')
       reply.header('Last-Modified', new Date().toUTCString())
       done()
     },
-    onResponse: function (request, reply, done) {
+    onResponse: function (reque: any, reply: any, done: Function) {
       // 该钩子总是在共享的 `onResponse` 钩子后被执行
       done()
     },
-    preValidation: function (request, reply, done) {
+    preValidation: function (reque: any, reply: any, done: Function) {
       // 该钩子总是在共享的 `preValidation` 钩子后被执行
       done()
     },
-    preHandler: function (request, reply, done) {
+    preHandler: function (reque: any, reply: any, done: Function) {
       // 该钩子总是在共享的 `preHandler` 钩子后被执行
       done()
     },
-    preSerialization: (request, reply, payload, done) => {
+    preSerialization: (request: any, reply: any, payload: any, done: Function) => {
       // 该钩子总是在共享的 `preSerialization` 钩子后被执行
       done(null, payload)
     }

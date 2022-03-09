@@ -5,15 +5,15 @@
  * count 为次数			默认 30秒/15次
  */
 
-const { apitime } = require('./config.js')
+import { apitime } from './config'
 const { open: _open, time: _time, count: _count } = apitime
 
-module.exports = (spname, spid, time = _time, count = _count, update = false) => {
+export default (spname: string, spid: string, time: number = _time, count: number = _count, update: boolean = false) => {
   //false为关闭限流
   if (!_open) return Promise.resolve(true)
 
-  let limit = global.api_limit
-  let cache = global.api_cache
+  let limit = global.apiLimit
+  let cache = global.apiCache
 
   let val = `${spname}_${spid}`
   let key_time = `apit_${val}`
@@ -38,12 +38,12 @@ module.exports = (spname, spid, time = _time, count = _count, update = false) =>
       //Api次数限制
       let add = parseInt(api_count) + 1
       if (add > count) return Promise.resolve(false)
-      global.set_cache(key_num, add)
+      global.setCache(key_num, add)
       return Promise.resolve(true)
     }
   }
 
-  global.set_cache(key_time, datetime)
-  global.set_cache(key_num, 1)
+  global.setCache(key_time, datetime)
+  global.setCache(key_num, 1)
   return Promise.resolve(true)
 }

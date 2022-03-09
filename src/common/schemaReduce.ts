@@ -1,8 +1,13 @@
-const schema = require('fluent-json-schema')
+import schema from 'fluent-json-schema'
+
 const _number = schema.number()
 const _string = schema.string()
 const _array = schema.array()
 const _object = schema.object()
+
+const items_DTYPE = {
+  number: number
+}
 
 //
 const items_type = {
@@ -14,11 +19,11 @@ const items_type = {
 
 // 基本类型生成
 const _type = {
-  number: (n1, n2) => _number.minimum(n1).maximum(n2),
-  string: (n1, n2) => _string.minLength(n1).maxLength(n2),
-  array: (n1, n2) => _array.maxItems(n1).items(items_type[n2]),
-  object: (n1, n2) => _object.minProperties(n1).maxProperties(n2),
-  enum: (n1, n2) => schema.enum(n1).default(n2)
+  number: (n1: number, n2: number) => _number.minimum(n1).maximum(n2),
+  string: (n1: number, n2: number) => _string.minLength(n1).maxLength(n2),
+  array: (n1: number, n2: number) => _array.maxItems(n1).items(items_type[n2]),
+  object: (n1: number, n2: number) => _object.minProperties(n1).maxProperties(n2),
+  enum: (n1: number, n2: number) => schema.enum(n1).default(n2)
 }
 
 // 创建初始头对象

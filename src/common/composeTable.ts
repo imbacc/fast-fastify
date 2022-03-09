@@ -1,27 +1,30 @@
 class composeTable {
-  constructor(table_name, key_list = [], remove_key) {
-    this.table = table_name
-    this.list = key_list
-    this.bak_list = key_list
+  private table: string
+  private list: Array<string>
+  private bakList: Array<string>
+  private sql: string
+
+  constructor(tableName: string, keyList: Array<string> = [], removeKey?: string) {
+    this.table = tableName
+    this.list = keyList
+    this.bakList = keyList
     this.sql = ''
     // 初始化并筛选
-    this.list = this.filter_key(remove_key).list
+    this.list = this.filter_key(removeKey).list
   }
 
   // 筛选key
-  filter_key(...remove_key) {
-    if (!remove_key) return this
-    const _type = remove_key.constructor
-    if (_type === String) this.list = this.bak_list.filter((key) => key !== remove_key)
-    if (_type === Array) this.list = this.bak_list.filter((key) => !remove_key.includes(key))
+  filter_key(removeKey: string | Array<string>) {
+    if (!removeKey) return this
+    if (removeKey as string) this.list = this.bakList.filter((key) => key !== removeKey)
+    if (removeKey as Array<string>) this.list = this.bakList.filter((key) => !removeKey.includes(key))
     return this
   }
 
   // 追加key
-  append_key(...key) {
-    const _type = key.constructor
-    if (_type === String) this.list.push(key)
-    if (_type === Array) this.list.push(...key)
+  append_key(key: string | Array<string>) {
+    if (key as string) this.list.push(key as string)
+    if (key as Array<string>) this.list.push(...key)
     return this
   }
 
@@ -91,7 +94,7 @@ class composeTable {
   }
 
   // 查询分页
-  curd_selectByPage(where) {
+  curd_selectByPage(where: string) {
     return this.select(`${where} limit ?,?`)
   }
 
@@ -100,17 +103,17 @@ class composeTable {
   get_sql() {
     const sql = this.sql
     this.sql = ''
-    this.list = [...this.bak_list]
+    this.list = [...this.bakList]
     return sql
   }
 }
 
-module.exports = composeTable
+export default composeTable
 
 //////////// 下面是私有函数
 
 // ['字段']
-const _get_colum = (list = []) => {
+const _get_colum = (list: Array<string> = []): string => {
   let len = list.length
   if (len === 0) return '*' // 不推荐list不填
   if (len > 0) list = [...new Set(list)]
@@ -119,7 +122,7 @@ const _get_colum = (list = []) => {
 }
 
 //获取并拼接 格式: key=?,key=?   ...
-const _get_value = (list = []) => {
+const _get_value = (list: Array<string> = []): string => {
   let value = ''
   if (list.length > 0) {
     list.forEach((key) => (value += key + '=?,'))
@@ -129,10 +132,10 @@ const _get_value = (list = []) => {
 }
 
 //获取相应数量拼接 格式: ?,?,?   ...
-const _get_join = (list = []) => {
+const _get_join = (list: Array<string> = []): string => {
   let value = ''
   if (list.length > 0) {
-    list.forEach((info) => (value += '?,'))
+    list.forEach(() => (value += '?,'))
     return value.substring(0, value.length - 1)
   }
   return value

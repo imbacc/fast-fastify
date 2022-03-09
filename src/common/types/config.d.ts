@@ -1,10 +1,3 @@
-export enum METHOD {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE'
-}
-
 // CONFIG
 export interface CONFIG<T, P> {
   dev: T

@@ -45,6 +45,8 @@ export interface APIResultful_DTYPE {
   data: any
 }
 
+// type code_DTYPE = APIResultCode_DTYPE extends keyof string
+
 //虚拟返回格式
 class APIResultful implements APIResultful_DTYPE {
   code: number = 0
@@ -63,4 +65,6 @@ class APIResultful implements APIResultful_DTYPE {
   }
 }
 
-export default (key: string, data?: any) => new APIResultful(...APIResultCode[key], data).result()
+type key_DTYPE = keyof APIResultCode_DTYPE
+
+export default (key: key_DTYPE, data?: any) => new APIResultful(...APIResultCode[key], data).result()

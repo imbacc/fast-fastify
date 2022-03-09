@@ -7,7 +7,7 @@ import type {
   redisConfig_DTYPE,
   apiTimeConfig_DTYPE,
   swaggerConfig_DTYPE
-} from '#/config'
+} from './types/config'
 
 import { initGlobal } from './global'
 import md5 from '@/common/MD5'
@@ -128,3 +128,9 @@ export const apitime = apiTimeConfig[env]
 export const listen = listenConfig[env]
 export const swagger = swaggerConfig[env]
 export const isDev = Boolean(env === 'dev')
+export const enum METHOD {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE'
+}

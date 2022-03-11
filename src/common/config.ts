@@ -1,15 +1,27 @@
 import type {
   CONFIG_DTYPE,
   checkAuth_DTYPE,
+  // listen
+  listenConfigType,
   listenConfig_DTYPE,
+  // jwt
+  jwtConfigType,
   jwtConfig_DTYPE,
+  // mysql
+  mysqlConfigType,
   mysqlConfig_DTYPE,
+  // redis
+  redisConfigType,
   redisConfig_DTYPE,
+  // apiTime
+  apiTimeConfigType,
   apiTimeConfig_DTYPE,
+  // swagger
+  swaggerConfigType,
   swaggerConfig_DTYPE
 } from './types/config'
 
-import { initGlobal } from './global'
+import { initGlobal } from './globalMemory'
 import md5 from '@/common/MD5'
 
 const env = (process.env.NODE_ENV || 'dev') as keyof CONFIG_DTYPE
@@ -121,12 +133,12 @@ const swaggerConfig: swaggerConfig_DTYPE = {
   }
 }
 
-export const mysql = mysqlConfig[env]
-export const redis = redisConfig[env] as redisConfig_DTYPE
-export const jwtkey = jwtConfig[env]
-export const apitime = apiTimeConfig[env]
-export const listen = listenConfig[env]
-export const swagger = swaggerConfig[env]
+export const mysql = mysqlConfig[env] as mysqlConfigType
+export const redis = redisConfig[env] as redisConfigType
+export const jwtkey = jwtConfig[env] as jwtConfigType
+export const apitime = apiTimeConfig[env] as apiTimeConfigType
+export const listen = listenConfig[env] as listenConfigType
+export const swagger = swaggerConfig[env] as swaggerConfigType
 export const isDev = Boolean(env === 'dev')
 export const enum METHOD {
   GET = 'GET',

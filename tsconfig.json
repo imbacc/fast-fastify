@@ -23,7 +23,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "types": ["node"],
-    // "typeRoots": ["src/types", "node", "fastify", "node_modules/@types"],
+    "typeRoots": ["src/types", "node", "fastify", "node_modules/@types"],
     "paths": {
       "@/*": ["src/*"],
       "#/*": ["src/types/*"]

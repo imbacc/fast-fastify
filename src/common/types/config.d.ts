@@ -13,7 +13,7 @@ type checkAuthType = Array<string>
 export interface checkAuth_DTYPE extends CONFIG<checkAuthType> {}
 
 //listenConfig
-type listenConfigType = {
+export type listenConfigType = {
   port: number
   ip: string
   queue: number
@@ -21,11 +21,11 @@ type listenConfigType = {
 export interface listenConfig_DTYPE extends CONFIG<listenConfigType> {}
 
 // jwtConfig
-type jwtConfigType = string
+export type jwtConfigType = string
 export interface jwtConfig_DTYPE extends CONFIG<jwtConfigType> {}
 
 // mysqlConfig
-type mysqlConfigType = {
+export type mysqlConfigType = {
   host: string | '127.0.0.1'
   user: string | 'root'
   password: string | 'root'
@@ -35,11 +35,11 @@ type mysqlConfigType = {
 export interface mysqlConfig_DTYPE extends CONFIG<mysqlConfigType> {}
 
 // redisConfig
-type redisConfigType = Pick<mysqlConfigType, 'host' | 'port'>
+export type redisConfigType = Pick<mysqlConfigType, 'host' | 'port'>
 export interface redisConfig_DTYPE extends CONFIG<redisConfigType> {}
 
 // apiTimeConfig
-type apiTimeConfigType = {
+export type apiTimeConfigType = {
   open: boolean
   time: number
   count: number
@@ -47,7 +47,7 @@ type apiTimeConfigType = {
 export interface apiTimeConfig_DTYPE extends CONFIG<apiTimeConfigType> {}
 
 // swaggerConfig
-type swaggerConfigType = {
+export type swaggerConfigType = {
   use: boolean | true
   route: string
   info: {

@@ -1,9 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 
+import { globalMemory } from './globalMemory'
+
 import md5 from './MD5'
 import resultful from '@/db/resultful' //返回数据构造
 import apitime from './apitime' //API限流
-const jumpCheck = global.jumpAuth //跳过检测jwt
+const jumpCheck = globalMemory.jumpAuth //跳过检测jwt
 
 const checkCode = async (onlyid: string, reply: any, code: string, httpCode: number, next: Function) => {
   console.log({ onlyid, code }, '拦截状态...')
@@ -11,7 +13,7 @@ const checkCode = async (onlyid: string, reply: any, code: string, httpCode: num
     reply.code(httpCode).send(resultful(code))
     return
   }
-  next()
+  await next()
 }
 
 //检测JWT令牌

@@ -5,6 +5,7 @@
  * count 为次数			默认 30秒/15次
  */
 
+import { globalMemory } from './globalMemory'
 import { apitime } from './config'
 const { open: _open, time: _time, count: _count } = apitime
 
@@ -12,8 +13,8 @@ export default (spname: string, spid: string, time: number = _time, count: numbe
   //false为关闭限流
   if (!_open) return Promise.resolve(true)
 
-  let limit = global.apiLimit
-  let cache = global.apiCache
+  let limit = globalMemory.apiLimit
+  let cache = globalMemory.apiCache
 
   let val = `${spname}_${spid}`
   let key_time = `apit_${val}`
@@ -38,12 +39,12 @@ export default (spname: string, spid: string, time: number = _time, count: numbe
       //Api次数限制
       let add = parseInt(api_count) + 1
       if (add > count) return Promise.resolve(false)
-      global.setCache(key_num, add)
+      globalMemory.setCache(key_num, add)
       return Promise.resolve(true)
     }
   }
 
-  global.setCache(key_time, datetime)
-  global.setCache(key_num, 1)
+  globalMemory.setCache(key_time, datetime)
+  globalMemory.setCache(key_num, 1)
   return Promise.resolve(true)
 }

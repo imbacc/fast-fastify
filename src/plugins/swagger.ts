@@ -1,13 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 
-import fastifySwagger from 'fastify-swagger'
-
+import { globalMemory } from '@/common/globalMemory'
 import { listen, swagger } from '@/common/config'
+
+import fastifySwagger from 'fastify-swagger'
 
 const { port, ip } = listen
 const { use, route, info, host, tags, apiKey, externalDocs } = swagger
 
-export default (fastify: FastifyInstance) => {
+export default (fastify: FastifyInstance, opts = {}, done: Function) => {
   if (!use) return
   fastify.register(fastifySwagger, {
     routePrefix: route,
@@ -28,10 +29,11 @@ export default (fastify: FastifyInstance) => {
           apiKey: []
         }
       ]
-    }
+    },
+    ...opts
   })
 
-  global.addJump([
+  globalMemory.addJump([
     route,
     `${route}/json`,
     `${route}/static/index.html`,
@@ -46,4 +48,6 @@ export default (fastify: FastifyInstance) => {
   ])
 
   setTimeout(() => console.log(`swagger服务已启动: http://${ip}:${port}${route}`))
+
+  done()
 }

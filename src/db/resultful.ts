@@ -1,6 +1,4 @@
-export interface APIResultCode_DTYPE {
-  [key: string]: [number, string]
-}
+export type APIResultCode_DTYPE = { [key in string]: [number, string] }
 
 //虚拟枚举类型 自己定义
 export const APIResultCode: APIResultCode_DTYPE = {
@@ -48,23 +46,22 @@ export interface APIResultful_DTYPE {
 // type code_DTYPE = APIResultCode_DTYPE extends keyof string
 
 //虚拟返回格式
-class APIResultful implements APIResultful_DTYPE {
-  code: number = 0
-  msg: string = ''
-  data: any = null
+class APIResultfulNode implements APIResultful_DTYPE {
+  public code: number = 0
+  public msg: string = ''
+  public data: any = null
 
-  constructor(code: number, msg: string, data: any) {
-    this.code = code
-    this.msg = msg
-    this.data = data || null
-  }
-
-  result() {
+  result(result: APIResultful_DTYPE) {
+    this.code = result.code
+    this.msg = result.msg
+    this.data = result.data || null
     const { code, msg, data } = this
     return { code, msg, data }
   }
 }
 
-type key_DTYPE = keyof APIResultCode_DTYPE
-
-export default (key: key_DTYPE, data?: any) => new APIResultful(...APIResultCode[key], data).result()
+const APIResultful = new APIResultfulNode()
+export default (key: keyof APIResultCode_DTYPE | never, data?: any) => {
+  const [code, msg] = APIResultCode[key]
+  return APIResultful.result({ code, msg, data })
+}

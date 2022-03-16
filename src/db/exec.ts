@@ -1,5 +1,5 @@
 import type { Pool } from 'mysql'
-import type { APIResultful_DTYPE, APIResultCode } from './resultful'
+import type { APIResultful_DTYPE } from './resultful'
 
 import resultful from './resultful'
 import { isDev } from '@/common/config'
@@ -27,7 +27,7 @@ class exec {
       pool.getConnection((error, conn) => {
         if (error) {
           log('conn err=', error)
-          resolve(resultful('WARN'))
+          resolve(resultful('WARddN'))
         } else {
           conn.query(sql, value, (err, res, fields) => {
             if (isDev) log('执行sql=', sql, value === undefined ? '' : value)

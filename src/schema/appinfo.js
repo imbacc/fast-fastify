@@ -1,4 +1,4 @@
-const { reduce_prop, arr_repeta } = require('@/common/schema_reduce.js')
+const { reduce_prop, arr_repeta } = require('@/common/schemaReduce')
 const { number_0_1, string_1_10, array_20_number, page_prop, size_prop } = require('./global.js')
 
 // prop

@@ -5,6 +5,7 @@ export default (fastify: FastifyInstance) => {
 
   fastify.setNotFoundHandler((request: any, reply: any) => {
     console.log('try 404...')
+    console.log('request', request)
     // console.log(reque)
     // console.log(reply)
     reply.code(404).send({
@@ -15,6 +16,7 @@ export default (fastify: FastifyInstance) => {
 
   fastify.setErrorHandler((error: any, request: any, reply: any) => {
     // error.validationContext 是 [body, params, querystring, headers] 之中的值
+    console.log('request', request)
     if (error.validation) {
       let msg = Array.from(error.validation, ({ message }) => message).join(',')
       let str = `validation failed of the ${error.validationContext}! ${msg}`

@@ -1,5 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 
+// import { globalMemory } from '@/common/globalMemory'
+
 import mysqlDrive from 'mysql'
 import Exec from './exec' //执行器封装
 import { mysql } from '@/common/config' //数据库配置

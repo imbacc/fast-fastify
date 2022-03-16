@@ -1,4 +1,4 @@
-const { arr_repeta } = require('@/common/schema_reduce.js')
+const { arr_repeta } = require('@/common/schemaReduce')
 
 const number_0_1 = ['number', 0, 1, true]
 const string_1_10 = ['string', 1, 10, true]

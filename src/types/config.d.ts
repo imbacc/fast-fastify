@@ -1,8 +1,7 @@
 // CONFIG
 export interface CONFIG<T, P> {
   dev: T
-  prod: P | T
-  // prod: P extends T ? P : T
+  prod: P | T // P extends T ? P : T
   // dev: T extends infer R ? R : T
   // prod: (P | T) extends infer R ? R : T
 }
@@ -57,7 +56,7 @@ export type swaggerConfigType = {
   }
   host: string | 'auto'
   apiKey: {
-    type: string | 'apiKey'
+    type: 'apiKey'
     name: string | 'Authorization'
     in: string | 'header'
   }
@@ -68,3 +67,11 @@ type swaggerConfigType_Prod_omit = Omit<swaggerConfigType, 'use'>
 type swaggerConfigType_Prod_pick = Pick<swaggerConfigType, 'use'>
 type swaggerConfigType_Prod = Partial<swaggerConfigType_Prod_omit> & swaggerConfigType_Prod_pick
 export interface swaggerConfig_DTYPE extends CONFIG<swaggerConfigType, swaggerConfigType_Prod> {}
+
+// method
+export const enum METHOD {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE'
+}

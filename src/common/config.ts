@@ -19,16 +19,13 @@ import type {
   // swagger
   swaggerConfigType,
   swaggerConfig_DTYPE
-} from './types/config'
+} from '#/config'
 
-import { initGlobal } from './globalMemory'
+import { globalMemory } from './globalMemory'
 import md5 from '@/common/MD5'
 
 const env = (process.env.NODE_ENV || 'dev') as keyof CONFIG_DTYPE
 console.log('env=', env)
-
-// 注入global全局变量和函数
-initGlobal()
 
 // 赋予路由跳过检测权限
 const checkAuth: checkAuth_DTYPE = {
@@ -37,7 +34,7 @@ const checkAuth: checkAuth_DTYPE = {
 }
 
 // 初始化执行
-global.addJump(checkAuth[env])
+globalMemory.addJump(checkAuth[env])
 
 // 端口信息
 const listenConfig: listenConfig_DTYPE = {

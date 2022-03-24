@@ -1,35 +1,32 @@
-import type { FastifyInstance } from 'fastify'
+import { redis_DTYPE } from '#/redis'
 
-import Redis from 'redis' //Redis驱动
+import { globalMemory } from '@/common/globalMemory'
 import { redis } from '@/common/config' //Redis配置
+import RedisDrive from 'redis' //Redis驱动
 
-const redisCli = Redis.createClient(redis.port, redis.host)
+const redisCli = RedisDrive.createClient(redis.port, redis.host)
 redisCli.on('error', (err: any) => console.log('redis err=' + err))
 
-const get_redis = async (key: string) => {
-  const p = new Promise((resolve) => {
-    redisCli.get(key, (err: any, res: any) => {
-      try {
-        res = JSON.parse(res)
-      } catch (e) {}
-      resolve(res)
+export class Redis implements redis_DTYPE {
+  async getRedis(key: string) {
+    const p = new Promise((resolve) => {
+      redisCli.get(key, (err: any, res: any) => {
+        try {
+          res = JSON.parse(res)
+        } catch (e) {}
+        resolve(res)
+      })
     })
-  })
-  return await p.then((res) => res)
+    return await p.then((res) => res)
+  }
+
+  setRedis(key: string, value: any, time: number) {
+    redisCli.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
+    if (time) redisCli.expire(key, time)
+  }
 }
 
-const set_redis = (key: string, value: any, time: number) => {
-  redisCli.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
-  if (time) redisCli.expire(key, time)
-}
-
-// const has_redis = async (key, two) => {
-//   const p = new Promise((resolve, reject) => redisCli.get(key, (err, res) => resolve(res === two)))
-//   return await p.then((res) => res)
-// }
-
-export default (fastify: FastifyInstance) => {
-  fastify.decorate('get_redis', get_redis)
-  fastify.decorate('set_redis', set_redis)
-  // fastify.decorate('has_redis', has_redis)
+const redisObj = new Redis()
+export default () => {
+  globalMemory.setRedis(redisObj)
 }

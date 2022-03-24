@@ -1,8 +1,8 @@
-import type { FastifyInstance } from 'fastify'
-
+import { globalMemory } from './globalMemory'
 import fastifyCors from 'fastify-cors'
 
-export default (fastify: FastifyInstance) => {
+const { fastify } = globalMemory
+export default () => {
   console.log('开启中间件...')
   fastify.register(fastifyCors)
 }

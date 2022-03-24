@@ -1,4 +1,4 @@
-export type APIResultCode_DTYPE = { [key in string]: [number, string] }
+import type { APIResultCode_DTYPE, APIResultful_DTYPE } from '#/resultful'
 
 //虚拟枚举类型 自己定义
 export const APIResultCode: APIResultCode_DTYPE = {
@@ -35,12 +35,6 @@ export const APIResultCode: APIResultCode_DTYPE = {
   UNMAKETOKEN_HASH: [-99997, '这不是提司腰牌!'],
   UNMAKETOKEN_RUBBISH: [-99998, '提司腰牌已损坏!'],
   UNMAKETOKEN_FAIL: [-99999, '提司腰牌与身份不匹配!']
-}
-
-export interface APIResultful_DTYPE {
-  code: number
-  msg: string
-  data: any
 }
 
 // type code_DTYPE = APIResultCode_DTYPE extends keyof string

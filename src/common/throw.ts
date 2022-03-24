@@ -1,6 +1,8 @@
-import type { FastifyInstance } from 'fastify'
+import { globalMemory } from './globalMemory'
 
-export default (fastify: FastifyInstance) => {
+const { fastify } = globalMemory
+
+export default () => {
   console.log('开启抛异常...')
 
   fastify.setNotFoundHandler((request: any, reply: any) => {

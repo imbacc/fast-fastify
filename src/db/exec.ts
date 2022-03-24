@@ -1,5 +1,6 @@
+import type { exec_DTYPE } from '#/exex'
+import type { APIResultful_DTYPE } from '#/resultful'
 import type { Pool } from 'mysql'
-import type { APIResultful_DTYPE } from './resultful'
 
 import resultful from './resultful'
 import { isDev } from '@/common/config'
@@ -7,8 +8,8 @@ import { isDev } from '@/common/config'
 const log = async (...args: any) => console.log(...args)
 
 //执行SQL事务封装
-class exec {
-  private pool: Pool
+class exec implements exec_DTYPE {
+  public pool: Pool
 
   constructor(pool: Pool) {
     this.pool = pool
@@ -21,13 +22,13 @@ class exec {
    * then 回调函数
    * result 不经过resultful直接返回结果 默认false
    */
-  call(sql: string, value?: Array<number>, code?: string): Promise<APIResultful_DTYPE> {
+  call(sql: string, value?: Array<any>, code?: string): Promise<APIResultful_DTYPE> {
     const pool = this.pool
     return new Promise((resolve) => {
       pool.getConnection((error, conn) => {
         if (error) {
           log('conn err=', error)
-          resolve(resultful('WARddN'))
+          resolve(resultful('WARN'))
         } else {
           conn.query(sql, value, (err, res, fields) => {
             if (isDev) log('执行sql=', sql, value === undefined ? '' : value)

@@ -1,16 +1,19 @@
 // 获取module文件下子模块内容
-const fs = require('fs')
-const { type } = require('os')
+import fs from 'fs'
+import { type } from 'os'
+import { globalMemory } from '@/common/globalMemory'
+const { fastify } = globalMemory
+
 const path = './src/router/modules'
 
-const fs_modules = (fastify) => {
+const fs_modules = () => {
   let modules = []
-  fs.readdirSync(path).map((fileName) => modules.push(require(`./modules/${fileName}`)(fastify)))
+  fs.readdirSync(path).map((fileName) => modules.push(import(`./modules/${fileName}`)))
   return modules
 }
 
-module.exports = (fastify) => {
-  const list = fs_modules(fastify)
+module.exports = () => {
+  const list = fs_modules()
   let limit = global.api_limit
   let jump = global.jump_auth
 

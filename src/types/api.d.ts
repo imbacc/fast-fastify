@@ -1,25 +1,24 @@
 import type { METHOD } from '#/config'
 
-type schema_DTYPE = { body?: any; query?: any }
 type hooks_DTYPE = (reque: any, reply: any, done: Function) => void
-interface apiImpl {
+interface api {
   url: string
-  method: METHOD | METHOD.GET
-  limit: [number, number]
-  sql: { [key in string]: string }
+  method: keyof typeof METHOD
+  limit?: [number, number] | [30, 15]
+  sql?: { [key: string]: string } | any
   swagger?: {
     summary: string | '概括'
     description: string | '描述'
   }
-  schema?: Record<keyof schema_DTYPE, any>
+  schema?: Partial<Record<'body' | 'query', string>>
   jump?: boolean
   onRequest?: hooks_DTYPE
   onResponse?: hooks_DTYPE
   preValidation?: hooks_DTYPE // 该钩子总是在共享的 `preValidation` 钩子后被执行
   preHandler?: hooks_DTYPE // 该钩子总是在共享的 `preHandler` 钩子后被执行
-  preSerialization?: hooks_DTYPE // 该钩子总是在共享的 `preSerialization` 钩子后被执行
+  preSerialization?: (reque: any, reply: any, payload: any, done: Function) => void // 该钩子总是在共享的 `preSerialization` 钩子后被执行
 }
 
-export interface apiRouterImpl {
-  [key in string]: apiImpl
+export interface apiRouter {
+  [key: string]: api
 }

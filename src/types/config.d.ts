@@ -1,11 +1,16 @@
 // CONFIG
-export interface CONFIG<T, P> {
+// export interface CONFIG<T, P> {
+//   dev: T
+//   prod: P | T // P extends T ? P : T
+//   // dev: T extends infer R ? R : T
+//   // prod: (P | T) extends infer R ? R : T
+// }
+export interface CONFIG<T> {
   dev: T
-  prod: P | T // P extends T ? P : T
-  // dev: T extends infer R ? R : T
-  // prod: (P | T) extends infer R ? R : T
+  prod: T
 }
-export interface CONFIG_DTYPE extends CONFIG<string> {}
+
+export type CONFIG_DTYPE = keyof CONFIG<any>
 
 // checkAuth
 type checkAuthType = Array<string>
@@ -65,8 +70,10 @@ export type swaggerConfigType = {
 }
 type swaggerConfigType_Prod_omit = Omit<swaggerConfigType, 'use'>
 type swaggerConfigType_Prod_pick = Pick<swaggerConfigType, 'use'>
-type swaggerConfigType_Prod = Partial<swaggerConfigType_Prod_omit> & swaggerConfigType_Prod_pick
-export interface swaggerConfig_DTYPE extends CONFIG<swaggerConfigType, swaggerConfigType_Prod> {}
+export interface swaggerConfig_DTYPE extends CONFIG<any> {
+  dev: swaggerConfigType
+  prod: Partial<swaggerConfigType_Prod_omit> & swaggerConfigType_Prod_pick
+}
 
 // method
 export const enum METHOD {

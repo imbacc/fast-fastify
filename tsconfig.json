@@ -19,7 +19,7 @@
     "incremental": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "rootDir": "src",
     "outDir": "dist",
     "types": ["node"],
@@ -29,6 +29,6 @@
       "#/*": ["src/types/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/types/**/*.d.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.js"],
   "exclude": ["node_modules", "dist", "tests", ".history"]
 }

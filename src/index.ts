@@ -1,11 +1,9 @@
-import type { FastifyInstance } from 'fastify'
-
 import fastifyFrame from 'fastify'
 import moduleAlias from 'module-alias'
 moduleAlias.addAliases({ '@': __dirname }) // 添加alias导向
 
+import { globalMemory } from '@/common/globalMemory'
 import { listen } from '@/common/config'
-import decorate from '@/common/decorate'
 import intercept from '@/common/intercept'
 import throws from '@/common/throw'
 import middle from '@/common/middle'
@@ -14,16 +12,17 @@ import mysql from '@/db/mysql'
 import redis from '@/db/redis'
 import router from '@/router/index'
 
-const fastify: FastifyInstance = fastifyFrame({ logger: false })
+const fastify = fastifyFrame({ logger: false })
 const { port, ip, queue } = listen
-decorate(fastify) //注册装饰器
-intercept(fastify) //注册拦截器
-throws(fastify) //注册抛异常
-middle(fastify) //注册中间件
-plugin(fastify) //注册插件
-mysql(fastify) //注册Mysql	不是fastify-mysql插件
-redis(fastify) //注册Redis	不是fastify-redis插件
-router(fastify) //注册路由
+
+globalMemory.setFastify(fastify)
+intercept() //注册拦截器
+throws() //注册抛异常
+middle() //注册中间件
+plugin() //注册插件
+mysql() //注册Mysql	不是fastify-mysql插件
+redis() //注册Redis	不是fastify-redis插件
+router() //注册路由
 
 //启动服务	nodemon	index
 fastify.listen(port, ip, queue, (err: Error) => {

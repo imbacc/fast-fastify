@@ -1,11 +1,10 @@
-import type { FastifyInstance } from 'fastify'
-
+import { globalMemory } from './globalMemory'
 import { jwtkey } from './config'
-
 import fastifyJwt from 'fastify-jwt'
 import swagger from '@/plugins/swagger'
 
-export default (fastify: FastifyInstance) => {
+const { fastify } = globalMemory
+export default () => {
   // JWT令牌
   fastify.register(fastifyJwt, { secret: jwtkey })
 

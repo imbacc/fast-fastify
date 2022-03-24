@@ -1,11 +1,9 @@
-import type { FastifyInstance } from 'fastify'
-
 import { globalMemory } from './globalMemory'
-
 import md5 from './MD5'
 import resultful from '@/db/resultful' //返回数据构造
 import apitime from './apitime' //API限流
-const jumpCheck = globalMemory.jumpAuth //跳过检测jwt
+
+const { fastify, skipAuth } = globalMemory //跳过检测jwt
 
 const checkCode = async (onlyid: string, reply: any, code: string, httpCode: number, next: Function) => {
   console.log({ onlyid, code }, '拦截状态...')
@@ -40,7 +38,7 @@ const H_VAL1 = '*'
 const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With'
 const H_VAL3 = 'POST,GET,OPTIONS'
 
-export default (fastify: FastifyInstance) => {
+export default () => {
   console.log('开启拦截器...')
 
   //请求
@@ -64,7 +62,7 @@ export default (fastify: FastifyInstance) => {
     // 判断是否跳过白名单，直接next
     const url_idx = url.indexOf('?')
     const url_str = url_idx !== -1 ? url.substring(0, url_idx) : url
-    const jump = jumpCheck.get(url_str)
+    const jump = skipAuth.get(url_str)
     if (jump) {
       next()
       return

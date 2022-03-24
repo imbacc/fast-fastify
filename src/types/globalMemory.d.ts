@@ -1,6 +1,6 @@
-export type apiCache_DTYPE = { [key in string]: any } // Record<string, any>
-export type apiLimit_DTYPE = { [key in string]: [number, number] }
-interface apiImpl {
+export type apiCache_DTYPE = { [key: string]: any } // Record<string, any>
+export type apiLimit_DTYPE = { [key: string]: [number, number] }
+interface api {
   // api接口键为N时回收内存
   apiClear: number | 10000
   // api接口缓存
@@ -13,19 +13,23 @@ interface apiImpl {
   setCache: (key: string, val: any) => boolean
 }
 
-export type jumpAuth_DTYPE = Map<string, any>
-interface jumpImpl {
+export type skipAuth_DTYPE = Map<string, any>
+interface skip {
   // 跳过权限检测
-  jumpAuth: jumpAuth_DTYPE
+  skipAuth: jumpAuth_DTYPE
   // 添加跳过权限函数
-  addJump: (jump: Array<string>) => jumpAuth_DTYPE
+  addSkip: (skip: Array<string>) => skipAuth_DTYPE
 }
 
-interface baseImpl {
+interface base {
   // base64加密
   base64: (str: string) => string
   // base64解密
   base64Re: (str: string) => string
 }
 
-export interface globalMemoryImpl extends apiImpl, jumpImpl, baseImpl {}
+interface cacheSql {
+  cacheSql: <T>(sql: string, val: Array<any>, time: number, reque: any) => Promise<T>
+}
+
+export interface globalMemory_DTYPE extends api, skip, base, cacheSql {}

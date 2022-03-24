@@ -16,7 +16,7 @@ interface api {
 export type skipAuth_DTYPE = Map<string, any>
 interface skip {
   // 跳过权限检测
-  skipAuth: jumpAuth_DTYPE
+  skipAuth: skipAuth_DTYPE
   // 添加跳过权限函数
   addSkip: (skip: Array<string>) => skipAuth_DTYPE
 }

@@ -33,7 +33,7 @@ export default (fastify: FastifyInstance, opts = {}, done: Function) => {
     ...opts
   })
 
-  globalMemory.addJump([
+  globalMemory.addSkip([
     route,
     `${route}/json`,
     `${route}/static/index.html`,

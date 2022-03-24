@@ -11,7 +11,7 @@ interface api {
     description: string | '描述'
   }
   schema?: Partial<Record<'body' | 'query', string>>
-  jump?: boolean
+  skip?: boolean
   onRequest?: hooks_DTYPE
   onResponse?: hooks_DTYPE
   preValidation?: hooks_DTYPE // 该钩子总是在共享的 `preValidation` 钩子后被执行

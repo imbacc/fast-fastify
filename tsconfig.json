@@ -18,6 +18,7 @@
     "diagnostics": true,
     "incremental": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "skipLibCheck": false,
     "rootDir": "src",

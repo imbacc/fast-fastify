@@ -95,7 +95,7 @@ const routerList: apiRouter = {
     url: '/fff',
     method: METHOD.GET,
     limit: LIMIT,
-    jump: true // 跳过权限检测
+    skip: true // 跳过权限检测
   },
   api_testDdd: {
     url: '/ddd',

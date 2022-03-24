@@ -12,14 +12,13 @@ const { select_test } = api.api_testSel.sql
 const { select, select2 } = api.api_testDdd.sql
 
 //用户模块路由
-module.exports = (fastify) => {
-  const { exec } = fastify
+module.exports = () => {
   return [
     {
       // 全局代理操作 当前js的每个路由 都会代理属性,对象,函数 (除了is_proxy属性外)
       is_proxy: true,
       // limit: [10, 1], //10秒/1次 访问限制
-      // jump: true, // 跳过权限检测
+      // skip: true, // 跳过权限检测
       swagger: {
         tags: [fileName],
         summary: '我是appinfo - 默认简介 is_proxy: true代理当前js所有路由!',
@@ -75,7 +74,7 @@ module.exports = (fastify) => {
       handler: async (reque, reply) => {
         //缓存到redis 60分钟 只GET请求缓存!
         //const res = await fastify.cache_sql(select_test, [0], 60, reque)
-        reply.send('设置了jump: true 老子跳过了权限检测！')
+        reply.send('设置了skip: true 老子跳过了权限检测！')
       }
     },
     {

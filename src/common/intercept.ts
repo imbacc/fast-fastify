@@ -3,8 +3,6 @@ import md5 from './MD5'
 import resultful from '@/db/resultful' //返回数据构造
 import apitime from './apitime' //API限流
 
-const { fastify, skipAuth } = globalMemory //跳过检测jwt
-
 const checkCode = async (onlyid: string, reply: any, code: string, httpCode: number, next: Function) => {
   console.log({ onlyid, code }, '拦截状态...')
   if (!(code === 'SUCCESS')) {
@@ -39,6 +37,7 @@ const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested
 const H_VAL3 = 'POST,GET,OPTIONS'
 
 export default () => {
+  const { fastify, skipAuth } = globalMemory //跳过检测jwt
   console.log('开启拦截器...')
 
   //请求
@@ -62,8 +61,8 @@ export default () => {
     // 判断是否跳过白名单，直接next
     const url_idx = url.indexOf('?')
     const url_str = url_idx !== -1 ? url.substring(0, url_idx) : url
-    const jump = skipAuth.get(url_str)
-    if (jump) {
+    const skip = skipAuth.get(url_str)
+    if (skip) {
       next()
       return
     }

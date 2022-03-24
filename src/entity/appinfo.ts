@@ -5,8 +5,6 @@
 // `ostext` varchar(5) DEFAULT NULL,
 // `linkurl` varchar(300) DEFAULT NULL,
 
-import { throws } from 'assert'
-
 export interface appInfo_DTYPE {
   id: number
   text: string
@@ -22,15 +20,53 @@ export interface appInfo_DTYPE {
 //   }
 // }
 
-function setLimitLength(target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-  console.log('target', target)
-  let originalMethod = descriptor.value
-  descriptor.value = function (value: any) {
-    console.log('wrapped function: before invoking ' + propertyKey)
-    let result = originalMethod.apply(this, value)
-    console.log('wrapped function: after invoking ' + propertyKey)
-    return result
+// const test = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+//   console.log('target', target)
+//   let originalMethod = descriptor.value
+//   descriptor.value = function (...args: any[]) {
+//     console.log('wrapped function: before invoking ' + propertyKey)
+//     let result = originalMethod.apply(this, args)
+//     console.log('wrapped function: after invoking ' + propertyKey)
+//     return result
+//   }
+// }
+
+// function Log(target: Function, key: string, parameterIndex: number) {
+//   let functionLogged = key || target.prototype.constructor.name
+//   console.log(`The parameter in position ${parameterIndex} at ${functionLogged} has been decorated`)
+// }
+
+function logProperty(target: any, key: string) {
+  delete target[key]
+
+  const backingField = '_' + key
+
+  Object.defineProperty(target, backingField, {
+    writable: true,
+    enumerable: true,
+    configurable: true
+  })
+
+  // property getter
+  const getter = function (this: any) {
+    const currVal = this[backingField]
+    console.log(`Get: ${key} => ${currVal}`)
+    return currVal
   }
+
+  // property setter
+  const setter = function (this: any, newVal: any) {
+    console.log(`Set: ${key} => ${newVal}`)
+    this[backingField] = newVal
+  }
+
+  // Create new property with getter and setter
+  Object.defineProperty(target, key, {
+    get: getter,
+    set: setter,
+    enumerable: true,
+    configurable: true
+  })
 }
 
 export class appInfo implements appInfo_DTYPE {
@@ -40,12 +76,21 @@ export class appInfo implements appInfo_DTYPE {
   ostext: string = ''
   linkurl: string = ''
 
-  @setLimitLength
-  set id(value: number) {
-    if (this.id) this.id = value
-  }
+  @logProperty
+  id: number = 0
 
-  get id() {
-    return this.id
-  }
+  // @test
+  // ddd(@Log arg: any): any {
+  //   console.log('runTask invoked, args: ' + arg)
+  //   return 'finished'
+  // }
+
+  // @logProperty
+  // set id(id: number) {
+  //   if (this.id) this.id = id
+  // }
+
+  // get id() {
+  //   return this.id
+  // }
 }

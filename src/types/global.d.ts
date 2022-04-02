@@ -1,4 +1,4 @@
 declare module 'redis' {
-  const redis = require('redis')
+  import redis = require('redis')
   export default redis
 }

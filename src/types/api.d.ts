@@ -1,7 +1,7 @@
 import type { METHOD } from '#/config'
 
 type hooks_DTYPE = (reque: any, reply: any, done: Function) => void
-interface api {
+interface api_DTYPE {
   url: string
   method: keyof typeof METHOD
   limit?: [number, number] | [30, 15]
@@ -20,5 +20,5 @@ interface api {
 }
 
 export interface apiRouter {
-  [key: string]: api
+  [key: string]: api_DTYPE
 }

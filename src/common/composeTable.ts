@@ -1,3 +1,4 @@
+// sql组合
 class composeTable {
   private table: string
   private list: Array<string>
@@ -9,6 +10,7 @@ class composeTable {
     this.list = keyList
     this.bakList = keyList
     this.sql = ''
+
     // 初始化并筛选
     this.list = this.filter_key(removeKey).list
   }
@@ -38,13 +40,13 @@ class composeTable {
 
   // 新增
   insert() {
-    this.sql += `INSERT INTO ${this.table} (${_get_colum(this.list)}) VALUES (${_get_join(this.list)});`
+    this.sql += `INSERT INTO ${this.table} (${this.getColum(this.list)}) VALUES (${this.getJoin(this.list)});`
     return this
   }
 
   // 更新
   update(where = '') {
-    this.sql += `UPDATE ${this.table} SET ${_get_value(this.list)} ${where};`
+    this.sql += `UPDATE ${this.table} SET ${this.getValue(this.list)} ${where};`
     return this
   }
 
@@ -56,7 +58,7 @@ class composeTable {
 
   // 查询
   select(where = '') {
-    this.sql += `SELECT ${_get_colum(this.list)} FROM ${this.table} ${where};`
+    this.sql += `SELECT ${this.getColum(this.list)} FROM ${this.table} ${where};`
     return this
   }
 
@@ -100,43 +102,27 @@ class composeTable {
 
   // --------------------结果result
   // 获取最终sql
-  get_sql() {
+  getSql() {
     const sql = this.sql
     this.sql = ''
     this.list = [...this.bakList]
     return sql
   }
+
+  // SELECT key,key... FROM
+  private getColum(list: Array<string> = []): string {
+    return list.length > 0 ? [...new Set(list)].join(',') : '*'
+  }
+
+  // 获取并拼接 格式: key=?,key=?...
+  private getValue(list: Array<string> = []): string {
+    return list.length > 0 ? `${list.join('=?')}=?` : ''
+  }
+
+  // 获取相应数量拼接 格式: ?,?,?...
+  private getJoin(list: Array<string> = []): string {
+    return list.length > 0 ? Array(list.length).fill('?').join(',') : ''
+  }
 }
 
 export default composeTable
-
-//////////// 下面是私有函数
-
-// ['字段']
-const _get_colum = (list: Array<string> = []): string => {
-  let len = list.length
-  if (len === 0) return '*' // 不推荐list不填
-  if (len > 0) list = [...new Set(list)]
-  let join = list.join(',')
-  return len > 1 ? join.substring(0, join.length) : join
-}
-
-//获取并拼接 格式: key=?,key=?   ...
-const _get_value = (list: Array<string> = []): string => {
-  let value = ''
-  if (list.length > 0) {
-    list.forEach((key) => (value += key + '=?,'))
-    return value.substring(0, value.length - 1)
-  }
-  return value
-}
-
-//获取相应数量拼接 格式: ?,?,?   ...
-const _get_join = (list: Array<string> = []): string => {
-  let value = ''
-  if (list.length > 0) {
-    list.forEach(() => (value += '?,'))
-    return value.substring(0, value.length - 1)
-  }
-  return value
-}

@@ -7,9 +7,10 @@ import { appInfo } from '@/entity/appinfo'
 const appinfo = new appInfo()
 console.log('appinfo=', appinfo)
 // appinfo.ddd('qqq')
-appinfo.id = 1
+appinfo.id = 1234
 console.log('appinfo.id=', appinfo.id)
-// schemats generate -c mysql://mysql@localhost/osm -t users -o osm.ts
+// 用于生成d.ts声明文件
+// pnpm exec schemats generate -c mysql://root:root@localhost/test -t app_info -s schema -o interface_output.ts
 
 import { globalMemory } from '@/common/globalMemory'
 import { listen } from '@/common/config'

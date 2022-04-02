@@ -1,5 +1,15 @@
 // const { arr_repeta } = require('@/common/schemaReduce')
 
+export interface pages_DTYPE {
+  page: number
+  size: number
+}
+
+export class pages implements pages_DTYPE {
+  page: number = 0
+  size: number = 0
+}
+
 // const number_0_1 = ['number', 0, 1, true]
 // const string_1_10 = ['string', 1, 10, true]
 // const array_20_number = ['array', 20, 'number', true]

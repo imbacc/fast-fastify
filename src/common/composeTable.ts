@@ -5,7 +5,7 @@ class composeTable {
   private bakList: Array<string>
   private sql: string
 
-  constructor(tableName: string, keyList: Array<string> = [], removeKey: string = '') {
+  constructor(tableName: string, keyList: Array<string> = [], removeKey: string | Array<string> = '') {
     this.table = tableName
     this.list = keyList
     this.bakList = keyList

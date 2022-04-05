@@ -25,7 +25,7 @@ const routerList: apiRouter = {
     method: METHOD.POST,
     limit: LIMIT,
     sql: {
-      add_test: table.crud_insert().get_sql()
+      add_test: table.crud_insert().getSql()
     },
     swagger: {
       summary: '我是新增接口',
@@ -40,8 +40,8 @@ const routerList: apiRouter = {
     method: METHOD.POST,
     limit: LIMIT,
     sql: {
-      update_test: table.curd_updateById().get_sql(),
-      update_text_test: table.clear_key().append_key('text').curd_deleteById().get_sql() // 清除key 只更新text属性根据id更新
+      update_test: table.curd_updateById().getSql(),
+      update_text_test: table.clear_key().append_key('text').curd_deleteById().getSql() // 清除key 只更新text属性根据id更新
     },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
@@ -68,7 +68,7 @@ const routerList: apiRouter = {
     method: METHOD.DELETE,
     limit: LIMIT,
     sql: {
-      delete_test: table.curd_deleteById().get_sql()
+      delete_test: table.curd_deleteById().getSql()
     },
     swagger: {
       summary: '我是删除接口',
@@ -83,8 +83,8 @@ const routerList: apiRouter = {
     method: METHOD.GET,
     limit: LIMIT,
     sql: {
-      select_test: table.select().get_sql(),
-      test_connect: table.clear_key().append_key('id').select('limit 1').get_sql()
+      select_test: table.select().getSql(),
+      test_connect: table.clear_key().append_key('id').select('limit 1').getSql()
     },
     swagger: {
       summary: '我是查询接口！ 从api -> appinfo.js -> swagger 设置summary,description 简介和描述!',
@@ -102,8 +102,8 @@ const routerList: apiRouter = {
     method: METHOD.GET,
     limit: [10, 3],
     sql: {
-      select: table.curd_selectById().get_sql(),
-      select2: table.filter_key('version').select('where id = ? and id > 0').get_sql()
+      select: table.curd_selectById().getSql(),
+      select2: table.filter_key('version').select('where id = ? and id > 0').getSql()
     }
   },
   api_testTtt: {

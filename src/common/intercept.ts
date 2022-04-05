@@ -37,7 +37,7 @@ const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested
 const H_VAL3 = 'POST,GET,OPTIONS'
 
 export default () => {
-  const { fastify, skipAuth } = globalMemory //跳过检测jwt
+  const { fastify, skip } = globalMemory //跳过检测jwt
   console.log('开启拦截器...')
 
   //请求
@@ -61,8 +61,9 @@ export default () => {
     // 判断是否跳过白名单，直接next
     const url_idx = url.indexOf('?')
     const url_str = url_idx !== -1 ? url.substring(0, url_idx) : url
-    const skip = skipAuth.get(url_str)
-    if (skip) {
+    const skipBool = skip.checkSkip(url_str)
+    const vagueSkipBool = skip.vagueCheckSkip(url_str)
+    if (skipBool || vagueSkipBool) {
       next()
       return
     }

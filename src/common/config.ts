@@ -34,7 +34,7 @@ const checkAuth: checkAuth_DTYPE = {
 }
 
 // 初始化执行
-globalMemory.addSkip(checkAuth[env])
+globalMemory.skip.addSkip(checkAuth[env])
 
 // 端口信息
 const listenConfig: listenConfig_DTYPE = {
@@ -77,10 +77,14 @@ const mysqlConfig: mysqlConfig_DTYPE = {
 // redis
 const redisConfig: redisConfig_DTYPE = {
   dev: {
+    username: 'root',
+    password: 'root',
     host: '127.0.0.1',
     port: 6379
   },
   prod: {
+    username: 'root',
+    password: 'root',
     host: '127.0.0.1',
     port: 6379
   }

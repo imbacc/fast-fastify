@@ -5,12 +5,10 @@ const _string = schema.string()
 const _array = schema.array()
 const _object = schema.object()
 
-const items_DTYPE = {
-  number: number
-}
+type items_DTYPE = {}
 
 //
-const items_type = {
+const items = {
   number: _number,
   string: _string,
   array: _array,
@@ -21,7 +19,7 @@ const items_type = {
 const _type = {
   number: (n1: number, n2: number) => _number.minimum(n1).maximum(n2),
   string: (n1: number, n2: number) => _string.minLength(n1).maxLength(n2),
-  array: (n1: number, n2: number) => _array.maxItems(n1).items(items_type[n2]),
+  array: (n1: number, n2: number | string) => _array.maxItems(n1).items(items[n2]),
   object: (n1: number, n2: number) => _object.minProperties(n1).maxProperties(n2),
   enum: (n1: number, n2: number) => schema.enum(n1).default(n2)
 }

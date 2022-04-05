@@ -1,5 +1,5 @@
 import type { Pool } from 'mysql'
-import type { APIResultful_DTYPE } from '@/db/resultful'
+import type { APIResultful_DTYPE } from '#/resultful'
 
 export interface exec_DTYPE {
   pool: Pool

@@ -18,13 +18,32 @@ export interface api_DTYPE {
 }
 
 export interface skip_DTYPE {
-  // 跳过权限检测
+  /**
+   * 跳过精确路由地址集合
+   */
   skipAuth: Array<string>
-  // 添加跳过权限
-  addSkip: (skip: Array<string>) => Array<string>
-  // 检查权限
+
+  /**
+   * 跳过模糊路由地址集合
+   */
+  vagueSkipAuth: Array<string>
+  /**
+   * 添加精确路由地址集合
+   * @param skip 路由地址字符串集合
+   */
+  addSkip: (skip: Array<string>) => void
+  /**
+   * 添加模糊路由地址集合
+   * @param skip 路由地址字符串集合
+   */
+  addVagueSkip: (skip: Array<string>) => void
+  /**
+   * 检查精确路由地址权限
+   */
   checkSkip: (skip: string) => boolean
-  // 模糊检查权限
+  /**
+   * 检查模糊路由地址权限
+   */
   vagueCheckSkip: (skip: string) => boolean
 }
 

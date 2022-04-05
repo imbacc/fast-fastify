@@ -31,15 +31,20 @@ export interface jwtConfig_DTYPE extends CONFIG<jwtConfigType> {}
 // mysqlConfig
 export type mysqlConfigType = {
   host: string | '127.0.0.1'
-  user: string | 'root'
-  password: string | 'root'
+  user: string
+  password: string
   port: number | 3306
   database: string
 }
 export interface mysqlConfig_DTYPE extends CONFIG<mysqlConfigType> {}
 
 // redisConfig
-export type redisConfigType = Pick<mysqlConfigType, 'host' | 'port'>
+export type redisConfigType = {
+  username: string
+  password: string
+  host: string | '127.0.0.1'
+  port: number | 6379
+}
 export interface redisConfig_DTYPE extends CONFIG<redisConfigType> {}
 
 // apiTimeConfig

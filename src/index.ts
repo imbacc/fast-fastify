@@ -2,13 +2,11 @@ import fastifyFrame from 'fastify'
 import moduleAlias from 'module-alias'
 moduleAlias.addAliases({ '@': __dirname }) // 添加alias导向
 
-import { appInfo } from '@/entity/appinfo'
-
-const appinfo = new appInfo()
-console.log('appinfo=', appinfo)
-// appinfo.ddd('qqq')
-appinfo.id = 1234
-console.log('appinfo.id=', appinfo.id)
+import testInfo from '@/entity/testInfo'
+const test = new testInfo()
+// test.id = 1234
+console.log('testInfo=', test)
+console.log('crud_selectAll=', test.crud_selectAll().getSql())
 // 用于生成d.ts声明文件
 // pnpm exec schemats generate -c mysql://root:root@localhost/test -t app_info -s schema -o interface_output.ts
 
@@ -24,7 +22,7 @@ import plugin from '@/common/plugin'
 
 const { port, ip, queue } = listen
 const fastify = fastifyFrame({ logger: false })
-globalMemory.setFastify(fastify)
+globalMemory.initFastify(fastify)
 
 intercept() //注册拦截器
 throws() //注册抛异常

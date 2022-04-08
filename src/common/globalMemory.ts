@@ -66,11 +66,11 @@ class apiImpl implements api_DTYPE {
   public cache: apiCache_DTYPE = {}
   public limit: apiLimit_DTYPE = {}
 
-  async getCache(key: string): Promise<string> {
-    return await this.cache[key]
+  getCache(key: keyof apiCache_DTYPE): any {
+    return this.cache[key]
   }
 
-  setCache(key: string, val: any) {
+  setCache(key: keyof apiCache_DTYPE, val: any) {
     this.cache[key] = val
     // 去除过多的缓存信息 节约内存
     const cache = this.cache
@@ -82,6 +82,10 @@ class apiImpl implements api_DTYPE {
     }
     return true
   }
+
+  getLimit(key: keyof apiLimit_DTYPE): [number, number] {
+    return this.limit[key]
+  }
 }
 
 class skipImpl implements skip_DTYPE {
@@ -89,14 +93,21 @@ class skipImpl implements skip_DTYPE {
   public vagueSkipAuth: Array<string> = []
 
   // 路由不检测 jwt权限
-  addSkip(skip: Array<string>) {
-    this.skipAuth.push(...skip)
+  addSkip(skip: string | Array<string>) {
+    if (typeof skip === 'string') {
+      this.skipAuth.push(skip)
+    } else {
+      this.skipAuth.push(...skip)
+    }
   }
 
   // 路由不检测 jwt权限
-  addVagueSkip(skip: Array<string>) {
-    this.vagueSkipAuth.push(...skip)
-    return this.vagueSkipAuth
+  addVagueSkip(skip: string | Array<string>) {
+    if (typeof skip === 'string') {
+      this.vagueSkipAuth.push(skip)
+    } else {
+      this.vagueSkipAuth.push(...skip)
+    }
   }
 
   /**
@@ -114,7 +125,7 @@ class skipImpl implements skip_DTYPE {
    * @returns boolean
    */
   vagueCheckSkip(skip: string) {
-    return this.skipAuth.indexOf(skip) !== -1
+    return skip.indexOf(this.vagueSkipAuth.toString()) !== -1
   }
 }
 

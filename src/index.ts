@@ -6,7 +6,12 @@ import testInfo from '@/entity/testInfo'
 const test = new testInfo()
 // test.id = 1234
 console.log('testInfo=', test)
-console.log('crud_selectAll=', test.crud_selectAll().getSql())
+console.log('sql1=', test.crud_selectAll().getSql())
+console.log('sql2=', test.crud_insert().getSql())
+console.log('sql3=', test.curd_selectById(10086).getSql())
+console.log('sql4=', test.curd_selectByPage().getSql())
+console.log('sql5', test.clearKey().appendKey('test').select().getSql())
+console.log('sql6', test.filterKey('').insert().getSql())
 // 用于生成d.ts声明文件
 // pnpm exec schemats generate -c mysql://root:root@localhost/test -t app_info -s schema -o interface_output.ts
 

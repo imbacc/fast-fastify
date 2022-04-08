@@ -126,7 +126,7 @@ const swaggerConfig: swaggerConfig_DTYPE = {
     ],
     externalDocs: {
       description: '查看fastify文档',
-      url: 'https://www.w3cschool.cn/fastify/fastify-zopy35zj.html'
+      url: 'https://www.w3cschool.cn/fastify/fastify-zopy35zj.html  https://www.fastify.io/'
     }
   },
   prod: {

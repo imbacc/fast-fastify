@@ -2,8 +2,8 @@ import type { exec_DTYPE } from '#/exex'
 import type { redis_DTYPE } from '#/redis'
 import type { FastifyInstance } from 'fastify'
 
-export type apiCache_DTYPE = { [key: string]: any }
-export type apiLimit_DTYPE = { [key: string]: [number, number] }
+export type apiCache_DTYPE = { [key in string]: any }
+export type apiLimit_DTYPE = { [key in string]: [number, number] }
 export interface api_DTYPE {
   // api接口键为N时回收内存
   clear: number | 10000
@@ -12,9 +12,11 @@ export interface api_DTYPE {
   // api限流设置 '路由名字':[每秒,次数]
   limit: apiLimit_DTYPE
   // 获取缓存
-  getCache: (key: string) => Promise<string>
+  getCache: (key: keyof apiCache_DTYPE) => any
   // 设置缓存
   setCache: (key: string, val: any) => boolean
+  // 获取限流
+  getLimit: (key: keyof apiLimit_DTYPE) => [number, number]
 }
 
 export interface skip_DTYPE {
@@ -31,12 +33,12 @@ export interface skip_DTYPE {
    * 添加精确路由地址集合
    * @param skip 路由地址字符串集合
    */
-  addSkip: (skip: Array<string>) => void
+  addSkip: (skip: string | Array<string>) => void
   /**
    * 添加模糊路由地址集合
    * @param skip 路由地址字符串集合
    */
-  addVagueSkip: (skip: Array<string>) => void
+  addVagueSkip: (skip: string | Array<string>) => void
   /**
    * 检查精确路由地址权限
    */

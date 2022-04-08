@@ -12,26 +12,32 @@ class composeTable {
     this.sql = ''
 
     // 初始化并筛选
-    this.list = this.filter_key(removeKey).list
+    this.list = this.filterKey(removeKey).list
   }
 
   // 筛选key
-  filter_key(removeKey: string | Array<string>) {
+  filterKey(removeKey: string | Array<string>) {
     if (!removeKey) return this
-    if (removeKey as string) this.list = this.bakList.filter((key) => key !== removeKey)
-    if (removeKey as Array<string>) this.list = this.bakList.filter((key) => !removeKey.includes(key))
+    if (typeof removeKey === 'string') {
+      this.list = this.bakList.filter((key) => key !== removeKey)
+    } else {
+      this.list = this.bakList.filter((key) => !removeKey.includes(key))
+    }
     return this
   }
 
   // 追加key
-  append_key(key: string | Array<string>) {
-    if (key as string) this.list.push(key as string)
-    if (key as Array<string>) this.list.push(...key)
+  appendKey(key: string | Array<string>) {
+    if (typeof key === 'string') {
+      this.list.push(key)
+    } else {
+      this.list.push(...key)
+    }
     return this
   }
 
   // 清除key 跟append_key配合
-  clear_key() {
+  clearKey() {
     this.list = []
     return this
   }
@@ -72,7 +78,7 @@ class composeTable {
 
   // 新增一条记录
   crud_insert() {
-    return this.filter_key('id').insert()
+    return this.filterKey('id').insert()
   }
 
   // 查询所有
@@ -87,7 +93,7 @@ class composeTable {
 
   // 根据ID更新
   curd_updateById() {
-    return this.filter_key('id').update('where id = ?')
+    return this.filterKey('id').update('where id = ?')
   }
 
   // 根据ID删除

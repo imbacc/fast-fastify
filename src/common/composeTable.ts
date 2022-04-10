@@ -1,9 +1,9 @@
 // sql组合
 class composeTable {
-  private table: string
-  private list: Array<string>
-  private bakList: Array<string>
-  private sql: string
+  table: string
+  list: Array<string>
+  bakList: Array<string>
+  sql: string
 
   constructor(tableName: string, keyList: Array<string> = [], removeKey: string | Array<string> = '') {
     this.table = tableName
@@ -102,7 +102,7 @@ class composeTable {
   }
 
   // 查询分页
-  curd_selectByPage(where: string) {
+  curd_selectByPage(where: string = '') {
     return this.select(`${where} limit ?,?`)
   }
 

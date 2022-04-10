@@ -1,26 +1,20 @@
 import composeTable from '@/common/composeTable'
+import schemaReduce from '@/common/schemaReduce'
 
-interface entity<T> extends Function {
+interface entity<T> {
   new (...args: any[]): T
 }
 
-// function factory<T>(target: entity<T>): any {
-//   console.log('%c [ target ]-25', 'font-size:13px; background:#41b883; color:#ffffff;', target)
-//   const ctx: any = new target()
-//   return class factoryImpl extends composeTable {
-//     constructor() {
-//       super(target.name, Object.keys(ctx))
-//     }
-//   }
-// }
-
+const schema = new schemaReduce()
 function factory<T>(target: entity<T>): composeTable {
   const ctx: any = new target()
-  return class factoryImpl extends composeTable {
+  return new (class extends composeTable {
+    private schema: schemaReduce = schema
+
     constructor() {
       super(target.name, Object.keys(ctx))
     }
-  }
+  })()
 }
 
 export default factory

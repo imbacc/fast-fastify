@@ -10,14 +10,6 @@ class test_info {
   public id: number = 0
   public name: string = ''
   public text: string = ''
-
-  constructor() {
-    this.id.constructor.prototype.dd = 'ddd'
-    console.log('this.id', this.id.constructor.prototype)
-    console.log('this.id', this.id)
-    console.log('this.id', this.id.constructor === Number)
-    console.log('this.id', this.id.constructor.toString())
-  }
 }
 
 export default entityFactory(test_info)

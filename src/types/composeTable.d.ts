@@ -1,12 +1,5 @@
 // sql组合
-export class composeTable_DTYPE {
-  private table: string
-  private list: Array<string>
-  private bakList: Array<string>
-  private sql: string
-
-  constructor(tableName: string, keyList: Array<string>, removeKey: string | Array<string>)
-
+export interface composeTable_DTYPE {
   // 筛选key
   filterKey(removeKey: string | Array<string>): this
 
@@ -17,7 +10,6 @@ export class composeTable_DTYPE {
   clearKey(): this
 
   // ------------------基础功能
-
   // 新增
   insert(): this
 
@@ -56,13 +48,4 @@ export class composeTable_DTYPE {
   // --------------------结果result
   // 获取最终sql
   getSql(): string
-
-  // SELECT key,key... FROM
-  private getColum(list: Array<string>): string
-
-  // 获取并拼接 格式: key=?,key=?...
-  private getValue(list: Array<string>): string
-
-  // 获取相应数量拼接 格式: ?,?,?...
-  private getJoin(list: Array<string>): string
 }

@@ -1,5 +1,7 @@
+import { composeTable_DTYPE } from '#/composeTable'
+
 // sql组合
-class composeTable {
+class composeTable implements composeTable_DTYPE {
   table: string
   list: Array<string>
   bakList: Array<string>

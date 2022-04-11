@@ -3,9 +3,7 @@ import moduleAlias from 'module-alias'
 moduleAlias.addAliases({ '@': __dirname }) // 添加alias导向
 
 import test from '@/entity/testInfo'
-// const test = new testInfo()
-// test.id = 1234
-console.log('testInfo=', test)
+console.log('index.ts testInfo=', test)
 console.log('sql1=', test.crud_selectAll().getSql())
 console.log('sql2=', test.crud_insert().getSql())
 console.log('sql3=', test.curd_selectById().getSql())

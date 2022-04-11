@@ -20,7 +20,6 @@ export class Redis implements redis_DTYPE {
   }
 
   setRedis(key: string, value: Object | string | number, time: number) {
-    let value = value
     redisClient.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
     if (time) redisClient.expire(key, time)
   }

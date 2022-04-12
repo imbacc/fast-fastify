@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=dev && nodemon --config nodemon.json --exec pnpm exec ts-node src/index.ts",
     "debug": "cross-env NODE_ENV=dev && nodemon --config nodemon.json --inspect-brk src/index.ts",
     "serve": "cross-env NODE_ENV=prod && node",
-    "build": "cross-env NODE_ENV=prod && tsc -p tsconfig.json"
+    "build": "cross-env NODE_ENV=prod && tsc -p tsconfig.json",
+    "mysql-ts": "pnpm dlx mysqltots -u root -p root -h localhost -d test"
   },
   "repository": {
     "type": "git",

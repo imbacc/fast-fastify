@@ -4,12 +4,10 @@
 //   `text` varchar(30) DEFAULT NULL,
 //   PRIMARY KEY (`id`)
 // ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+import { test_info } from '#/entity'
+
 import entityFactory from '@/common/entityFactory'
 
-class test_info {
-  public id: number = 0
-  public name: string = ''
-  public text: string = ''
-}
+class test_info extends test_info {}
 
 export default entityFactory(test_info)

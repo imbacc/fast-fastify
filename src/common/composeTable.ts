@@ -1,11 +1,12 @@
-import { composeTable_DTYPE } from '#/composeTable'
+import type { composeTable_DTYPE } from '#/composeTable'
 
 // sql组合
-class composeTable implements composeTable_DTYPE {
-  table: string
-  list: Array<string>
-  bakList: Array<string>
-  sql: string
+class composeTable<T> implements composeTable_DTYPE {
+  public table: string
+  public list: Array<string>
+  public bakList: Array<string>
+  private sql: string
+  public entity!: T
 
   constructor(tableName: string, keyList: Array<string> = [], removeKey: string | Array<string> = '') {
     this.table = tableName
@@ -108,13 +109,19 @@ class composeTable implements composeTable_DTYPE {
     return this.select(`${where} limit ?,?`)
   }
 
-  // --------------------结果result
   // 获取最终sql
   getSql() {
     const sql = this.sql
     this.sql = ''
     this.list = [...this.bakList]
     return sql
+  }
+
+  // 设置自定义sql
+  setSql(sql: string) {
+    this.clearKey()
+    this.sql = `${sql};`
+    return this
   }
 
   // SELECT key,key... FROM

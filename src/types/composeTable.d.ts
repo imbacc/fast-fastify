@@ -48,4 +48,6 @@ export interface composeTable_DTYPE {
   // --------------------结果result
   // 获取最终sql
   getSql(): string
+
+  setSql(sql: string): this
 }

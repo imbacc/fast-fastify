@@ -8,8 +8,9 @@ console.log('sql1=', test.crud_selectAll().getSql())
 console.log('sql2=', test.crud_insert().getSql())
 console.log('sql3=', test.curd_selectById().getSql())
 console.log('sql4=', test.curd_selectByPage().getSql())
-console.log('sql5', test.clearKey().appendKey('test').select().getSql())
-console.log('sql6', test.filterKey('').insert().getSql())
+console.log('sql5=', test.clearKey().appendKey('text').select().getSql())
+console.log('sql6=', test.setSql('SELECT id,name,text FROM test_info').getSql())
+// console.log('test.entity', test.entity)
 
 import { globalMemory } from '@/common/globalMemory'
 import { listen } from '@/common/config'

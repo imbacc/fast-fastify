@@ -1,7 +1,8 @@
 import composeTable from '@/common/composeTable'
 import { createProp } from '@/common/schemaReduce'
 
-function factory<T>(target: InstanceType<any>): composeTable<T> {
+type entity<T> = { new (...args: any[]): T }
+function factory<T>(target: entity<T>): composeTable<T> {
   const ctx: any = new target()
   const name = target.name
   const keys = Object.keys(ctx)
@@ -18,7 +19,7 @@ function factory<T>(target: InstanceType<any>): composeTable<T> {
   const _entity = {
     [`${name}`]: class extends composeTable<T> {
       constructor() {
-        super(name, keys)
+        super(name, keys as Array<keyof T>)
         super.entity = ctx
       }
     }

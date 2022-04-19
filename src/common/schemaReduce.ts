@@ -64,13 +64,35 @@ export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
   return _arr
 }
 
-export class schemaReduce {
-  // pick(keys: keyof test_info_DTYPE | Array<keyof test_info_DTYPE>) {
-  //   console.log('%c [ keys ]-37', 'font-size:14px; background:#41b883; color:#ffffff;', keys)
-  //   return new Error('Method not implemented.')
-  // }
-  // omit(keys: keyof test_info_DTYPE | Array<keyof test_info_DTYPE>) {
-  //   console.log('%c [ keys ]-41', 'font-size:14px; background:#41b883; color:#ffffff;', keys)
-  //   throw new Error('Method not implemented.')
-  // }
+export class schemaReduce<T> {
+  /**
+   * 所有字段schema
+   */
+  all() {}
+
+  /**
+   * 只有选取的字段
+   * @param keys 字符串或字符串集合
+   */
+  pick(keys: keyof T | Array<keyof T>) {
+    return keys
+  }
+
+  /**
+   * 只有排除的字段
+   * @param keys 字符串或字符串集合
+   */
+  omit(keys: keyof T | Array<keyof T>) {
+    return keys
+  }
+
+  /**
+   * 追加 自定义字段 相当于VO
+   */
+  append() {}
+
+  /**
+   * 更新schema原有定义 长度限制或者类型限制
+   */
+  update() {}
 }

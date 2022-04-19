@@ -1,40 +1,54 @@
-import type { composeTable_DTYPE } from '#/composeTable'
-
 // sql组合
-class composeTable<T> implements composeTable_DTYPE {
+class composeTable<T> {
+  // 表名
   public table: string
-  public list: Array<string>
-  public bakList: Array<string>
+  // 生产sql集合字段
+  public list: Array<keyof T>
+  // 原有sql集合字段
+  public bakList: Array<keyof T>
+  // sql语句
   private sql: string
+  // 表实体类
   public entity!: T
 
-  constructor(tableName: string, keyList: Array<string> = [], removeKey: string | Array<string> = '') {
+  constructor(tableName: string, keyList: Array<keyof T> = [], omitKey?: keyof T | Array<keyof T>) {
     this.table = tableName
     this.list = keyList
     this.bakList = keyList
     this.sql = ''
 
     // 初始化并筛选
-    this.list = this.filterKey(removeKey).list
+    if (omitKey) this.list = this.omitKey(omitKey).list
   }
 
-  // 筛选key
-  filterKey(removeKey: string | Array<string>) {
-    if (!removeKey) return this
-    if (typeof removeKey === 'string') {
-      this.list = this.bakList.filter((key) => key !== removeKey)
+  // 选中key
+  pickKey(key: keyof T | Array<keyof T> | string) {
+    if (!key) return this
+    if (typeof key === 'string') {
+      this.list = this.bakList.filter((f) => key === f)
     } else {
-      this.list = this.bakList.filter((key) => !removeKey.includes(key))
+      this.list = this.bakList.filter((f) => (key as unknown as Array<keyof T>).includes(f))
+    }
+    return this
+  }
+
+  // 排除key
+  omitKey(key: keyof T | Array<keyof T> | string) {
+    if (!key) return this
+    if (typeof key === 'string') {
+      this.list = this.bakList.filter((f) => f !== key)
+    } else {
+      this.list = this.bakList.filter((f) => !(key as Array<keyof T>).includes(f))
     }
     return this
   }
 
   // 追加key
-  appendKey(key: string | Array<string>) {
+  appendKey(key: keyof T | Array<keyof T>) {
     if (typeof key === 'string') {
       this.list.push(key)
     } else {
-      this.list.push(...key)
+      this.list.push(...(key as Array<keyof T>))
     }
     return this
   }
@@ -60,28 +74,28 @@ class composeTable<T> implements composeTable_DTYPE {
   }
 
   // 删除
-  deleted(where = '') {
+  deleted(where: string = '') {
     this.sql += `DELETE FROM ${this.table} ${where};`
     return this
   }
 
   // 查询
-  select(where = '') {
+  select(where: string = '') {
     this.sql += `SELECT ${this.getColum(this.list)} FROM ${this.table} ${where};`
     return this
   }
 
   // 统计
-  count(where = '') {
-    this.sql += `SELECT count(id) as count FROM ${this.table} ${where};`
+  count(where: string = '', ID?: string) {
+    this.sql += `SELECT count(${ID || 'id'}) as count FROM ${this.table} ${where};`
     return this
   }
 
   // --------------------特点CRUD功能
 
   // 新增一条记录
-  crud_insert() {
-    return this.filterKey('id').insert()
+  crud_insert(ID?: string) {
+    return this.omitKey(ID || 'id').insert()
   }
 
   // 查询所有
@@ -90,18 +104,18 @@ class composeTable<T> implements composeTable_DTYPE {
   }
 
   // 根据ID查询
-  curd_selectById() {
-    return this.select('where id = ?')
+  curd_selectById(ID?: string) {
+    return this.select(`where ${ID || 'id'} = ?`)
   }
 
   // 根据ID更新
-  curd_updateById() {
-    return this.filterKey('id').update('where id = ?')
+  curd_updateById(ID?: string) {
+    return this.omitKey(ID || 'id').update(`where ${ID || 'id'} = ?`)
   }
 
   // 根据ID删除
-  curd_deleteById() {
-    return this.deleted('where id = ?')
+  curd_deleteById(ID?: string) {
+    return this.deleted(`where ${ID || 'id'} = ?`)
   }
 
   // 查询分页
@@ -125,17 +139,17 @@ class composeTable<T> implements composeTable_DTYPE {
   }
 
   // SELECT key,key... FROM
-  private getColum(list: Array<string> = []): string {
+  private getColum(list: Array<keyof T> = []): string {
     return list.length > 0 ? [...new Set(list)].join(',') : '*'
   }
 
   // 获取并拼接 格式: key=?,key=?...
-  private getValue(list: Array<string> = []): string {
+  private getValue(list: Array<keyof T> = []): string {
     return list.length > 0 ? `${list.join('=?')}=?` : ''
   }
 
   // 获取相应数量拼接 格式: ?,?,?...
-  private getJoin(list: Array<string> = []): string {
+  private getJoin(list: Array<keyof T> = []): string {
     return list.length > 0 ? Array(list.length).fill('?').join(',') : ''
   }
 }

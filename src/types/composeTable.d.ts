@@ -1,53 +1,59 @@
-// sql组合
-export interface composeTable_DTYPE {
-  // 筛选key
-  filterKey(removeKey: string | Array<string>): this
+// // sql组合
+// export interface composeTable_DTYPE {
+//   // 筛选key
+//   filterKey(removeKey: string | Array<string>): this
 
-  // 追加key
-  appendKey(key: string | Array<string>): this
+//   // 选中相应key
+//   pickKey(key: string | Array<string>): this
 
-  // 清除key 跟append_key配合
-  clearKey(): this
+//   // 排除相应key
+//   omitKey(key: string | Array<string>): this
 
-  // ------------------基础功能
-  // 新增
-  insert(): this
+//   // 追加key
+//   appendKey(key: string | Array<string>): this
 
-  // 更新
-  update(where: string): this
+//   // 清除key 跟append_key配合
+//   clearKey(): this
 
-  // 删除
-  deleted(where: string): this
+//   // ------------------基础功能
+//   // 新增
+//   insert(): this
 
-  // 查询
-  select(where: string): this
+//   // 更新
+//   update(where: string): this
 
-  // 统计
-  count(where: string): this
+//   // 删除
+//   deleted(where: string): this
 
-  // --------------------特点CRUD功能
+//   // 查询
+//   select(where: string): this
 
-  // 新增一条记录
-  crud_insert(): this
+//   // 统计
+//   count(where: string): this
 
-  // 查询所有
-  crud_selectAll(): this
+//   // --------------------特点CRUD功能
 
-  // 根据ID查询
-  curd_selectById(): this
+//   // 新增一条记录
+//   crud_insert(): this
 
-  // 根据ID更新
-  curd_updateById(): this
+//   // 查询所有
+//   crud_selectAll(): this
 
-  // 根据ID删除
-  curd_deleteById(): this
+//   // 根据ID查询
+//   curd_selectById(): this
 
-  // 查询分页
-  curd_selectByPage(where: string): this
+//   // 根据ID更新
+//   curd_updateById(): this
 
-  // --------------------结果result
-  // 获取最终sql
-  getSql(): string
+//   // 根据ID删除
+//   curd_deleteById(): this
 
-  setSql(sql: string): this
-}
+//   // 查询分页
+//   curd_selectByPage(where: string): this
+
+//   // --------------------结果result
+//   // 获取最终sql
+//   getSql(): string
+
+//   setSql(sql: string): this
+// }

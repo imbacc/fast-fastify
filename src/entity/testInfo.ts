@@ -34,4 +34,4 @@ class test_info implements test_info_DTYPE {
   }
 }
 
-export default entityFactory<test_info>(test_info)
+export default entityFactory(test_info)

@@ -10,6 +10,8 @@ class composeTable<T> {
   private sql: string
   // 表实体类
   public entity!: T
+  // schema
+  // public schema!: T
 
   constructor(tableName: string, keyList: Array<keyof T> = [], omitKey?: keyof T | Array<keyof T>) {
     this.table = tableName

@@ -1,5 +1,9 @@
+import type { entity_DTYPE } from '#/entity'
+
+import { schemaReduce } from '@/common/schemaReduce'
+
 // sql组合
-class composeTable<T> {
+class composeTable<T extends entity_DTYPE> {
   // 表名
   public table: string
   // 生产sql集合字段
@@ -9,15 +13,17 @@ class composeTable<T> {
   // sql语句
   private sql: string
   // 表实体类
-  public entity!: T
+  // public entity!: T
   // schema
-  // public schema!: T
+  public schema!: schemaReduce<T>
 
-  constructor(tableName: string, keyList: Array<keyof T> = [], omitKey?: keyof T | Array<keyof T>) {
+  constructor(tableName: string, keyList: Array<keyof T> = [], entity: T, omitKey?: keyof T | Array<keyof T>) {
+    // super(entity, keyList)
     this.table = tableName
     this.list = keyList
     this.bakList = keyList
     this.sql = ''
+    this.schema = new schemaReduce(entity, keyList)
 
     // 初始化并筛选
     if (omitKey) this.list = this.omitKey(omitKey).list
@@ -29,7 +35,7 @@ class composeTable<T> {
     if (typeof key === 'string') {
       this.list = this.bakList.filter((f) => key === f)
     } else {
-      this.list = this.bakList.filter((f) => (key as unknown as Array<keyof T>).includes(f))
+      this.list = this.bakList.filter((f) => (key as Array<keyof T>).includes(f))
     }
     return this
   }

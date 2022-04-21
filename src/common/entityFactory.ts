@@ -1,8 +1,10 @@
+import { entity_DTYPE } from '#/entity'
+
 import composeTable from '@/common/composeTable'
 import { createProp } from '@/common/schemaReduce'
 
 type entity<T> = { new (): T }
-function factory<T>(target: entity<T>): composeTable<T> {
+function factory<T extends entity_DTYPE>(target: entity<T>): composeTable<T> {
   const ctx: any = new target()
   const name = target.name
   const keys = Object.keys(ctx)
@@ -19,9 +21,7 @@ function factory<T>(target: entity<T>): composeTable<T> {
   const _entity = {
     [`${name}`]: class extends composeTable<T> {
       constructor() {
-        super(name, keys as Array<keyof T>)
-        super.entity = ctx
-        // super.schema = new schemaReduce<T>(keys as Array<keyof T>, ctx)
+        super(name, keys as Array<keyof T>, ctx)
       }
     }
   }

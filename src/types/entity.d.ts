@@ -8,39 +8,14 @@ export interface attr_DTYPE {
   n1: n1_param
   n2: n2_param | 'max'
   len: number
-  schema?: any
+  schema?: ObjectSchema
 }
 
-export interface entity_schema_DTYPE<T> {
-  /**
-   * 所有字段schema
-   */
-  allSchema(): ObjectSchema
-
-  /**
-   * 只有选取的字段
-   * @param keys 字符串或字符串集合
-   */
-  pickSchema(keys: keyof T | Array<keyof T>): ObjectSchema
-
-  /**
-   * 只有排除的字段
-   * @param keys 字符串或字符串集合
-   */
-  omitSchema(keys: keyof T | Array<keyof T>): ObjectSchema
-
-  /**
-   * 追加 自定义字段 相当于VO
-   */
-  appendSchema(): ObjectSchema
-
-  /**
-   * 更新schema原有定义 长度限制或者类型限制
-   */
-  updateSchema(): ObjectSchema
+export interface entity_DTYPE {
+  [key: string]: attr_DTYPE
 }
 
-export interface test_info_DTYPE extends entity_schema_DTYPE<test_info_DTYPE> {
+export interface test_info_DTYPE extends entity_DTYPE {
   id: attr_DTYPE // auto_increment
   name: attr_DTYPE
   text: attr_DTYPE

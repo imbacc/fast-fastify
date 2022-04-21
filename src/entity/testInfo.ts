@@ -9,6 +9,7 @@ import type { attr_DTYPE, test_info_DTYPE } from '#/entity'
 import entityFactory from '@/common/entityFactory'
 
 class test_info implements test_info_DTYPE {
+  [key: string]: attr_DTYPE
   id: attr_DTYPE = {
     desc: '唯一ID',
     type: 'number',

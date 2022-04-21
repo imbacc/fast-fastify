@@ -1,6 +1,6 @@
 import type { NumberSchema, StringSchema, ArraySchema, ObjectSchema, JSONSchema } from 'fluent-json-schema'
 import type { items_DTYPE, enum_DTYPE, prop_param, createProp_param } from '#/schemaReduce'
-// import type { attr_DTYPE } from '#/entity'
+import type { entity_DTYPE } from '#/entity'
 
 import schema from 'fluent-json-schema'
 
@@ -65,49 +65,54 @@ export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
   return _arr
 }
 
-// export class schemaReduce<T> {
-//   private entity!: T
-//   private keys: Array<keyof T> = []
+export class schemaReduce<T extends entity_DTYPE> {
+  private entity!: T
+  private keys: Array<keyof T> = []
 
-//   constructor(keys: Array<keyof T>, entity: T) {
-//     this.keys = keys
-//     this.entity = entity
-//   }
+  constructor(entity: T, keys: Array<keyof T>) {
+    this.entity = entity
+    this.keys = keys
+  }
 
-//   /**
-//    * 所有字段schema
-//    */
-//   allSchema() {
-//     this.keys.forEach((key: keyof T) => {
-//       this.entity[key].schema
-//       console.log('%c [ this.entity[key].schema ]-83', 'font-size:14px; background:#41b883; color:#ffffff;', this.entity[key].schema)
-//     })
-//     return
-//   }
+  getSuper() {
+    return this
+  }
 
-//   /**
-//    * 只有选取的字段
-//    * @param keys 字符串或字符串集合
-//    */
-//   pickSchema(keys: keyof T | Array<keyof T>) {
-//     return keys
-//   }
+  /**
+   * 所有字段schema
+   */
+  allSchema() {
+    const list: Array<any> = []
+    this.keys.forEach((key: keyof T) => {
+      let prop = this.entity[key]
+      if (prop) list.push(prop.schema)
+    })
+    return reduceProp(list)
+  }
 
-//   /**
-//    * 只有排除的字段
-//    * @param keys 字符串或字符串集合
-//    */
-//   omitSchema(keys: keyof T | Array<keyof T>) {
-//     return keys
-//   }
+  /**
+   * 只有选取的字段
+   * @param keys 字符串或字符串集合
+   */
+  pickSchema(keys: keyof T | Array<keyof T>) {
+    return keys
+  }
 
-//   /**
-//    * 追加 自定义字段 相当于VO
-//    */
-//   appendSchema() {}
+  /**
+   * 只有排除的字段
+   * @param keys 字符串或字符串集合
+   */
+  omitSchema(keys: keyof T | Array<keyof T>) {
+    return keys
+  }
 
-//   /**
-//    * 更新schema原有定义 长度限制或者类型限制
-//    */
-//   updateSchema() {}
-// }
+  /**
+   * 追加 自定义字段 相当于VO
+   */
+  appendSchema() {}
+
+  /**
+   * 更新schema原有定义 长度限制或者类型限制
+   */
+  updateSchema() {}
+}

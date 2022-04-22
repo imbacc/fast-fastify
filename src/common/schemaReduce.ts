@@ -49,13 +49,24 @@ export function reduceProp(...args: any) {
   const out_schema = args
     .reduce((t: any, v: any) => {
       // @ts-ignore
-      createProp.call({}, ...v, t), createObject()
-    })
+      return createProp.call({}, ...v, t)
+    }, createObject())
     .valueOf()
   delete out_schema.$schema
   console.log('%c [ out_schema ]-80', 'font-size:13px; background:#41b883; color:#ffffff;', out_schema)
   return out_schema
 }
+// export function reduceProp(...args: any) {
+//   const out_schema = args
+//     .reduce((t: any, v: any) => {
+//       // @ts-ignore
+//       return createProp.call({}, ...v, t)
+//     }, createObject())
+//     .valueOf()
+//   delete out_schema.$schema
+//   console.log('%c [ out_schema ]-80', 'font-size:13px; background:#41b883; color:#ffffff;', out_schema)
+//   return out_schema
+// }
 
 // 复用数组
 export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
@@ -82,12 +93,18 @@ export class schemaReduce<T extends entity_DTYPE> {
    * 所有字段schema
    */
   allSchema() {
-    const list: Array<any> = []
+    // const list: Array<ObjectSchema> = []
+    let schema: ObjectSchema = createObject()
     this.keys.forEach((key: keyof T) => {
       let prop = this.entity[key]
-      if (prop) list.push(prop.schema)
+      schema = schema.prop(key as string, prop.schema)
+      // if (prop) list.push(prop.schema as ObjectSchema)
     })
-    return reduceProp(list)
+    const a: any = schema.valueOf()
+    console.log('properties', a.properties.id.properties)
+    console.log('required', a.properties.id.required)
+    return schema.valueOf()
+    // return reduceProp(list)
   }
 
   /**

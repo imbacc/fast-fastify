@@ -30,7 +30,7 @@ class composeTable<T extends entity_DTYPE> {
   }
 
   // 选中key
-  pickKey(key: keyof T | Array<keyof T> | string) {
+  pickKey(key: keyof T | Array<keyof T>) {
     if (!key) return this
     if (typeof key === 'string') {
       this.list = this.bakList.filter((f) => key === f)
@@ -41,7 +41,7 @@ class composeTable<T extends entity_DTYPE> {
   }
 
   // 排除key
-  omitKey(key: keyof T | Array<keyof T> | string) {
+  omitKey(key: keyof T | Array<keyof T>) {
     if (!key) return this
     if (typeof key === 'string') {
       this.list = this.bakList.filter((f) => f !== key)

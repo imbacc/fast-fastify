@@ -1,6 +1,6 @@
 import type { NumberSchema, StringSchema, ArraySchema, ObjectSchema, JSONSchema } from 'fluent-json-schema'
-import type { items_DTYPE, enum_DTYPE, prop_param, createProp_param } from '#/schemaReduce'
-import type { entity_DTYPE } from '#/entity'
+import type { items_DTYPE, enum_DTYPE, prop_param, append_param, createProp_param } from '#/schemaReduce'
+import type { entity_DTYPE, attr_DTYPE } from '#/entity'
 
 import schema from 'fluent-json-schema'
 
@@ -27,25 +27,23 @@ const typeFunction = {
 // 创建初始头对象
 const createObject = (): ObjectSchema => schema.object()
 
-export function createProp(name: string, desc: string, propParmam: prop_param, object: ObjectSchema = createObject()) {
+export function createProp(name: string, desc: string, propParmam: prop_param, object?: ObjectSchema): JSONSchema {
+  if (!object) object = createObject()
   const [type, n1, n2, required, append] = propParmam
   let prop: any = null
   if (type === 'number' || type === 'string' || type === 'object') prop = typeFunction[type](n1 as number, n2 as number)
   if (type === 'array') prop = typeFunction.array(n1 as number, n2 as keyof items_DTYPE)
   if (type === 'enum') prop = typeFunction.enum(n1 as Array<keyof enum_DTYPE>, n2 as enum_DTYPE)
   if (append) {
-    const append_type = Object.prototype.toString.call(append)
-    if (append_type === '[object Array]') {
-      ;(append as Array<string>).forEach((key) => (prop = prop[key]()))
-    } else if (append_type === '[object Object]') {
-      Object.entries(append).forEach(([key, val]) => (prop = prop[key](val)))
-    }
+    Object.entries(append).forEach(([key, val]) => {
+      prop = val ? prop[key](val) : prop[key]()
+    })
   }
   if (required) prop = prop.required()
   return object.prop(name, prop).description(desc)
 }
 
-export function reduceProp(...args: any) {
+export function reduceProp(...args: any): JSONSchema {
   const out_schema = args
     .reduce((t: any, v: any) => {
       // @ts-ignore
@@ -53,20 +51,8 @@ export function reduceProp(...args: any) {
     }, createObject())
     .valueOf()
   delete out_schema.$schema
-  console.log('%c [ out_schema ]-80', 'font-size:13px; background:#41b883; color:#ffffff;', out_schema)
   return out_schema
 }
-// export function reduceProp(...args: any) {
-//   const out_schema = args
-//     .reduce((t: any, v: any) => {
-//       // @ts-ignore
-//       return createProp.call({}, ...v, t)
-//     }, createObject())
-//     .valueOf()
-//   delete out_schema.$schema
-//   console.log('%c [ out_schema ]-80', 'font-size:13px; background:#41b883; color:#ffffff;', out_schema)
-//   return out_schema
-// }
 
 // 复用数组
 export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
@@ -76,60 +62,86 @@ export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
   return _arr
 }
 
+type Array_attr_DTYPE = { [key in string]: attr_DTYPE }
+
 export class schemaReduce<T extends entity_DTYPE> {
   private entity!: T
   private keys: Array<keyof T> = []
+  private appendVo: Array<Array_attr_DTYPE> = []
+  private updateProp: append_param = {}
 
   constructor(entity: T, keys: Array<keyof T>) {
     this.entity = entity
     this.keys = keys
   }
 
-  getSuper() {
-    return this
+  // getSuper() {
+  //   return this
+  // }
+
+  /**
+   * 映射出schema: prop_param 原型
+   */
+  private keysInProp(keys: Array<keyof T>): Array<prop_param> {
+    const list: Array<prop_param> = []
+    keys.forEach((key: keyof T) => {
+      let schema = this.entity[key].schema as prop_param
+      schema.push()
+      list.push(schema)
+    })
+    return list
   }
 
   /**
    * 所有字段schema
    */
-  allSchema() {
-    // const list: Array<ObjectSchema> = []
-    let schema: ObjectSchema = createObject()
-    this.keys.forEach((key: keyof T) => {
-      let prop = this.entity[key]
-      schema = schema.prop(key as string, prop.schema)
-      // if (prop) list.push(prop.schema as ObjectSchema)
-    })
-    const a: any = schema.valueOf()
-    console.log('properties', a.properties.id.properties)
-    console.log('required', a.properties.id.required)
-    return schema.valueOf()
-    // return reduceProp(list)
+  allSchema(): JSONSchema {
+    return reduceProp(...this.keysInProp(this.keys))
   }
 
   /**
    * 只有选取的字段
-   * @param keys 字符串或字符串集合
+   * @param key 字符串或字符串集合
    */
-  pickSchema(keys: keyof T | Array<keyof T>) {
-    return keys
+  pickSchema(key: keyof T | Array<keyof T> | never): JSONSchema | null {
+    if (!key) return null
+    let keys = []
+    if (typeof key === 'string') {
+      keys = this.keys.filter((f) => key === f)
+    } else {
+      keys = this.keys.filter((f) => (key as Array<keyof T>).includes(f))
+    }
+    return reduceProp(...this.keysInProp(keys))
   }
 
   /**
    * 只有排除的字段
-   * @param keys 字符串或字符串集合
+   * @param key 字符串或字符串集合
    */
-  omitSchema(keys: keyof T | Array<keyof T>) {
-    return keys
+  omitSchema(key: keyof T | Array<keyof T>): JSONSchema | null {
+    if (!key) return null
+    let keys = []
+    if (typeof key === 'string') {
+      keys = this.keys.filter((f) => f !== key)
+    } else {
+      keys = this.keys.filter((f) => !(key as Array<keyof T>).includes(f))
+    }
+    return reduceProp(...this.keysInProp(keys))
   }
 
   /**
    * 追加 自定义字段 相当于VO
    */
-  appendSchema() {}
+  appendSchemaVo(appendVo: Array<Array_attr_DTYPE>) {
+    this.appendVo = appendVo
+    console.log('%c [ this.appendVo ]-137', 'font-size:14px; background:#41b883; color:#ffffff;', this.appendVo)
+  }
 
   /**
    * 更新schema原有定义 长度限制或者类型限制
    */
-  updateSchema() {}
+  updateSchema(update: append_param) {
+    this.updateProp = update
+    console.log('%c [ this.updateProp ]-145', 'font-size:14px; background:#41b883; color:#ffffff;', this.updateProp)
+  }
 }

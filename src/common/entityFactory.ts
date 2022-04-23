@@ -1,8 +1,6 @@
 import { entity_DTYPE } from '#/entity'
 
 import composeTable from '@/common/composeTable'
-import { createProp } from '@/common/schemaReduce'
-
 type entity<T> = { new (): T }
 function factory<T extends entity_DTYPE>(target: entity<T>): composeTable<T> {
   const ctx: any = new target()
@@ -15,7 +13,7 @@ function factory<T extends entity_DTYPE>(target: entity<T>): composeTable<T> {
       if (type === 'number') n2Val = parseInt(`${Array(len).fill(9).join('')}`)
       if (type === 'string') n2Val = len
     }
-    ctx[key].schema = createProp(key, desc, [type, n1, n2Val, true, false])
+    ctx[key].schema = [key, desc, [type, n1, n2Val, true, false]]
   })
 
   const _entity = {

@@ -92,7 +92,7 @@ class skipImpl implements skip_DTYPE {
   public skipAuth: Array<string> = []
   public vagueSkipAuth: Array<string> = []
 
-  // 路由不检测 jwt权限
+  // 精确检查 路由不检测 jwt权限
   addSkip(skip: string | Array<string>) {
     if (typeof skip === 'string') {
       this.skipAuth.push(skip)
@@ -101,7 +101,7 @@ class skipImpl implements skip_DTYPE {
     }
   }
 
-  // 路由不检测 jwt权限
+  // 模糊检查 路由不检测 jwt权限
   addVagueSkip(skip: string | Array<string>) {
     if (typeof skip === 'string') {
       this.vagueSkipAuth.push(skip)

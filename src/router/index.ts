@@ -17,8 +17,8 @@ const fs_modules = () => {
 export default () => {
   const list = fs_modules()
   console.log('list', list)
-  let limit = globalMemory.apiLimit
-  let skip = globalMemory.skipAuth
+  let limit = globalMemory.api.limit
+  let skip = globalMemory.skip
 
   console.time('生产路由')
   list.forEach((info) => {
@@ -45,7 +45,7 @@ export default () => {
         delete module.limit
       }
       if (module.skip) {
-        skip.set(module.url, true)
+        skip.addSkip(module.url)
         delete module.skip
       }
       if (module.swagger) {

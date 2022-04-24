@@ -12,10 +12,11 @@ export interface attr_DTYPE {
 
 export interface entity_DTYPE {
   [key: string]: attr_DTYPE
+  vo?: attr_DTYPE & any
 }
 
-export interface test_info_DTYPE extends entity_DTYPE {
-  id: attr_DTYPE // auto_increment
+export interface testInfo_DTYPE extends entity_DTYPE {
+  id: attr_DTYPE
   name: attr_DTYPE
   text: attr_DTYPE
 }

@@ -65,7 +65,7 @@ export function arrRepeta(arr: createProp_param, n1: any, n2: any) {
 type Array_attr_DTYPE = { [key in string]: attr_DTYPE }
 
 export class schemaReduce<T extends entity_DTYPE> {
-  private entity!: T
+  public entity!: T
   private keys: Array<keyof T> = []
   private appendVo: Array<Array_attr_DTYPE> = []
   private updateProp: append_param = {}

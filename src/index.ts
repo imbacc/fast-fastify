@@ -11,8 +11,9 @@ console.log('sql4=', test.curd_selectByPage().getSql())
 console.log('sql5=', test.clearKey().appendKey('text').select().getSql())
 console.log('sql6=', test.setSql('SELECT id,name,text FROM test_info').getSql())
 console.log('test.schema.allSchema=======', test.schema.allSchema())
-console.log(`test.schema.pickSchema('id')=======`, test.schema.pickSchema('id'))
-console.log(`test.schema.omitSchema('id')=======`, test.schema.omitSchema('id'))
+console.log(`test.schema.pickSchema=======`, test.schema.pickSchema('id'))
+console.log(`test.schema.omitSchema=======`, test.schema.omitSchema('id'))
+console.log('test', test.schema.entity.vo)
 // console.log('test.entity', test.entity.id.schema)
 
 import { globalMemory } from '@/common/globalMemory'

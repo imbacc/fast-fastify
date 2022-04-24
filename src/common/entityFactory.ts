@@ -2,10 +2,11 @@ import { entity_DTYPE } from '#/entity'
 
 import composeTable from '@/common/composeTable'
 type entity<T> = { new (): T }
-function factory<T extends entity_DTYPE>(target: entity<T>): composeTable<T> {
+function factory<T extends entity_DTYPE>(target: entity<T>, targetVo?: entity<T>): composeTable<T> {
   const ctx: any = new target()
   const name = target.name
   const keys = Object.keys(ctx)
+  if (targetVo) ctx.vo = targetVo
   keys.forEach((key: string) => {
     const { desc, type, n1, n2, len } = ctx[key]
     let n2Val = n2

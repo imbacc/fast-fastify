@@ -4,7 +4,7 @@
 //   `text` varchar(30) DEFAULT NULL,
 //   PRIMARY KEY (`id`)
 // ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-import type { attr_DTYPE, testInfo_DTYPE } from '#/entity'
+import type { attr_DTYPE, entity_DTYPE, testInfo_DTYPE } from '#/entity'
 
 import entityFactory from '@/common/entityFactory'
 
@@ -33,16 +33,35 @@ class test_info implements testInfo_DTYPE {
     n2: 'max',
     len: 30
   }
+
+  vo: vo | any
 }
 
-// const vo: entity_DTYPE = {
-//   name: {
-//     desc: '搜索用的关键字',
-//     type: 'string',
-//     n1: 1,
-//     n2: 'max',
-//     len: 30
-//   }
-// }
+class vo implements entity_DTYPE {
+  [key: string]: attr_DTYPE
+  qqq: attr_DTYPE = {
+    desc: '搜索用的关键字',
+    type: 'string',
+    n1: 1,
+    n2: 'max',
+    len: 20
+  }
 
-export default entityFactory(test_info)
+  qwe: attr_DTYPE = {
+    desc: 'qwe',
+    type: 'string',
+    n1: 1,
+    n2: 'max',
+    len: 3
+  }
+
+  www: attr_DTYPE = {
+    desc: 'www',
+    type: 'string',
+    n1: 3,
+    n2: 'max',
+    len: 3
+  }
+}
+
+export default entityFactory(test_info, vo)

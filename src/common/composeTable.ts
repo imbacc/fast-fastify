@@ -12,13 +12,10 @@ class composeTable<T extends entity_DTYPE> {
   public bakList: Array<keyof T>
   // sql语句
   private sql: string
-  // 表实体类
-  // public entity!: T
   // schema
   public schema!: schemaReduce<T>
 
   constructor(tableName: string, keyList: Array<keyof T> = [], entity: T, omitKey?: keyof T | Array<keyof T>) {
-    // super(entity, keyList)
     this.table = tableName
     this.list = keyList
     this.bakList = keyList

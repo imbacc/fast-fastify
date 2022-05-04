@@ -111,7 +111,7 @@ export class schemaReduce<T extends entity_DTYPE> {
       let schema = this.appendVo[key].schema as createProp_param
       list.push(schema)
     })
-    console.log('%c [ list ]-112', 'font-size:14px; background:#41b883; color:#ffffff;', list)
+    // console.log('%c [ list ]-112', 'font-size:14px; background:#41b883; color:#ffffff;', list)
     this.appendVo = {}
     this.appendVoKeys = []
     return list
@@ -128,8 +128,8 @@ export class schemaReduce<T extends entity_DTYPE> {
    * 只有选取的字段
    * @param key 字符串或字符串集合
    */
-  pickSchema(key: keyof T | Array<keyof T> | never): JSONSchema | null {
-    if (!key) return null
+  pickSchema(key: keyof T | Array<keyof T> | never): JSONSchema {
+    if (!key) return createObject()
     let keys = []
     if (typeof key === 'string') {
       keys = this.keys.filter((f) => key === f)
@@ -143,8 +143,8 @@ export class schemaReduce<T extends entity_DTYPE> {
    * 只有排除的字段
    * @param key 字符串或字符串集合
    */
-  omitSchema(key: keyof T | Array<keyof T>): JSONSchema | null {
-    if (!key) return null
+  omitSchema(key: keyof T | Array<keyof T>): JSONSchema {
+    if (!key) return createObject()
     let keys = []
     if (typeof key === 'string') {
       keys = this.keys.filter((f) => f !== key)
@@ -199,17 +199,16 @@ export class schemaReduce<T extends entity_DTYPE> {
           vo[name] = info as attr_DTYPE
         }
       })
-      console.log('%c [ Object.keys(vo) ]-202', 'font-size:14px; background:#41b883; color:#ffffff;', Object.keys(vo))
       this.appendVoKeys = Object.keys(vo)
       this.appendVo = this.conVertSchema(vo as entity_DTYPE as T, this.appendVoKeys)
-      console.log('%c [ this.appendVo ]-193', 'font-size:14px; background:#41b883; color:#ffffff;', this.appendVo)
-      console.log('%c [ this.appendVoKeys ]-194', 'font-size:14px; background:#41b883; color:#ffffff;', this.appendVoKeys)
+      // console.log('%c [ this.appendVo ]-193', 'font-size:14px; background:#41b883; color:#ffffff;', this.appendVo)
+      // console.log('%c [ this.appendVoKeys ]-194', 'font-size:14px; background:#41b883; color:#ffffff;', this.appendVoKeys)
     }
     return this
   }
 
   /**
-   * 更新schema原有定义 长度限制或者类型限制
+   * 更新schema当前定义 长度限制或者类型限制
    */
   updateSchema(update: append_param) {
     this.updateProp = update

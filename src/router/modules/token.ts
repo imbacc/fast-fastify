@@ -25,8 +25,8 @@ module.exports = (fastify) => {
     {
       ...api.api_token,
       handler: async (reque, reply) => {
-        const { uuid, id } = reque.query
-        const token = fastify.jwt.sign({ uuid, by: 'imbacc' }, { expiresIn: 60 * 60 * 1 })
+        const { userid, id } = reque.query
+        const token = fastify.jwt.sign({ userid, by: 'imbacc' }, { expiresIn: 60 * 60 * 1 })
         const res = await exec.call(select_test, [id])
         res.token = `Bearer ${token}`
         reply.send(res)

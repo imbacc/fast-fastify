@@ -1,13 +1,13 @@
 import { METHOD } from '@/common/config'
 
-import schema from '@/schema/token'
+import global from '@/entity/global'
 
 export default {
   api_token: {
     url: '/token',
     method: METHOD.GET,
     schema: {
-      query: schema.id_uid_schema
+      query: global.schema.pickSchema('userid')
     }
   }
 }

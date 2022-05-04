@@ -1,38 +1,27 @@
-import type { apiRouter } from '#/api'
+import type { apiRouter_DTYPE } from '#/api'
 
 import { METHOD } from '@/common/config'
-import schema from '@/schema/appinfo'
-import tokenSchema from '@/schema/token'
-import composeTable from '@/common/composeTable'
+import testInfo from '@/entity/testInfo'
 
 // xx/秒		默认30秒
 // 次数			默认 30秒/15次
 // 当前user统一限制 10秒/5次访问限制
 const LIMIT: [number, number] = [10, 5]
 
-// `id` int(11) NOT NULL AUTO_INCREMENT,
-// `text` varchar(200) DEFAULT NULL,
-// `version` int(11) DEFAULT NULL,
-// `os` int(1) DEFAULT NULL,
-// `ostext` varchar(5) DEFAULT NULL,
-// `linkurl` varchar(300) DEFAULT NULL,
-const key_list = ['id', 'text', 'version', 'os', 'ostext', 'linkurl']
-const table = new composeTable('app_info', key_list)
-
-const routerList: apiRouter = {
+const routerList: apiRouter_DTYPE = {
   api_testAdd: {
     url: '/add',
     method: METHOD.POST,
     limit: LIMIT,
     sql: {
-      add_test: table.crud_insert().getSql()
+      add_test: testInfo.crud_insert().getSql()
     },
     swagger: {
       summary: '我是新增接口',
       description: '新增接口的描述啊啊啊啊!'
     },
     schema: {
-      body: schema.add_schema
+      body: testInfo.schema.pickSchema('id')
     }
   },
   api_testUpp: {
@@ -40,15 +29,15 @@ const routerList: apiRouter = {
     method: METHOD.POST,
     limit: LIMIT,
     sql: {
-      update_test: table.curd_updateById().getSql(),
-      update_text_test: table.clearKey().appendKey('text').curd_deleteById().getSql() // 清除key 只更新text属性根据id更新
+      update_test: testInfo.curd_updateById().getSql(),
+      update_text_test: testInfo.pickKey('text').curd_updateById().getSql() // 根据id更新text属性
     },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
       description: '更新接口的描述啊啊啊啊!'
     },
     schema: {
-      body: schema.update_schema
+      body: testInfo.schema.pickSchema('text')
     }
   },
   api_testUpp2: {
@@ -60,7 +49,7 @@ const routerList: apiRouter = {
       description: '更新接口的克隆版的描述啊啊啊啊!'
     },
     schema: {
-      body: schema.update_schema
+      body: testInfo.schema.allSchema()
     }
   },
   api_testDel: {
@@ -68,14 +57,11 @@ const routerList: apiRouter = {
     method: METHOD.DELETE,
     limit: LIMIT,
     sql: {
-      delete_test: table.curd_deleteById().getSql()
+      delete_test: testInfo.curd_deleteById().getSql()
     },
     swagger: {
       summary: '我是删除接口',
       description: '删除接口的描述啊啊啊啊!'
-    },
-    schema: {
-      body: tokenSchema.id_schema
     }
   },
   api_testSel: {
@@ -83,8 +69,8 @@ const routerList: apiRouter = {
     method: METHOD.GET,
     limit: LIMIT,
     sql: {
-      select_test: table.select().getSql(),
-      test_connect: table.clearKey().appendKey('id').select('limit 1').getSql()
+      select_test: testInfo.select().getSql(),
+      test_connect: testInfo.pickKey('id').select('limit 1').getSql()
     },
     swagger: {
       summary: '我是查询接口！ 从api -> appinfo.js -> swagger 设置summary,description 简介和描述!',
@@ -102,8 +88,8 @@ const routerList: apiRouter = {
     method: METHOD.GET,
     limit: [10, 3],
     sql: {
-      select: table.curd_selectById().getSql(),
-      select2: table.filterKey('version').select('where id = ? and id > 0').getSql()
+      select: testInfo.curd_selectById().getSql(),
+      select2: testInfo.omitKey('version').select('where id = ? and id > 0').getSql()
     }
   },
   api_testTtt: {
@@ -112,7 +98,7 @@ const routerList: apiRouter = {
     onRequest: (reque: any, reply: any, done: Function) => {
       console.log('reque', reque)
       console.log('reply', reply)
-      // console.log('得经过老子!')
+      console.log('得经过老子!')
       done()
     }
   },

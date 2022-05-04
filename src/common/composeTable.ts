@@ -150,7 +150,7 @@ class composeTable<T extends entity_DTYPE> {
 
   // 获取并拼接 格式: key=?,key=?...
   private getValue(list: Array<keyof T> = []): string {
-    return list.length > 0 ? `${list.join('=?')}=?` : ''
+    return list.length > 0 ? `${list.join('=?,')}=?` : ''
   }
 
   // 获取相应数量拼接 格式: ?,?,?...

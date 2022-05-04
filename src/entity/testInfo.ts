@@ -12,7 +12,7 @@ class test_info implements testInfo_DTYPE {
   [key: string]: attr_DTYPE
   id: attr_DTYPE = {
     desc: '唯一ID',
-    type: 'number',
+    type: 'number', // number 为数字最小数和最大数
     n1: 1,
     n2: 'max',
     len: 11
@@ -20,7 +20,7 @@ class test_info implements testInfo_DTYPE {
 
   name: attr_DTYPE = {
     desc: '名称啊',
-    type: 'string',
+    type: 'string', // string 为字符串最少长度和最大长度
     n1: 1,
     n2: 'max',
     len: 30

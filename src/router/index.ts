@@ -1,7 +1,6 @@
 // 获取module文件下子模块内容
 import fs from 'fs'
 import { globalMemory } from '@/common/globalMemory'
-const { fastify } = globalMemory
 
 const path = './src/router/modules'
 
@@ -9,7 +8,7 @@ const fs_modules = () => {
   let modules: Array<any> = []
   fs.readdirSync(path).map(async (fileName) => {
     const res = await import(`./modules/${fileName}`)
-    modules.push(res)
+    modules.push(res.default())
   })
   return modules
 }
@@ -52,7 +51,7 @@ export default () => {
         module.schema = { ...module.schema, ...module.swagger }
         delete module.swagger
       }
-      fastify.route(module)
+      globalMemory.fastify.route(module)
     })
   }) //循环子模块路由配置 生产路由
   console.timeEnd('生产路由')

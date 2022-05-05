@@ -27,23 +27,25 @@ class composeTable<T extends entity_DTYPE> {
   }
 
   // 选中key
-  pickKey(key: keyof T | Array<keyof T>) {
+  pickKey(key: keyof T | Array<keyof T>, list?: Array<keyof T>) {
     if (!key) return this
+    if (!list) list = this.bakList
     if (typeof key === 'string') {
-      this.list = this.bakList.filter((f) => key === f)
+      this.list = list.filter((f) => key === f)
     } else {
-      this.list = this.bakList.filter((f) => (key as Array<keyof T>).includes(f))
+      this.list = list.filter((f) => (key as Array<keyof T>).includes(f))
     }
     return this
   }
 
   // 排除key
-  omitKey(key: keyof T | Array<keyof T>) {
+  omitKey(key: keyof T | Array<keyof T>, list?: Array<keyof T>) {
     if (!key) return this
+    if (!list) list = this.bakList
     if (typeof key === 'string') {
-      this.list = this.bakList.filter((f) => f !== key)
+      this.list = list.filter((f) => f !== key)
     } else {
-      this.list = this.bakList.filter((f) => !(key as Array<keyof T>).includes(f))
+      this.list = list.filter((f) => !(key as Array<keyof T>).includes(f))
     }
     return this
   }
@@ -100,7 +102,7 @@ class composeTable<T extends entity_DTYPE> {
 
   // 新增一条记录
   crud_insert(ID?: string) {
-    return this.omitKey(ID || 'id').insert()
+    return this.omitKey(ID || 'id', this.list.length === 0 ? this.bakList : this.list).insert()
   }
 
   // 查询所有
@@ -115,7 +117,7 @@ class composeTable<T extends entity_DTYPE> {
 
   // 根据ID更新
   curd_updateById(ID?: string) {
-    return this.omitKey(ID || 'id').update(`where ${ID || 'id'} = ?`)
+    return this.omitKey(ID || 'id', this.list.length === 0 ? this.bakList : this.list).update(`where ${ID || 'id'} = ?`)
   }
 
   // 根据ID删除

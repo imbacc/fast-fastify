@@ -1,5 +1,4 @@
 import type { api_DTYPE, skip_DTYPE, base_DTYPE, cacheSql_DTYPE, apiCache_DTYPE, apiLimit_DTYPE, globalMemory_DTYPE } from '#/globalMemory'
-
 import type { exec_DTYPE } from '#/exex'
 import type { redis_DTYPE } from '#/redis'
 import type { FastifyInstance } from 'fastify'
@@ -22,7 +21,7 @@ class globalMemoryImpl implements globalMemory_DTYPE {
   /**
    * 缓存简单的请求sql
    */
-  public cacheSql: cacheSql_DTYPE = new cacheSqlImpl(this)
+  public cacheSql!: cacheSql_DTYPE
   /**
    * fastify实例对象
    */
@@ -58,6 +57,7 @@ class globalMemoryImpl implements globalMemory_DTYPE {
    */
   initRedis(redis: redis_DTYPE) {
     this.redis = redis
+    this.cacheSql = new cacheSqlImpl(this)
   }
 }
 
@@ -149,6 +149,7 @@ class cacheSqlImpl implements cacheSql_DTYPE {
   async cache(sql: string, val: any[], time: number) {
     const name = `sql_${md5(sql)}`
     const redisCache = await this.gloablSuper.redis.getRedis(name)
+    console.log('%c [ redisCache ]-151', 'font-size:14px; background:#41b883; color:#ffffff;', redisCache)
     if (redisCache) return await redisCache
     const res = await this.gloablSuper.exec.call(sql, val)
     if (res.code === 0) this.gloablSuper.redis.setRedis(name, res, time) //默认360分钟一个小时 60 * 60

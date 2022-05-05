@@ -1,4 +1,4 @@
-// import type { apiRouter_DTYPE } from '#/api'
+import type { apiRouter_DTYPE } from '#/api'
 
 import { METHOD } from '@/common/config'
 import testInfo from '@/entity/testInfo'
@@ -8,8 +8,7 @@ import testInfo from '@/entity/testInfo'
 // 当前user统一限制 10秒/5次访问限制
 const LIMIT: [number, number] = [10, 5]
 
-// const routerList: apiRouter_DTYPE = {
-const routerList = {
+const routerList: apiRouter_DTYPE = {
   api_testAdd: {
     url: '/add',
     method: METHOD.POST,
@@ -31,14 +30,14 @@ const routerList = {
     limit: LIMIT,
     sql: {
       update_test: testInfo.curd_updateById().getSql(),
-      update_text_test: testInfo.pickKey('text').curd_updateById().getSql() // 根据id更新text属性
+      update_test2: testInfo.pickKey('text').curd_updateById().getSql() // 根据id更新text属性
     },
     swagger: {
       summary: '我是更新接口 【跳过权限检测开启】',
       description: '更新接口的描述啊啊啊啊!'
     },
     schema: {
-      body: testInfo.schema.pickSchema('text')
+      body: testInfo.schema.allSchema()
     }
   },
   api_testUpp2: {
@@ -50,7 +49,7 @@ const routerList = {
       description: '更新接口的克隆版的描述啊啊啊啊!'
     },
     schema: {
-      body: testInfo.schema.allSchema()
+      body: testInfo.schema.omitSchema('name')
     }
   },
   api_testDel: {
@@ -74,7 +73,7 @@ const routerList = {
       test_connect: testInfo.pickKey('id').select('limit 1').getSql()
     },
     swagger: {
-      summary: '我是查询接口！ 从api -> appinfo.js -> swagger 设置summary,description 简介和描述!',
+      summary: '我是查询接口！ 从api -> appinfo -> swagger 设置summary,description 简介和描述!',
       description: '查询接口的描述啊啊啊啊!'
     }
   },
@@ -91,14 +90,15 @@ const routerList = {
     sql: {
       select: testInfo.curd_selectById().getSql(),
       select2: testInfo.omitKey('version').select('where id = ? and id > 0').getSql()
+    },
+    schema: {
+      querystring: testInfo.schema.pickSchema('id')
     }
   },
   api_testTtt: {
     url: '/ttt',
     method: METHOD.POST,
-    onRequest: (reque: any, reply: any, done: Function) => {
-      console.log('reque', reque)
-      console.log('reply', reply)
+    onRequest: (_reque: any, _reply: any, done: Function) => {
       console.log('得经过老子!')
       done()
     }

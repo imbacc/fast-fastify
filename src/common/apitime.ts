@@ -18,7 +18,6 @@ export default (spname: string, spid: string, time: number = _time, count: numbe
   let key_time = `apit_${val}`
   let key_num = `apin_${val}`
   let cfg = api.getLimit(spname.split('?')[0])
-  console.log('%c [ cfg ]-23', 'font-size:13px; background:#41b883; color:#ffffff;', cfg)
 
   if (cfg && Array.isArray(cfg) && !update) {
     const [cfg_time, cfg_count] = cfg

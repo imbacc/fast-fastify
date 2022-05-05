@@ -1,4 +1,5 @@
 import type { METHOD } from '#/config'
+import { AnyRecord } from 'dns'
 import type { JSONSchema } from 'fluent-json-schema'
 
 type handler_DTYPE = (reque: any, reply: any) => void | Promise<void>
@@ -13,7 +14,7 @@ export interface api_DTYPE {
     summary: string | '概括'
     description: string | '描述'
   }
-  schema?: Partial<Record<'body' | 'query', JSONSchema>>
+  schema?: Partial<Record<'body' | 'querystring' | 'params' | 'headers', JSONSchema>>
   skip?: boolean
   handler?: handler_DTYPE
   onRequest?: hooks_DTYPE // 每当接收到一个请求时触发的函数。可以是一个函数数组。

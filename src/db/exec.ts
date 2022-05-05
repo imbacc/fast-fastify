@@ -31,7 +31,11 @@ class exec implements exec_DTYPE {
           resolve(resultful('WARN'))
         } else {
           conn.query(sql, value, (err, res, _fields) => {
-            if (isDev) log('执行sql=', sql, value === undefined ? '' : value)
+            if (isDev) {
+              let val: Array<string> | '' = ''
+              if (Array.isArray(value) && value.filter((f) => f).length > 0) val = value
+              log('执行sql=', sql, val)
+            }
             conn.release()
             if (err === null) {
               sql = sql.toUpperCase()

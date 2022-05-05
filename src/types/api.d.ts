@@ -8,7 +8,7 @@ export interface api_DTYPE {
   url: string
   method: keyof typeof METHOD
   limit?: [number, number] | [30, 15]
-  sql?: { [key in string]: string }
+  sql?: any
   swagger?: {
     summary: string | '概括'
     description: string | '描述'

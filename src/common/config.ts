@@ -39,7 +39,7 @@ globalMemory.skip.addSkip(checkAuth[env])
 // 端口信息
 const listenConfig: listenConfig_DTYPE = {
   dev: {
-    port: 3000, // 默认端口
+    port: 3100, // 默认端口
     ip: '127.0.0.1', // 指定监听的地址 当部署在 Docker 或其它容器上时，明智的做法是监听 0.0.0.0
     queue: 511 // 指定积压队列的大小
   },
@@ -126,7 +126,7 @@ const swaggerConfig: swaggerConfig_DTYPE = {
     ],
     externalDocs: {
       description: '查看fastify文档',
-      url: 'https://www.w3cschool.cn/fastify/fastify-zopy35zj.html  https://www.fastify.io/'
+      url: 'https://www.fastify.io/'
     }
   },
   prod: {

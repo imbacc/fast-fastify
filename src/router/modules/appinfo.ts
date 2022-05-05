@@ -1,13 +1,13 @@
 // api
-import api from '@/api/appinfo'
+import appinfoAPI from '@/api/appinfo'
 import { globalMemory } from '@/common/globalMemory'
 
 // sql
-const { add_test } = api.api_testAdd.sql.add_test
-const { update_test } = api.api_testUpp.sql
-const { delete_test } = api.api_testDel.sql
-const { select_test } = api.api_testSel.sql
-const { select, select2 } = api.api_testDdd.sql
+const { add_test } = appinfoAPI.api_testAdd.sql
+const { update_test } = appinfoAPI.api_testUpp.sql
+const { delete_test } = appinfoAPI.api_testDel.sql
+const { select_test } = appinfoAPI.api_testSel.sql
+const { select, select2 } = appinfoAPI.api_testDdd.sql
 
 //用户模块路由
 export default () => {
@@ -24,7 +24,7 @@ export default () => {
       }
     },
     {
-      ...api.api_testAdd,
+      ...appinfoAPI.api_testAdd,
       handler: async (reque: any, reply: any) => {
         const { text, version, os, ostext, linkurl } = reque.body
         const body = [text, version, os, ostext, linkurl]
@@ -35,7 +35,7 @@ export default () => {
       }
     },
     {
-      ...api.api_testUpp,
+      ...appinfoAPI.api_testUpp,
       handler: async (reque: any, reply: any) => {
         const { id, text, version, os, ostext, linkurl } = reque.body
         const body = [text, version, os, ostext, linkurl, id]
@@ -44,7 +44,7 @@ export default () => {
       }
     },
     {
-      ...api.api_testUpp2,
+      ...appinfoAPI.api_testUpp2,
       handler: async (reque: any, reply: any) => {
         const { id, text, version, os, ostext, linkurl } = reque.body
         const body = [text, version, os, ostext, linkurl, id]
@@ -54,21 +54,21 @@ export default () => {
       }
     },
     {
-      ...api.api_testDel,
+      ...appinfoAPI.api_testDel,
       handler: async (reque: any, reply: any) => {
         const res = await globalMemory.exec.call(delete_test, [reque.body.id])
         reply.send(res)
       }
     },
     {
-      ...api.api_testSel,
+      ...appinfoAPI.api_testSel,
       handler: async (_reque: any, reply: any) => {
         const res = await globalMemory.exec.call(select_test)
         reply.send(res)
       }
     },
     {
-      ...api.api_testFff,
+      ...appinfoAPI.api_testFff,
       handler: async (reque: any, reply: any) => {
         //缓存到redis 60分钟 只GET请求缓存!
         const res = await globalMemory.cacheSql.cache(select_test, [0], 60, reque)
@@ -76,7 +76,7 @@ export default () => {
       }
     },
     {
-      ...api.api_testDdd,
+      ...appinfoAPI.api_testDdd,
       handler: async (_reque: any, reply: any) => {
         const res1 = await globalMemory.exec.call(select)
         const res2 = await globalMemory.exec.call(select2)
@@ -85,14 +85,14 @@ export default () => {
       }
     },
     {
-      ...api.api_testTtt,
+      ...appinfoAPI.api_testTtt,
       handler: async (reque: any, reply: any) => {
         const res = await globalMemory.exec.call(select_test, [0])
         reply.send(reque.body, res)
       }
     },
     {
-      ...api.api_testCache,
+      ...appinfoAPI.api_testCache,
       handler: async (_reque: any, reply: any) => {
         const res = await globalMemory.exec.call(select_test, [0])
         reply.send(res)

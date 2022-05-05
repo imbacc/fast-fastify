@@ -7,6 +7,7 @@ export interface attr_DTYPE {
   n1: n1_param
   n2: n2_param | 'max'
   len: number
+  required?: boolean
   schema?: createProp_param
 }
 

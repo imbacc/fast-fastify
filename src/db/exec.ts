@@ -30,7 +30,7 @@ class exec implements exec_DTYPE {
           log('conn err=', error)
           resolve(resultful('WARN'))
         } else {
-          conn.query(sql, value, (err, res, fields) => {
+          conn.query(sql, value, (err, res, _fields) => {
             if (isDev) log('执行sql=', sql, value === undefined ? '' : value)
             conn.release()
             if (err === null) {
@@ -62,7 +62,6 @@ class exec implements exec_DTYPE {
                 if (update_bool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
                 if (delete_bool) res = affectedRows >= 1 ? { affectedRows } : false
               }
-              console.error('fields=', fields)
               resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res))
             } else {
               if (!isDev) {

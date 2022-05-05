@@ -85,15 +85,15 @@ export class schemaReduce<T extends entity_DTYPE> {
    */
   private conVertSchema(entity: T, keys: Array<keyof T>): T {
     entity = this.clone(entity)
-    console.log('%c [ entity ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', entity)
+    // console.log('%c [ entity ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', entity)
     keys.forEach((key: keyof T) => {
-      let { desc, type, n1, n2, len } = entity[key]
+      let { desc, type, n1, n2, len, required } = entity[key]
       let n2Val = n2
       if (len > 0 && n2 === 'max') {
         if (type === 'number') n2Val = parseInt(`${Array(len).fill(9).join('')}`)
         if (type === 'string') n2Val = len
       }
-      entity[key].schema = [key as string, desc, [type, n1, n2Val as n2_param, true, null]]
+      entity[key].schema = [key as string, desc, [type, n1, n2Val as n2_param, required === undefined ? true : (required as boolean), null]]
     })
     return entity
   }
@@ -104,14 +104,19 @@ export class schemaReduce<T extends entity_DTYPE> {
   private keysInProp(keys: Array<keyof T>): Array<createProp_param> {
     const list: Array<createProp_param> = []
     keys.forEach((key: keyof T) => {
-      let schema = this.entity[key].schema as createProp_param
+      let schema = this.clone(this.entity[key].schema as createProp_param)
       list.push(schema)
     })
     this.appendVoKeys.forEach((key: keyof entity_DTYPE) => {
-      let schema = this.appendVo[key].schema as createProp_param
+      let schema = this.clone(this.appendVo[key].schema as createProp_param)
       list.push(schema)
     })
+    Object.keys(this.updateProp).forEach((key: keyof append_param) => {
+      const idx = list.findIndex((f) => f[0] === key)
+      if (idx !== -1) list[idx][2][4] = this.updateProp[key] as append_param
+    })
     // console.log('%c [ list ]-112', 'font-size:14px; background:#41b883; color:#ffffff;', list)
+    this.updateProp = {}
     this.appendVo = {}
     this.appendVoKeys = []
     return list
@@ -212,6 +217,7 @@ export class schemaReduce<T extends entity_DTYPE> {
    */
   updateSchema(update: append_param) {
     this.updateProp = update
-    console.log('%c [ this.updateProp ]-145', 'font-size:14px; background:#41b883; color:#ffffff;', this.updateProp)
+    if (this.updateProp === undefined) this.updateProp = {}
+    return this
   }
 }

@@ -1,27 +1,29 @@
-// 获取module文件下子模块内容
-import fs from 'fs'
+// import fs from 'fs'
 import { globalMemory } from '@/common/globalMemory'
+import appinfo from '@/router/modules/appinfo'
+import token from '@/router/modules/token'
 
-const path = './src/router/modules'
-
+// const path = './src/router/modules'
 const fs_modules = () => {
   let modules: Array<any> = []
-  fs.readdirSync(path).map(async (fileName) => {
-    const res = await import(`./modules/${fileName}`)
-    modules.push(res.default())
-  })
+  // await fs.readdirSync(path).map(async (fileName) => {
+  //   const res = await import(`./modules/${fileName}`)
+  //   modules.push(res.default())
+  // })
+  modules.push(appinfo())
+  modules.push(token())
   return modules
 }
 
 export default () => {
   const list = fs_modules()
-  console.log('list', list)
-  let limit = globalMemory.api.limit
-  let skip = globalMemory.skip
+  const fastify = globalMemory.fastify
+  const limit = globalMemory.api.limit
+  const skip = globalMemory.skip
 
   console.time('生产路由')
-  list.forEach((info) => {
-    let proxy: any = false
+  list.forEach((info: Array<object>) => {
+    let proxy: any = null
     let filter = info.filter((f: any) => {
       if (f.is_proxy) proxy = Object.assign({}, f)
       return !f.is_proxy
@@ -51,7 +53,8 @@ export default () => {
         module.schema = { ...module.schema, ...module.swagger }
         delete module.swagger
       }
-      globalMemory.fastify.route(module)
+      fastify.route(module)
+      // console.log('%c [ module ]-53', 'font-size:14px; background:#41b883; color:#ffffff;', module)
     })
   }) //循环子模块路由配置 生产路由
   console.timeEnd('生产路由')

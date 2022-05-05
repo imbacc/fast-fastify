@@ -7,7 +7,7 @@ export default {
     url: '/token',
     method: METHOD.GET,
     schema: {
-      query: global.schema.pickSchema('userid')
+      querystring: global.schema.pickSchema('userid')
     }
   }
 }

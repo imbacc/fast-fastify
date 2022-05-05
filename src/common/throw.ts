@@ -1,8 +1,8 @@
 import { globalMemory } from './globalMemory'
 
 export default () => {
-  const { fastify } = globalMemory
   console.log('开启抛异常...')
+  const fastify = globalMemory.fastify
 
   fastify.setNotFoundHandler((request: any, reply: any) => {
     console.log('try 404...')

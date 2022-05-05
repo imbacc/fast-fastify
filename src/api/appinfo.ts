@@ -1,4 +1,4 @@
-import type { apiRouter_DTYPE } from '#/api'
+// import type { apiRouter_DTYPE } from '#/api'
 
 import { METHOD } from '@/common/config'
 import testInfo from '@/entity/testInfo'
@@ -8,7 +8,8 @@ import testInfo from '@/entity/testInfo'
 // 当前user统一限制 10秒/5次访问限制
 const LIMIT: [number, number] = [10, 5]
 
-const routerList: apiRouter_DTYPE = {
+// const routerList: apiRouter_DTYPE = {
+const routerList = {
   api_testAdd: {
     url: '/add',
     method: METHOD.POST,

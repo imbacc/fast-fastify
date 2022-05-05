@@ -1,4 +1,4 @@
-import type { attr_DTYPE, entity_DTYPE, testInfo_DTYPE } from '#/entity'
+import type { attr_DTYPE, entity_DTYPE } from '#/entity'
 
 import entityFactory from '@/common/entityFactory'
 

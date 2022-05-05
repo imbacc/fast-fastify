@@ -8,8 +8,9 @@ import fastifySwagger from 'fastify-swagger'
 const { port, ip } = listen
 const { use, route, info, host, tags, apiKey, externalDocs } = swagger
 
-export default (fastify: FastifyInstance, opts = {}, done: Function) => {
+export default (fastify: FastifyInstance, _opts = {}, done: Function) => {
   if (!use) return
+  // https://github.com/fastify/fastify-swagger
   fastify.register(fastifySwagger, {
     routePrefix: route,
     exposeRoute: true,
@@ -29,8 +30,7 @@ export default (fastify: FastifyInstance, opts = {}, done: Function) => {
           apiKey: []
         }
       ]
-    },
-    ...opts
+    }
   })
 
   globalMemory.skip.addVagueSkip([route])

@@ -37,7 +37,8 @@ const H_VAL2 = 'Content-Type, Content-Length, Authorization, Accept, X-Requested
 const H_VAL3 = 'POST,GET,OPTIONS'
 
 export default () => {
-  const { fastify, skip } = globalMemory //跳过检测jwt
+  const fastify = globalMemory.fastify
+  const skip = globalMemory.skip
   console.log('开启拦截器...')
 
   //请求

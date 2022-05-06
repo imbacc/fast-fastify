@@ -1,9 +1,11 @@
+import { APIResultCode_DTYPE } from '#/resultful'
+
 import { globalMemory } from './globalMemory'
 import md5 from './MD5'
 import resultful from '@/db/resultful' //返回数据构造
 import apitime from './apitime' //API限流
 
-const checkCode = async (onlyid: string, reply: any, code: string, httpCode: number, next: Function) => {
+const checkCode = async (onlyid: string, reply: any, code: keyof APIResultCode_DTYPE, httpCode: number, next: Function) => {
   console.log({ onlyid, code }, '拦截状态...')
   if (!(code === 'SUCCESS')) {
     reply.code(httpCode).send(resultful(code))
@@ -47,14 +49,13 @@ export default () => {
     reply.header(H_KEY2, H_VAL2)
     reply.header(H_KEY3, H_VAL3)
 
-    const raw = reque.raw
-    const url = raw.url
+    const { url, method } = reque.raw
     if (url === ICO) {
       next()
       return
     }
 
-    if (raw.method === 'OPTIONS') {
+    if (method === 'OPTIONS') {
       next()
       return
     }

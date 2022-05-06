@@ -16,5 +16,5 @@ const exec = new Exec(pool)
 export default () => {
   globalMemory.initExec(exec)
   //初始化连接池 创建1个测试
-  exec.call(test_connect).then((res) => console.log(res.code === 0 ? '开启连接池...' : '连接池开启失败...'))
+  exec.call(test_connect).then((res) => console.log(res.code === 0 ? 'Mysql开启连接池...' : 'Mysql连接池开启失败...'))
 }

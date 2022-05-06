@@ -1,3 +1,5 @@
+import type { APIResultful_DTYPE } from '#/resultful'
+
 // api
 import appinfoAPI from '@/api/appinfo'
 import { globalMemory } from '@/common/globalMemory'
@@ -73,8 +75,9 @@ export default () => {
       ...appinfoAPI.api_testFff,
       handler: async (reque: any, reply: any) => {
         //缓存到redis 60分钟 只GET请求缓存!
-        const res = await cacheSql.cache(select_test, [0], 60, reque)
-        reply.send('设置了skip: true 老子跳过了权限检测！', res)
+        const res = (await cacheSql.cache(select_test, [0], 60, reque)) as APIResultful_DTYPE
+        res.description = '设置了skip: true 老子跳过了权限检测！'
+        reply.send(res)
       }
     },
     {

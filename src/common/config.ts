@@ -78,7 +78,7 @@ const mysqlConfig: mysqlConfig_DTYPE = {
 const redisConfig: redisConfig_DTYPE = {
   dev: {
     username: 'root',
-    password: 'root',
+    password: '',
     host: '127.0.0.1',
     port: 6379
   },

@@ -149,8 +149,10 @@ class cacheSqlImpl implements cacheSql_DTYPE {
   async cache(sql: string, val: any[], time: number) {
     const name = `sql_${md5(sql)}`
     const redisCache = await this.gloablSuper.redis.getRedis(name)
-    console.log('%c [ redisCache ]-151', 'font-size:14px; background:#41b883; color:#ffffff;', redisCache)
-    if (redisCache) return await redisCache
+    if (redisCache) {
+      // console.log('%c [ redisCache ]-153', 'font-size:14px; background:#41b883; color:#ffffff;', redisCache)
+      return await redisCache
+    }
     const res = await this.gloablSuper.exec.call(sql, val)
     if (res.code === 0) this.gloablSuper.redis.setRedis(name, res, time) //默认360分钟一个小时 60 * 60
     return await res

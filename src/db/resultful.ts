@@ -48,7 +48,7 @@ class APIResultfulNode implements APIResultful_DTYPE {
   result(result: APIResultful_DTYPE) {
     this.code = result.code
     this.msg = result.msg
-    this.data = result.data || null
+    this.data = result.data === undefined ? null : result.data
     const { code, msg, data } = this
     return { code, msg, data }
   }

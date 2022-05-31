@@ -1,8 +1,8 @@
-function hex_md5(string, bit) {
-  function md5_RotateLeft(lValue, iShiftBits) {
+function hex_md5(string: string, bit: number) {
+  function md5_RotateLeft(lValue: number, iShiftBits: number) {
     return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits))
   }
-  function md5_AddUnsigned(lX, lY) {
+  function md5_AddUnsigned(lX: number, lY: number) {
     let lX4, lY4, lX8, lY8, lResult
     lX8 = lX & 0x80000000
     lY8 = lY & 0x80000000
@@ -22,35 +22,35 @@ function hex_md5(string, bit) {
       return lResult ^ lX8 ^ lY8
     }
   }
-  function md5_F(x, y, z) {
+  function md5_F(x: number, y: number, z: number) {
     return (x & y) | (~x & z)
   }
-  function md5_G(x, y, z) {
+  function md5_G(x: number, y: number, z: number) {
     return (x & z) | (y & ~z)
   }
-  function md5_H(x, y, z) {
+  function md5_H(x: number, y: number, z: number) {
     return x ^ y ^ z
   }
-  function md5_I(x, y, z) {
+  function md5_I(x: number, y: number, z: number) {
     return y ^ (x | ~z)
   }
-  function md5_FF(a, b, c, d, x, s, ac) {
+  function md5_FF(a: number, b: number, c: number, d: number, x: any, s: number, ac: number) {
     a = md5_AddUnsigned(a, md5_AddUnsigned(md5_AddUnsigned(md5_F(b, c, d), x), ac))
     return md5_AddUnsigned(md5_RotateLeft(a, s), b)
   }
-  function md5_GG(a, b, c, d, x, s, ac) {
+  function md5_GG(a: number, b: number, c: number, d: number, x: any, s: number, ac: number) {
     a = md5_AddUnsigned(a, md5_AddUnsigned(md5_AddUnsigned(md5_G(b, c, d), x), ac))
     return md5_AddUnsigned(md5_RotateLeft(a, s), b)
   }
-  function md5_HH(a, b, c, d, x, s, ac) {
+  function md5_HH(a: number, b: number, c: number, d: number, x: any, s: number, ac: number) {
     a = md5_AddUnsigned(a, md5_AddUnsigned(md5_AddUnsigned(md5_H(b, c, d), x), ac))
     return md5_AddUnsigned(md5_RotateLeft(a, s), b)
   }
-  function md5_II(a, b, c, d, x, s, ac) {
+  function md5_II(a: number, b: number, c: number, d: number, x: any, s: number, ac: number) {
     a = md5_AddUnsigned(a, md5_AddUnsigned(md5_AddUnsigned(md5_I(b, c, d), x), ac))
     return md5_AddUnsigned(md5_RotateLeft(a, s), b)
   }
-  function md5_ConvertToWordArray(string) {
+  function md5_ConvertToWordArray(string: string) {
     let lWordCount
     let lMessageLength = string.length
     let lNumberOfWords_temp1 = lMessageLength + 8
@@ -72,7 +72,7 @@ function hex_md5(string, bit) {
     lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29
     return lWordArray
   }
-  function md5_WordToHex(lValue) {
+  function md5_WordToHex(lValue: number) {
     let WordToHexValue = '',
       WordToHexValue_temp = '',
       lByte,
@@ -84,7 +84,7 @@ function hex_md5(string, bit) {
     }
     return WordToHexValue
   }
-  function md5_Utf8Encode(string) {
+  function md5_Utf8Encode(string: string) {
     string = string.replace(/\r\n/g, '\n')
     let utftext = ''
     for (let n = 0, j = string.length; n < j; n++) {
@@ -200,11 +200,10 @@ function hex_md5(string, bit) {
     c = md5_AddUnsigned(c, CC)
     d = md5_AddUnsigned(d, DD)
   }
-  if (bit == 32)
-    return (md5_WordToHex(a) + md5_WordToHex(b) + md5_WordToHex(c) + md5_WordToHex(d)).toLowerCase()
+  if (bit == 32) return (md5_WordToHex(a) + md5_WordToHex(b) + md5_WordToHex(c) + md5_WordToHex(d)).toLowerCase()
   return (md5_WordToHex(b) + md5_WordToHex(c)).toLowerCase()
 }
-function md5(str) {
+function md5(str: string) {
   return hex_md5(str, 32).toUpperCase()
 }
 export default md5

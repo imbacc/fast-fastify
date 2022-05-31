@@ -1,11 +1,12 @@
-// 复用
-import appinfoAPI from '@/api/appinfo'
-import tokenAPI from '@/api/token'
-
+import { METHOD } from '@/common/config'
 import { globalMemory } from '@/common/globalMemory'
+import testInfo from '@/entity/testInfo'
+import global from '@/entity/global'
 
-// sql 复用user的sql
-const { select_test } = appinfoAPI.api_testSel.sql
+// sql生成语句最好放外面
+const testInfoSql = {
+  selectTest: testInfo.crud_selectAll().getSql()
+}
 
 //版本模块路由
 export default () => {
@@ -20,11 +21,15 @@ export default () => {
       }
     },
     {
-      ...tokenAPI.api_token,
+      url: '/token',
+      method: METHOD.GET,
+      schema: {
+        querystring: global.schema.pickSchema('userid')
+      },
       handler: async (reque: any, reply: any) => {
         const { userid, id } = reque.query
         const token = globalMemory.fastify.jwt.sign({ userid, by: 'imbacc' }, { expiresIn: 60 * 60 * 1 })
-        const res = await globalMemory.exec.call(select_test, [id])
+        const res = await globalMemory.exec.call(testInfoSql.selectTest, [id])
         res.token = `Bearer ${token}`
         reply.send(res)
       }

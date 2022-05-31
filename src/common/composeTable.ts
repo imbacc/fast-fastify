@@ -26,6 +26,31 @@ class composeTable<T extends entity_DTYPE> {
     if (omitKey) this.list = this.omitKey(omitKey).list
   }
 
+  // ------------------默认生成现有sql和schema
+
+  getDefaultSql() {
+    return {
+      crud_insertSql: this.crud_insert().getSql(),
+      curd_updateByIdSql: this.curd_updateById().getSql(),
+      curd_deleteByIdSql: this.curd_deleteById().getSql(),
+      curd_selectByIdSql: this.curd_selectById().getSql(),
+      curd_selectByPageSql: this.curd_selectByPage().getSql(),
+      crud_selectAllSql: this.crud_selectAll().getSql(),
+      countSql: this.count().getSql()
+    }
+  }
+
+  getDefaultSchema() {
+    return {
+      all: this.schema.allSchema(),
+      omitId: this.schema.omitSchema('id'),
+      onlyId: this.schema.pickSchema('id'),
+      voAll: this.schema.appendSchemaVo(this.schema.entity.vo).allSchema()
+    }
+  }
+
+  // ------------------操作函数
+
   // 选中key
   pickKey(key: keyof T | Array<keyof T>, list?: Array<keyof T>) {
     if (!key) return this

@@ -1,17 +1,14 @@
-// import fs from 'fs'
+import fs from 'fs'
+import { resolve } from 'path'
 import { globalMemory } from '@/common/globalMemory'
-import appinfo from '@/router/modules/appinfo'
-import token from '@/router/modules/token'
 
-// const path = './src/router/modules'
 const fs_modules = () => {
   let modules: Array<any> = []
-  // await fs.readdirSync(path).map(async (fileName) => {
-  //   const res = await import(`./modules/${fileName}`)
-  //   modules.push(res.default())
-  // })
-  modules.push(appinfo())
-  modules.push(token())
+  const files = fs.readdirSync(resolve(__dirname, 'modules'))
+  files.forEach((fileName: string) => {
+    const res = require(`./modules/${fileName}`)
+    modules.push(res.default())
+  })
   return modules
 }
 

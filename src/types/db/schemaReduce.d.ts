@@ -6,7 +6,7 @@ export type items_DTYPE = {
   array: ArraySchema
   object: ObjectSchema
 }
-export type enum_DTYPE = { [key in string]: string }
+export type enum_DTYPE = Record<string, string>
 export type type_param = keyof items_DTYPE | 'enum'
 export type n1_param = number | Array<keyof enum_DTYPE>
 export type n2_param = number | keyof items_DTYPE | enum_DTYPE

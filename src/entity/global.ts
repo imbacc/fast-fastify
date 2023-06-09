@@ -1,6 +1,7 @@
-import type { attr_DTYPE, entity_DTYPE } from '#/entity'
+import type { entity_DTYPE } from '@/types/db/entity'
+import { attr_DTYPE } from '@/types/db/entity'
 
-import entityFactory from '@/common/entityFactory'
+import entityFactory from '@/db/entityFactory'
 
 class global implements entity_DTYPE {
   [key: string]: attr_DTYPE
@@ -10,7 +11,7 @@ class global implements entity_DTYPE {
     type: 'number',
     n1: 1,
     n2: 'max',
-    len: 11
+    len: 11,
   }
 
   page: attr_DTYPE = {
@@ -18,7 +19,7 @@ class global implements entity_DTYPE {
     type: 'number',
     n1: 1,
     n2: 'max',
-    len: 6
+    len: 6,
   }
 
   size: attr_DTYPE = {
@@ -26,7 +27,7 @@ class global implements entity_DTYPE {
     type: 'number',
     n1: 1,
     n2: 'max',
-    len: 6
+    len: 6,
   }
 }
 

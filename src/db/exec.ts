@@ -1,18 +1,31 @@
-import type { exec_DTYPE } from '#/exex'
-import type { APIResultful_DTYPE } from '#/resultful'
-import type { Pool } from 'mysql'
+import type { APIResultful_DTYPE } from '@/types/db/resultful'
 
 import resultful from './resultful'
-import { isDev } from '@/common/config'
+import { isDev } from '@/config'
+import { mysqlPool } from './mysql'
 
-const log = async (...args: any) => console.log(...args)
+// 复用
+// import appinfo from '@/api/appinfo'
+import { logger } from '@/effect'
 
-//执行SQL事务封装
-class exec implements exec_DTYPE {
-  public pool: Pool
+// sql 复用user的sql
+// const { test_connect } = appinfo.api_testSel.sql
 
-  constructor(pool: Pool) {
-    this.pool = pool
+// 执行SQL事务封装
+export class Exec {
+  private pool = mysqlPool
+
+  constructor() {
+    // 初始化连接池 创建1个测试
+    this.pool.getConnection((error, connection) => {
+      if (error) {
+        logger.error(`msqyl error = ${error.message}`)
+        return
+      }
+
+      logger.start('mysql pool start server success!')
+      connection.release()
+    })
   }
 
   /**
@@ -25,28 +38,28 @@ class exec implements exec_DTYPE {
   call(sql: string, value?: Array<any>, code?: string): Promise<APIResultful_DTYPE> {
     const pool = this.pool
     return new Promise((resolve) => {
-      pool.getConnection((error, conn) => {
+      pool.getConnection((error, connect) => {
         if (error) {
-          log('conn err=', error)
+          logger.error(`mysql connect error = ${error.message}`)
           resolve(resultful('WARN'))
         } else {
-          conn.query(sql, value, (err, res, _fields) => {
+          connect.query(sql, value, (err, res, _fields) => {
             if (isDev) {
               let val: Array<string> | '' = ''
               if (Array.isArray(value) && value.filter((f) => f).length > 0) val = value
-              log('执行sql=', sql, val)
+              logger.info(`执行sql=${sql} val=${val}`)
             }
-            conn.release()
+            connect.release()
             if (err === null) {
               sql = sql.toUpperCase()
-              const sel_bool = ~sql.indexOf('SELECT')
-              if (!sel_bool) {
-                const add_bool = ~sql.indexOf('INSERT INTO')
-                const update_bool = ~sql.indexOf('UPDATE')
-                const delete_bool = ~sql.indexOf('DELETE')
-                let affectedRows = 0,
-                  changedRows = 0,
-                  insertId = 0
+              const selBool = ~sql.indexOf('SELECT')
+              if (!selBool) {
+                const addBool = ~sql.indexOf('INSERT INTO')
+                const updateBool = ~sql.indexOf('UPDATE')
+                const deleteBool = ~sql.indexOf('DELETE')
+                let affectedRows = 0
+                let changedRows = 0
+                let insertId = 0
                 if (Array.isArray(res)) {
                   const sum = res.reduce((t, v) => {
                     if (!t.affectedRows) t.affectedRows = 0
@@ -62,18 +75,13 @@ class exec implements exec_DTYPE {
                   changedRows = res.changedRows
                   insertId = res.insertId
                 }
-                if (add_bool) res = affectedRows >= 1 ? { affectedRows, id: insertId } : false
-                if (update_bool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
-                if (delete_bool) res = affectedRows >= 1 ? { affectedRows } : false
+                if (addBool) res = affectedRows >= 1 ? { affectedRows, id: insertId } : false
+                if (updateBool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
+                if (deleteBool) res = affectedRows >= 1 ? { affectedRows } : false
               }
               resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res))
             } else {
-              if (!isDev) {
-                delete err.sql
-                delete err.sqlState
-                delete err.sqlMessage
-              }
-              console.log('query err=', err)
+              logger.error(`mysql query error = ${err.message}`)
               resolve(resultful('API_ERROR'))
             }
           })
@@ -83,4 +91,4 @@ class exec implements exec_DTYPE {
   }
 }
 
-export default exec
+export default Exec

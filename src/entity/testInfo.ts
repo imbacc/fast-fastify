@@ -4,9 +4,10 @@
 //   `text` varchar(30) DEFAULT NULL,
 //   PRIMARY KEY (`id`)
 // ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-import type { attr_DTYPE, entity_DTYPE, testInfo_DTYPE } from '#/entity'
+import { attr_DTYPE } from '@/types/db/entity'
+import type { entity_DTYPE, testInfo_DTYPE } from '@/types/db/entity'
 
-import entityFactory from '@/common/entityFactory'
+import entityFactory from '@/db/entityFactory'
 
 class test_info implements testInfo_DTYPE {
   [key: string]: attr_DTYPE
@@ -15,7 +16,7 @@ class test_info implements testInfo_DTYPE {
     type: 'number', // number 为数字最小数和最大数
     n1: 1,
     n2: 'max',
-    len: 11
+    len: 11,
   }
 
   name: attr_DTYPE = {
@@ -23,7 +24,7 @@ class test_info implements testInfo_DTYPE {
     type: 'string', // string 为字符串最少长度和最大长度
     n1: 1,
     n2: 'max',
-    len: 30
+    len: 30,
   }
 
   text: attr_DTYPE = {
@@ -31,7 +32,7 @@ class test_info implements testInfo_DTYPE {
     type: 'string',
     n1: 1,
     n2: 'max',
-    len: 30
+    len: 30,
   }
 
   vo: vo | any
@@ -44,7 +45,7 @@ class vo implements entity_DTYPE {
     type: 'string',
     n1: 1,
     n2: 'max',
-    len: 20
+    len: 20,
   }
 
   qwe: attr_DTYPE = {
@@ -52,7 +53,7 @@ class vo implements entity_DTYPE {
     type: 'string',
     n1: 1,
     n2: 'max',
-    len: 3
+    len: 3,
   }
 
   www: attr_DTYPE = {
@@ -60,7 +61,7 @@ class vo implements entity_DTYPE {
     type: 'string',
     n1: 3,
     n2: 'max',
-    len: 3
+    len: 3,
   }
 }
 

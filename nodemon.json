@@ -1,8 +1,10 @@
 {
-  "watch": ["src/**/*.ts", "src/**/*.js"],
+  "watch": [
+    "src"
+  ],
   "ignore": [".git", "node_modules/", "dist/"],
+  "ext": "ts,js,json",
   "execMap": {
-    "ts": "node -r ts-node/register"
-  },
-  "ext": "js,ts,json"
+    "ts": "node -r ts-node/register -r module-alias/register"
+  }
 }

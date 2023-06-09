@@ -1,41 +1,46 @@
-import type { FastifyInstance } from 'fastify'
+import { fastify, skipRouter, logger } from '@/effect'
+import { listenConfig, swaggerConfig } from '@/config'
 
-import { globalMemory } from '@/common/globalMemory'
-import { listen, swagger } from '@/common/config'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 
-import fastifySwagger from 'fastify-swagger'
+const { port, ip } = listenConfig
+const { use, route, info, host, tags, apiKey, externalDocs } = swaggerConfig
 
-const { port, ip } = listen
-const { use, route, info, host, tags, apiKey, externalDocs } = swagger
-
-export default (fastify: FastifyInstance, _opts = {}, done: Function) => {
+export default async () => {
   if (!use) return
-  // https://github.com/fastify/fastify-swagger
-  fastify.register(fastifySwagger, {
-    routePrefix: route,
-    exposeRoute: true,
+  await fastify.register(fastifySwagger, {
     swagger: {
-      info: info,
+      info,
       host: host === 'auto' ? `${ip}:${port}` : host,
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json'],
       securityDefinitions: {
-        apiKey: apiKey
+        apiKey,
       },
-      tags: tags,
-      externalDocs: externalDocs,
+      tags,
+      externalDocs,
       security: [
         {
-          apiKey: []
-        }
-      ]
-    }
+          apiKey: [],
+        },
+      ],
+    },
   })
 
-  globalMemory.skip.addVagueSkip([route])
+  await fastify.register(fastifySwaggerUi, {
+    routePrefix: route,
+    uiConfig: {
+      docExpansion: 'full',
+      deepLinking: false,
+    },
+    staticCSP: true,
+    transformSpecificationClone: true,
+  })
 
-  setTimeout(() => console.log(`swagger服务已启动: http://${ip}:${port}${route}`))
+  skipRouter.addBlurSkip(route)
 
-  done()
+  logger.start('use swagger document!')
+  logger.start(`swagger server url = http://${ip}:${port}${route}/static/index.html`)
 }

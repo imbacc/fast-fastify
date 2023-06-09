@@ -1,40 +1,49 @@
-import type { redis_DTYPE } from '#/redis'
+import { redisConfig } from '@/config'
+import { logger } from '@/effect'
+import { createClient } from 'redis'
 
-import { globalMemory } from '@/common/globalMemory'
-import { redis } from '@/common/config' //Redis配置
-import { createClient } from 'redis' //Redis驱动
-// redis[s]://[[username][:password]@][host][:port][/db-number]:
-// url: 'redis://alice:foobared@awesome.redis.server:6380'
-const redisClient = createClient({ url: `redis://${redis.host}:${redis.port}` })
-redisClient.connect()
-if (redis.password) {
-  redisClient.auth({
-    username: redis.username,
-    password: redis.password
-  })
-}
-// redisClient.disconnect()
-redisClient.on('error', (err: any) => console.log('redis err=' + err))
-redisClient.on('connect', () => console.log('Redis开启连接...'))
+export class Redis {
+  private redis = createClient({ url: `redis://${redisConfig.host}:${redisConfig.port}` })
 
-export class Redis implements redis_DTYPE {
-  async getRedis(key: string) {
-    let res: any = await redisClient.get(key)
-    if (`${res}`.indexOf('[') !== -1) {
-      try {
-        res = JSON.parse(res)
-      } catch (e) {}
+  constructor() {
+    // Redis驱动
+    // redis[s]://[[username][:password]@][host][:port][/db-number]:
+    // url: 'redis://alice:foobared@awesome.redis.server:6380'
+    this.redis.connect()
+    if (redisConfig.password) {
+      this.redis.auth({
+        username: redisConfig.username,
+        password: redisConfig.password,
+      })
     }
-    return await res
+    // this.redis.disconnect()
+    this.redis.on('error', (err) => {
+      logger.error(`redis error = ${err.message}`)
+      if (err.message?.indexOf('connect ECONNREFUSED') !== -1) {
+        this.redis.disconnect()
+      }
+    })
+    this.redis.on('connect', () => logger.start('use redis server!'))
   }
 
-  setRedis(key: string, value: Object | string | number, time: number) {
-    redisClient.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
-    if (time) redisClient.expire(key, time)
+  async getRedis<T = any>(key: string) {
+    return new Promise<T>((resolve) => {
+      this.redis.get(key).then((res) => {
+        if (`${res}`.includes('[')) {
+          try {
+            res = JSON.parse(res as string)
+          } catch (e) { }
+        }
+        resolve(res as unknown as T)
+      }).catch((err) => {
+        logger.error(`redis error = ${err}`)
+        resolve(false as unknown as T)
+      })
+    })
   }
-}
 
-const redisObj = new Redis()
-export default () => {
-  globalMemory.initRedis(redisObj)
+  setRedis(key: string, value, time?: number) {
+    this.redis.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
+    if (time) this.redis.expire(key, time)
+  }
 }

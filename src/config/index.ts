@@ -19,7 +19,7 @@ import type {
   // swagger
   swagger_CONFIG,
   swagger_DTYPE,
-} from '@/types/config'
+} from '#/config'
 
 import md5 from 'imba-md5'
 

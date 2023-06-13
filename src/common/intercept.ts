@@ -1,9 +1,9 @@
-import type { APIResultCode_DTYPE } from '@/types/db/resultful'
+import type { APIResultCode_DTYPE } from '#/compose/resultful'
 
-import md5 from 'imba-md5'
-
-import resultful from '@/db/resultful' // 返回数据构造
 import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect'
+
+import resultful from '@/compose/resultful' // 返回数据构造
+import md5 from 'imba-md5'
 
 function checkCode(onlyid: string, reply, code: keyof APIResultCode_DTYPE, httpCode: number, next) {
   logger.info(`intercept state = ${{ onlyid, code }},`)

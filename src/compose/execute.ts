@@ -1,8 +1,8 @@
-import type { APIResultful_DTYPE } from '@/types/db/resultful'
+import type { APIResultful_DTYPE } from '#/compose/resultful'
 
 import resultful from './resultful'
 import { isDev } from '@/config'
-import { mysqlPool } from './mysql'
+import { mysqlPool } from '@/db/mysql'
 
 // 复用
 // import appinfo from '@/api/appinfo'
@@ -12,7 +12,7 @@ import { logger } from '@/effect'
 // const { test_connect } = appinfo.api_testSel.sql
 
 // 执行SQL事务封装
-export class Exec {
+export class Execute {
   private pool = mysqlPool
 
   constructor() {
@@ -90,5 +90,3 @@ export class Exec {
     })
   }
 }
-
-export default Exec

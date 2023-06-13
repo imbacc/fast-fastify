@@ -26,9 +26,6 @@ export default () => {
     {
       url: '/add',
       method: 'POST',
-      // sql: {
-      //   add_test: testInfo.crud_insert().getSql(),
-      // },
       swagger: {
         summary: '我是新增接口',
         description: '新增接口的描述啊啊啊啊!',

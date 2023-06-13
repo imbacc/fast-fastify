@@ -9,6 +9,7 @@
     "serve": "cross-env NODE_ENV=prod && node",
     "build": "cross-env NODE_ENV=prod && tsc -p tsconfig.json",
     "mysqlts": "pnpm dlx mysqltots -u root -p root -h localhost -d test",
+    "build-entity": "ts-node ./generate/entity.ts && eslint ./src/entity/*.ts --fix",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "czc": "git add . && pnpm exec cz",

@@ -1,4 +1,4 @@
-import type { APIResultCode_DTYPE, APIResultful_DTYPE } from '@/types/db/resultful'
+import type { APIResultCode_DTYPE, APIResultful_DTYPE } from '#/compose/resultful'
 
 // 虚拟枚举类型 自己定义
 export const APIResultCode: APIResultCode_DTYPE = {

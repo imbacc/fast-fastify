@@ -28,11 +28,8 @@ export class ComposeTable<T> {
   pickKey(key: keyof T | Array<keyof T>, keyList?: Array<keyof T>) {
     if (!key) return this
     if (!keyList) keyList = this.tableKeyListBak
-    if (typeof key === 'string') {
-      this.tableKeyList = keyList.filter((f) => key === f)
-    } else {
-      this.tableKeyList = keyList.filter((f) => (key as Array<keyof T>).includes(f))
-    }
+    if (typeof key === 'string') key = [key]
+    this.tableKeyList = keyList.filter((f) => (key as Array<keyof T>).includes(f))
     return this
   }
 
@@ -40,23 +37,17 @@ export class ComposeTable<T> {
   omitKey(key: keyof T | Array<keyof T>, keyList?: Array<keyof T>) {
     if (!key) return this
     if (!keyList) keyList = this.tableKeyListBak
-    if (typeof key === 'string') {
-      this.tableKeyList = keyList.filter((f) => f !== key)
-    } else {
-      this.tableKeyList = keyList.filter((f) => !(key as Array<keyof T>).includes(f))
-    }
+    if (typeof key === 'string') key = [key]
+    this.tableKeyList = keyList.filter((f) => !(key as Array<keyof T>).includes(f))
     return this
   }
 
   // 追加key
-  // appendKey(key: string | Array<string>) {
-  //   if (typeof key === 'string') {
-  //     this.tableKeyList.push(key as keyof T)
-  //   } else {
-  //     this.tableKeyList.push(...(key as Array<keyof T>))
-  //   }
-  //   return this
-  // }
+  appendKey(key: string | Array<string>) {
+    if (typeof key === 'string') key = [key]
+    this.tableKeyList.push(...(key as Array<keyof T>))
+    return this
+  }
 
   // 清除key 跟append_key配合
   clearKey() {

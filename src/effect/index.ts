@@ -7,7 +7,7 @@ import { Base64 } from './base64'
 import { CacheSql } from './cacheSql'
 import { Logger } from './fastifyLog'
 import { Redis } from '@/db/redis'
-import { Execute } from '@/compose/execute'
+import { MysqlExecute } from '@/db/mysql'
 
 // fastify实例对象
 export const fastify = fastifyFrame({
@@ -52,7 +52,7 @@ export const base64 = new Base64()
 export const cacheSql = new CacheSql()
 
 // mysql执行器实例对象
-export const exec = new Execute()
+export const mysql = new MysqlExecute()
 
 // redis实例对象
 export const redis = new Redis()

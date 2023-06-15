@@ -1,5 +1,5 @@
 import type { integer_DTYPE, string_DTYPE } from '#/compose/entity'
-import type { TestInfo_DTYPE } from '#/entity/TestInfo'
+import type { TestInfo_DTYPE } from '#/entity/testInfo'
 
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'
 
@@ -51,5 +51,5 @@ export class TestInfoVo implements Partial<TestInfo_DTYPE> {
     maxLength: 50,
   }
 }
-export const TestInfoTable = tableFactory<TestInfo>(TestInfo)
-export const TestInfoSchema = schemaFactory<TestInfo, TestInfoVo>(TestInfo, TestInfoVo)
+export const testInfoTable = tableFactory<TestInfo>(TestInfo)
+export const testInfoSchema = schemaFactory<TestInfo, TestInfoVo>(TestInfo, TestInfoVo)

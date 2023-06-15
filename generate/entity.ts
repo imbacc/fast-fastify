@@ -47,10 +47,10 @@ function toPascalCase(str: string): string {
     .join('')
 }
 
-// // 首字母小写 AppInfo -> appInfo
-// function firstLetterToLowercase(str) {
-//   return str.charAt(0).toLowerCase() + str.slice(1);
-// }
+// 首字母小写 AppInfo -> appInfo
+function firstLetterToLowercase(str) {
+  return str.charAt(0).toLowerCase() + str.slice(1)
+}
 
 // function clearEntity() {
 //   const proAll: Promise<any>[] = []
@@ -75,6 +75,7 @@ function toPascalCase(str: string): string {
 
 // 实体类型的声明
 function generateDtype(formatTableName, fields) {
+  const lowercaseTableName = firstLetterToLowercase(formatTableName)
   const types = fields.map((item) => {
     return `  ${item.fieldName}${item.dontNull === 'YES' ? '?' : ''}: ${typeTodtype[item.filedType]}`
   }).join('\n')
@@ -83,12 +84,13 @@ function generateDtype(formatTableName, fields) {
 export interface ${formatTableName}_DTYPE {
 ${types}
 }`
-  fs.writeFileSync(`types/entity/${formatTableName}.d.ts`, entityDTypeContent)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${formatTableName}.d.ts`)
+  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, entityDTypeContent)
+  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
 }
 
 // 实体的属性 和 vo
 function generateEntity(formatTableName, fields) {
+  const lowercaseTableName = firstLetterToLowercase(formatTableName)
   const types = fields.map((item) => {
     const dtype = typeTodtype[item.filedType]
 
@@ -109,7 +111,7 @@ function generateEntity(formatTableName, fields) {
   }).join('\n')
 
   const entityContent = `import type { integer_DTYPE, number_DTYPE, string_DTYPE, object_DTYPE } from '#/compose/entity'
-import type { ${formatTableName}_DTYPE } from '#/entity/${formatTableName}'\n
+import type { ${formatTableName}_DTYPE } from '#/entity/${lowercaseTableName}'\n
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'\n
 export class ${formatTableName} implements ${formatTableName}_DTYPE {
 ${types}
@@ -117,10 +119,10 @@ ${types}
 export class ${formatTableName}Vo implements Partial<${formatTableName}_DTYPE> {
 ${types}
 }
-export const ${formatTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
-export const ${formatTableName}Schema = schemaFactory<${formatTableName}, ${formatTableName}Vo>(${formatTableName}, ${formatTableName}Vo)`
-  fs.writeFileSync(`src/entity/${formatTableName}.ts`, entityContent)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${formatTableName}.ts`)
+export const ${lowercaseTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
+export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}, ${formatTableName}Vo>(${formatTableName}, ${formatTableName}Vo)`
+  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, entityContent)
+  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
 }
 
 async function generateCreate() {
@@ -152,8 +154,6 @@ async function generateCreate() {
         where table_schema ='${mysqlConfig.database}' AND table_name = '${tableName}'
       `, (error, fields) => {
           if (error) throw error
-          console.log('%c [ fields ]-22', 'font-size:14px; background:#41b883; color:#ffffff;', fields)
-
           console.log('%c [ generateTableName ]', 'font-size:14px; background:#41b883; color:#ffffff;', formatTableName)
           generateDtype(formatTableName, fields)
           generateEntity(formatTableName, fields)

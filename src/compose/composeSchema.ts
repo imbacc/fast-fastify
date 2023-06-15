@@ -6,11 +6,6 @@ import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTY
 
 import schema from 'fluent-json-schema'
 
-export function createSchema<T>(entity: T) {
-  console.log('%c [ entity ]-49', 'font-size:14px; background:#41b883; color:#ffffff;', entity)
-  // return object.prop(name, prop).description(desc)
-}
-
 export class ComposeSchema<T, Y> {
   public entity: T
   public entityVo: Y
@@ -25,8 +20,8 @@ export class ComposeSchema<T, Y> {
   constructor(entity: T, entityVo: Y, keys: Array<keyof T>, keysVo: Array<keyof Y>) {
     this.entity = entity
     this.entityVo = entityVo
-    // this.keys = keys
-    // this.keysVo = keysVo
+    this.keys = keys
+    this.keysVo = keysVo
     this.schema = this.conVertSchema(entity, keys)
     this.schemaVo = this.conVertSchema(entityVo, keysVo)
   }
@@ -40,15 +35,18 @@ export class ComposeSchema<T, Y> {
   conVertSchema(entity: T | Y, keys: Array<keyof T> | Array<keyof Y>): JSONSchema {
     let schema
     keys.forEach((key) => {
-      if (schema) {
-        schema = this.createProps(key, entity[key], schema as ObjectSchema)
-      } else {
-        schema = this.createProps(key, entity[key])
-      }
+      schema = this.createProps(key, entity[key], schema)
     })
     return schema as JSONSchema
   }
 
+  /**
+   * 根据实体的定义创建schema属性
+   * @param name 属性名
+   * @param attribute 属性类型
+   * @param object 追加
+   * @returns
+   */
   createProps(name: string, attribute: string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE, object?: ObjectSchema): JSONSchema {
     if (!object) object = schema.object()
     let props: props_DTYPE = schema.object()
@@ -91,14 +89,70 @@ export class ComposeSchema<T, Y> {
    * 获取schema valueof
    * target 传入 entity或entityVo
    */
-  getSchema(targetSchema?: T | Y) {
-    const cloneSchema = this.clone(targetSchema || this.schema) as JSONSchema
-    const outSchema = cloneSchema.valueOf()
+  getSchema(targetSchema?: JSONSchema) {
+    if (!targetSchema) targetSchema = this.schema
+    const outSchema = targetSchema.valueOf()
     delete (outSchema as any).$schema
-    console.log('%c [ outSchema ]-96', 'font-size:14px; background:#41b883; color:#ffffff;', outSchema)
     return outSchema
   }
 
+  /**
+   * vo与实体合并
+   */
+  allSchema() {
+    const schema = this.clone(this.schema)
+    const schemaVo = this.clone(this.schemaVo)
+    return this.getSchema(Object.assign(schema, schemaVo) as any)
+  }
+
+  /**
+   * 只有选取的字段
+   * @param key 字符串或字符串集合
+   */
+  pickSchema(key: keyof T | Array<keyof T>, targetEntity?: T) {
+    return this.handleSchema<T>(key, this.keys, targetEntity || this.entity, true)
+  }
+
+  /**
+   * 只有选取的字段Vo
+   * @param key 字符串或字符串集合
+   */
+  pickSchemaVo(key: keyof Y | Array<keyof Y>, targetEntityVo?: Y) {
+    return this.handleSchema<Y>(key, this.keysVo, targetEntityVo || this.entityVo, true)
+  }
+
+  /**
+   * 只有排除的字段
+   * @param key 字符串或字符串集合
+   */
+  omitSchema(key: keyof T | Array<keyof T>, targetEntity?: T) {
+    return this.handleSchema<T>(key, this.keys, targetEntity || this.entity, false)
+  }
+
+  /**
+   * 只有排除的字段
+   * @param key 字符串或字符串集合
+   */
+  omitSchemaVo(key: keyof Y | Array<keyof Y>, targetEntityVo?: Y) {
+    return this.handleSchema<Y>(key, this.keysVo, targetEntityVo || this.entityVo, false)
+  }
+
+  /**
+   * 追加schema
+   */
+  appendSchema(append: string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE) {
+
+  }
+
+  // 复用执行
+  private handleSchema<P>(key: keyof P | Array<keyof P>, keyList: Array<keyof P>, targetEntity: P, pick: boolean) {
+    if (typeof key === 'string') key = [key]
+    const keys = keyList.filter((f) => (key as Array<keyof P>).includes(f) === pick)
+    const schema = this.conVertSchema(targetEntity as unknown as (T | Y), keys as unknown as (Array<keyof T> | Array<keyof Y>))
+    return this.getSchema(schema)
+  }
+
+  // 克隆
   private clone(obj) {
     const o = Array.isArray(obj) ? [] : {}
     for (const k in obj) {

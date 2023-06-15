@@ -1,11 +1,7 @@
 // import schema from 'fluent-json-schema'
-import { TestInfoService } from '@/service/testInfoService'
+// import { TestInfoService } from '@/service/TestDtypeService'
 
-const testInfoService = new TestInfoService()
-const addtest = testInfoService.addTest()
-const deltest = testInfoService.deleteTest()
-console.log('%c [ addtest ]-6', 'font-size:14px; background:#41b883; color:#ffffff;', addtest)
-console.log('%c [ deltest ]-7', 'font-size:14px; background:#41b883; color:#ffffff;', deltest)
+// const testInfoService = new TestInfoService()
 
 // console.log('index.ts testInfo=', test)
 // console.log('test.schema.entity.vo', test.schema.entity.vo)

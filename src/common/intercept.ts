@@ -1,8 +1,8 @@
-import type { APIResultCode_DTYPE } from '#/compose/resultful'
+import type { APIResultCode_DTYPE } from '#/common/resultful'
 
 import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect'
 
-import resultful from '@/compose/resultful' // 返回数据构造
+import resultful from '@/common/resultful' // 返回数据构造
 import md5 from 'imba-md5'
 
 function checkCode(onlyid: string, reply, code: keyof APIResultCode_DTYPE, httpCode: number, next) {

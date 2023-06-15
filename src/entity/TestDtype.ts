@@ -1,14 +1,31 @@
 import type { integer_DTYPE, number_DTYPE, string_DTYPE } from '#/compose/entity'
-import type { TestDtype_DTYPE } from '#/entity/TestDtype'
+import type { TestDtype_DTYPE } from '#/entity/testDtype'
 
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'
 
 export class TestDtype implements TestDtype_DTYPE {
+  date: string_DTYPE = {
+    desc: '格式化的时间',
+    type: 'string',
+    required: true,
+    minLength: 1,
+    maxLength: 16,
+    defaultFormat: 'DATE_TIME',
+  }
+
   id: integer_DTYPE = {
     desc: '主键ID',
     type: 'integer',
     primaryKey: true,
     maximum: 9999999999,
+  }
+
+  json: string_DTYPE = {
+    desc: 'json格式',
+    type: 'string',
+    required: true,
+    minLength: 1,
+    maxLength: 200,
   }
 
   money: number_DTYPE = {
@@ -21,31 +38,31 @@ export class TestDtype implements TestDtype_DTYPE {
     desc: '名字',
     type: 'string',
     maxLength: 10,
-  }
-
-  date: string_DTYPE = {
-    desc: '格式化的时间',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 16,
-    defaultFormat: 'DATE_TIME',
-  }
-
-  json: string_DTYPE = {
-    desc: 'json格式',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 200,
   }
 }
 export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
+  date: string_DTYPE = {
+    desc: '格式化的时间',
+    type: 'string',
+    required: true,
+    minLength: 1,
+    maxLength: 16,
+    defaultFormat: 'DATE_TIME',
+  }
+
   id: integer_DTYPE = {
     desc: '主键ID',
     type: 'integer',
     primaryKey: true,
     maximum: 9999999999,
+  }
+
+  json: string_DTYPE = {
+    desc: 'json格式',
+    type: 'string',
+    required: true,
+    minLength: 1,
+    maxLength: 200,
   }
 
   money: number_DTYPE = {
@@ -59,23 +76,6 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
     type: 'string',
     maxLength: 10,
   }
-
-  date: string_DTYPE = {
-    desc: '格式化的时间',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 16,
-    defaultFormat: 'DATE_TIME',
-  }
-
-  json: string_DTYPE = {
-    desc: 'json格式',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 200,
-  }
 }
-export const TestDtypeTable = tableFactory<TestDtype>(TestDtype)
-export const TestDtypeSchema = schemaFactory<TestDtype, TestDtypeVo>(TestDtype, TestDtypeVo)
+export const testDtypeTable = tableFactory<TestDtype>(TestDtype)
+export const testDtypeSchema = schemaFactory<TestDtype, TestDtypeVo>(TestDtype, TestDtypeVo)

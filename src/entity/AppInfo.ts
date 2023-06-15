@@ -1,5 +1,5 @@
 import type { integer_DTYPE, string_DTYPE } from '#/compose/entity'
-import type { AppInfo_DTYPE } from '#/entity/AppInfo'
+import type { AppInfo_DTYPE } from '#/entity/appInfo'
 
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'
 
@@ -11,20 +11,12 @@ export class AppInfo implements AppInfo_DTYPE {
     maximum: 9999999999,
   }
 
-  text: string_DTYPE = {
+  linkurl: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 200,
-  }
-
-  version: integer_DTYPE = {
-    desc: '',
-    type: 'integer',
-    required: true,
-    minimum: 1,
-    maximum: 9999999999,
+    maxLength: 300,
   }
 
   os: integer_DTYPE = {
@@ -43,12 +35,20 @@ export class AppInfo implements AppInfo_DTYPE {
     maxLength: 6,
   }
 
-  linkurl: string_DTYPE = {
+  text: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 300,
+    maxLength: 200,
+  }
+
+  version: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    required: true,
+    minimum: 1,
+    maximum: 9999999999,
   }
 }
 export class AppInfoVo implements Partial<AppInfo_DTYPE> {
@@ -59,20 +59,12 @@ export class AppInfoVo implements Partial<AppInfo_DTYPE> {
     maximum: 9999999999,
   }
 
-  text: string_DTYPE = {
+  linkurl: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 200,
-  }
-
-  version: integer_DTYPE = {
-    desc: '',
-    type: 'integer',
-    required: true,
-    minimum: 1,
-    maximum: 9999999999,
+    maxLength: 300,
   }
 
   os: integer_DTYPE = {
@@ -91,13 +83,21 @@ export class AppInfoVo implements Partial<AppInfo_DTYPE> {
     maxLength: 6,
   }
 
-  linkurl: string_DTYPE = {
+  text: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 300,
+    maxLength: 200,
+  }
+
+  version: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    required: true,
+    minimum: 1,
+    maximum: 9999999999,
   }
 }
-export const AppInfoTable = tableFactory<AppInfo>(AppInfo)
-export const AppInfoSchema = schemaFactory<AppInfo, AppInfoVo>(AppInfo, AppInfoVo)
+export const appInfoTable = tableFactory<AppInfo>(AppInfo)
+export const appInfoSchema = schemaFactory<AppInfo, AppInfoVo>(AppInfo, AppInfoVo)

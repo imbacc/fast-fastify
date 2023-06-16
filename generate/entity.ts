@@ -100,7 +100,7 @@ function generateEntity(formatTableName, fields) {
     ${item.dontNull === 'YES' ? 'required: true,' : ''}${item.isPrimaryKey === 'PRI' ? 'primaryKey: true,' : ''}`
 
     if (dtype === 'string_DTYPE') {
-      return `${entityStr}${item.dontNull === 'YES' ? 'minLength: 1,' : ''}maxLength: ${item.filedType === 'datetime' ? 16 : item.textLength},${item.filedType === 'datetime' ? 'defaultFormat: \'DATE_TIME\',' : ''}${item.filedType === 'date' ? 'defaultFormat: \'DATE\',' : ''}${item.filedType === 'time' ? 'defaultFormat: \'TIME\',' : ''}
+      return `${entityStr}${item.dontNull === 'YES' ? 'minLength: 1,' : ''}maxLength: ${item.filedType === 'datetime' ? 16 : item.textLength},${item.filedType === 'datetime' ? 'defaultFormat: \'date-time\',' : ''}${item.filedType === 'date' ? 'defaultFormat: \'date\',' : ''}${item.filedType === 'time' ? 'defaultFormat: \'time\',' : ''}
   }
 `
     } else if (dtype === 'number_DTYPE' || dtype === 'integer_DTYPE') {

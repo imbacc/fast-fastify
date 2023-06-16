@@ -36,6 +36,7 @@ type types_DTYPE = {
 }
 
 type props_DTYPE = StringSchema | NumberSchema | IntegerSchema | ObjectSchema | ArraySchema
+type attribute_DTYPE = string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE
 
 type entity_DTYPE = {
   // 描述
@@ -56,7 +57,7 @@ export type string_DTYPE = {
   // 字符最大长度 最大长度为数据库定义长度
   maxLength?: number | 'max'
   // 默认格式化字符内容
-  defaultFormat?: keyof FORMATS
+  defaultFormat?: FORMATS[keyof FORMATS]
   // 追加StringSchema原有规则
   appendSchema?: StringSchema
 } & entity_DTYPE
@@ -81,7 +82,7 @@ export type integer_DTYPE = {
 
 export type array_DTYPE = {
   // 数组值指向类型
-  item: JSONSchema | Array<JSONSchema>
+  item: attribute_DTYPE
   // 数组最小长度
   minItems?: number
   // 数组最大长度

@@ -1,3 +1,4 @@
+import type { number_DTYPE, string_DTYPE } from '#/compose/entity'
 import { testDtypeSchema } from '@/entity/TestDtype'
 import { testInfoTable } from '@/entity/testInfo'
 
@@ -52,11 +53,25 @@ export class TestService {
     const schema4 = testDtypeSchema.pickSchemaVo('id')
     const schema5 = testDtypeSchema.omitSchemaVo('id')
 
-    const entity6 = Object.assign(testDtypeSchema.entity, { qqq: 'qqq' }) as any
-    const keys6 = Object.keys(entity6) as any[]
-    const convert6 = testDtypeSchema.conVertSchema(entity6, keys6)
-    const schema6 = testDtypeSchema.getSchema(convert6)
+    class AppendVo {
+      qqq: string_DTYPE = { desc: '测试追加qqq', type: 'string', minLength: 1, maxLength: 20, defaultFormat: 'email' }
+      www: number_DTYPE = { desc: '测试追加www', type: 'number', minimum: 1, maximum: 2 }
+    }
 
-    // const schema3 = testDtypeSchema.getSchema()
+    const schema6 = testDtypeSchema.appendSchema(Object.assign(new AppendVo()))
+    const schema7 = testDtypeSchema.appendSchema({ fff: { desc: '测试追加单个fff', type: 'string' } })
+    const schema8 = testDtypeSchema.appendSchema({ over: { desc: '测试格式', type: 'array', item: { desc: 'aa', type: 'number', minimum: 1 } } })
+
+    return {
+      schema0,
+      schema1,
+      schema2,
+      schema3,
+      schema4,
+      schema5,
+      schema6,
+      schema7,
+      schema8,
+    }
   }
 }

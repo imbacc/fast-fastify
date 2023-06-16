@@ -10,7 +10,7 @@ export class TestDtype implements TestDtype_DTYPE {
     required: true,
     minLength: 1,
     maxLength: 16,
-    defaultFormat: 'DATE_TIME',
+    defaultFormat: 'date-time',
   }
 
   id: integer_DTYPE = {
@@ -47,7 +47,7 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
     required: true,
     minLength: 1,
     maxLength: 16,
-    defaultFormat: 'DATE_TIME',
+    defaultFormat: 'date-time',
   }
 
   id: integer_DTYPE = {

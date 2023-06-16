@@ -2,7 +2,7 @@ import type {
   ObjectSchema,
   JSONSchema,
 } from 'fluent-json-schema'
-import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, props_DTYPE } from '#/compose/entity'
+import type { string_DTYPE, number_DTYPE, array_DTYPE, object_DTYPE, props_DTYPE, attribute_DTYPE } from '#/compose/entity'
 
 import schema from 'fluent-json-schema'
 
@@ -47,7 +47,7 @@ export class ComposeSchema<T, Y> {
    * @param object 追加
    * @returns
    */
-  createProps(name: string, attribute: string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE, object?: ObjectSchema): JSONSchema {
+  createProps(name: string, attribute: attribute_DTYPE, object?: ObjectSchema): JSONSchema {
     if (!object) object = schema.object()
     let props: props_DTYPE = schema.object()
     if (!attribute.hidden) {
@@ -56,7 +56,7 @@ export class ComposeSchema<T, Y> {
         const attr = attribute as string_DTYPE
         if (typeof attr.minLength === 'number') props = props.minLength(attr.minLength)
         if (typeof attr.maxLength === 'number' && (attr.maxLength as unknown as string) !== 'max') props = props.maxLength(attr.maxLength)
-        if (attr.defaultFormat) props = props.format(attr.defaultFormat as any)
+        if (attr.defaultFormat) props = props.format(attr.defaultFormat)
       } else if (attribute.type === 'number' || attribute.type === 'integer') {
         props = attribute.type === 'number' ? schema.number() : schema.integer()
         const attr = attribute as number_DTYPE
@@ -67,7 +67,8 @@ export class ComposeSchema<T, Y> {
         const attr = attribute as array_DTYPE
         if (typeof attr.minItems === 'number') props = props.minItems(attr.minItems)
         if (typeof attr.maxItems === 'number' && (attr.maxItems as unknown as string) !== 'max') props = props.maxItems(attr.maxItems)
-        if (attr.item) props = props.items(attr.item)
+        console.log('%c [ this.createProps("", attr.item) ]-71', 'font-size:14px; background:#41b883; color:#ffffff;', this.createProps('', attr.item))
+        if (attr.item) props = props.items(this.createProps('', attr.item))
       } else if (attribute.type === 'object') {
         props = schema.object()
         const attr = attribute as object_DTYPE
@@ -140,8 +141,19 @@ export class ComposeSchema<T, Y> {
   /**
    * 追加schema
    */
-  appendSchema(append: string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE) {
+  appendSchema(append: Record<string, attribute_DTYPE>) {
+    const keys = Object.keys(append)
+    const newSchema = this.conVertSchema(append as any, keys as any)
+    return this.getSchema(Object.assign(this.schema, newSchema))
+  }
 
+  /**
+   * 追加schema
+   */
+  appendSchemaVo(append: Record<string, attribute_DTYPE>) {
+    const keys = Object.keys(append)
+    const newSchema = this.conVertSchema(append as any, keys as any)
+    return this.getSchema(Object.assign(this.schemaVo, newSchema))
   }
 
   // 复用执行

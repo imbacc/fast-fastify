@@ -5,7 +5,6 @@ import type {
   BooleanSchema,
   ObjectSchema,
   ArraySchema,
-  JSONSchema
 } from 'fluent-json-schema'
 
 type FORMATS = {

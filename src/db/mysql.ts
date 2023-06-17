@@ -1,6 +1,7 @@
 import type { APIResultful_DTYPE } from '#/common/resultful'
+import type { APICode } from '@/common/resultful'
 
-import resultful from '@/common/resultful'
+import { resultful } from '@/common/resultful'
 import mysqlDrive from 'mysql'
 import { isDev, mysqlConfig } from '@/config'
 
@@ -29,21 +30,21 @@ export class MysqlExecute {
    * sql 语句 select id form 表名 where id = ? and num = ?
    * value 数组格式传入 sql参数 [1,22]
    * then 回调函数
-   * result 不经过resultful直接返回结果 默认false
+   * code 填写 NOTHINK_RESULT 不经过resultful直接返回结果
    */
-  call(sql: string, value?: Array<any>, code?: string): Promise<APIResultful_DTYPE> {
+  call(sql: string, value?: Array<any>, code?: keyof APICode): Promise<APIResultful_DTYPE> {
     const pool = this.pool
     return new Promise((resolve) => {
       pool.getConnection((error, connect) => {
         if (error) {
           logger.error(`mysql connect error = ${error.message}`)
-          resolve(resultful('WARN'))
+          resolve(resultful('MYSQL_CONNECT_WARN'))
         } else {
           connect.query(sql, value, (err, res, _fields) => {
             if (isDev) {
               let val: Array<string> | '' = ''
               if (Array.isArray(value) && value.filter((f) => f).length > 0) val = value
-              logger.info(`执行sql=${sql} val=${val}`)
+              logger.info(`execute sql=${sql} val=[${val}]`)
             }
             connect.release()
             if (err === null) {
@@ -75,7 +76,7 @@ export class MysqlExecute {
                 if (updateBool) res = changedRows >= 1 ? { changedRows } : affectedRows >= 1 ? { changedRows: 1 } : false
                 if (deleteBool) res = affectedRows >= 1 ? { affectedRows } : false
               }
-              resolve(code === 'result' ? res : resultful(code || 'SUCCESS', res))
+              resolve(code === 'NOTHINK_RESULT' ? res : resultful(code || 'SUCCESS', res))
             } else {
               logger.error(`mysql query error = ${err.message}`)
               resolve(resultful('API_ERROR'))

@@ -1,13 +1,10 @@
 import type { router_DTYPE } from '#/router/modules'
 
 import { logger } from '@/effect'
+import { TestDtypeService } from '@/service/testDtypeService.bak'
 
-// sql
-// const { add_test } = appinfoAPI.api_testAdd.sql
-// const { update_test, update_test2 } = appinfoAPI.api_testUpp.sql
-// const { delete_test } = appinfoAPI.api_testDel.sql
-// const { select_test } = appinfoAPI.api_testSel.sql
-// const { select, select2 } = appinfoAPI.api_testDdd.sql
+const testDtypeService = new TestDtypeService()
+const add = testDtypeService.add()
 
 // 用户模块路由
 export default () => {
@@ -31,16 +28,17 @@ export default () => {
         description: '新增接口的描述啊啊啊啊!',
       },
       schema: {
-        // body: testInfo.schema.pickSchema('id'),
+        body: add.schema,
       },
-      handler: (reque, reply) => {
+      skip: true,
+      handler: async (reque, reply) => {
         // const { text } = reque.body
         // const body = [text]
         // 或者
-        // const body = Object.values(reque.body)
+        const body = Object.values(reque.body as object)
         // const res = await exec.call(add_test, body)
-        // reply.send(res)
-        reply.send(reque.body)
+        const res = await add.action(body)
+        reply.send(res)
       },
     },
     {

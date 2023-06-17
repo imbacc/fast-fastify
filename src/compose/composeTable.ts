@@ -59,13 +59,13 @@ export class ComposeTable<T> {
 
   // 新增
   insert() {
-    this.sql += `INSERT INTO ${this.tableName} (${this.getColum(this.tableKeyList)}) VALUES (${this.getJoin(this.tableKeyList)});`
+    this.sql += `INSERT INTO ${this.tableName} (${this.getColumn(this.tableKeyList)}) VALUES (${this.getColumnJoin(this.tableKeyList)});`
     return this
   }
 
   // 更新
   update(where = '') {
-    this.sql += `UPDATE ${this.tableName} SET ${this.getValue(this.tableKeyList)} ${where};`
+    this.sql += `UPDATE ${this.tableName} SET ${this.getColumnMerge(this.tableKeyList)} ${where};`
     return this
   }
 
@@ -77,7 +77,7 @@ export class ComposeTable<T> {
 
   // 查询
   select(where = '') {
-    this.sql += `SELECT ${this.getColum(this.tableKeyList)} FROM ${this.tableName} ${where};`
+    this.sql += `SELECT ${this.getColumn(this.tableKeyList)} FROM ${this.tableName} ${where};`
     return this
   }
 
@@ -119,6 +119,8 @@ export class ComposeTable<T> {
     return this.select(`${where} limit ?,?`)
   }
 
+  // --------------------特殊函数
+
   // 获取最终sql
   getSql() {
     const sql = this.sql
@@ -134,18 +136,26 @@ export class ComposeTable<T> {
     return this
   }
 
+  // 根据对象键值排序返回对应值格式 { b: 2, a: 1 } -> { a: 1, b: 2 } -> [1, 2]
+  getValues(targetValue: object) {
+    const keys = Object.keys(targetValue).sort()
+    return keys.map((key) => targetValue[key])
+  }
+
+  // --------------------私有函数
+
   // SELECT key,key... FROM
-  private getColum(list: Array<keyof T> = []): string {
-    return list.length > 0 ? [...new Set(list)].join(',') : '*'
+  private getColumn(list: Array<keyof T> = []): string {
+    return list.length > 0 ? [...new Set(list.sort())].join(',') : '*'
   }
 
   // 获取并拼接 格式: key=?,key=?...
-  private getValue(list: Array<keyof T> = []): string {
-    return list.length > 0 ? `${list.join('=?,')}=?` : ''
+  private getColumnMerge(list: Array<keyof T> = []): string {
+    return list.length > 0 ? `${list.sort().join('=?,')}=?` : ''
   }
 
   // 获取相应数量拼接 格式: ?,?,?...
-  private getJoin(list: Array<keyof T> = []): string {
+  private getColumnJoin(list: Array<keyof T> = []): string {
     return list.length > 0 ? Array(list.length).fill('?').join(',') : ''
   }
 }

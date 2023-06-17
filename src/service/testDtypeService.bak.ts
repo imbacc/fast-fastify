@@ -1,7 +1,16 @@
 import type { number_DTYPE, string_DTYPE } from '#/compose/entity'
-import { testDtypeSchema, testDtypeTable } from '@/entity/TestDtype'
 
-export class TestService {
+import { testDtypeSchema, testDtypeTable } from '@/entity/TestDtype'
+import { mysql } from '@/effect/index'
+
+export class TestDtypeService {
+  add() {
+    const sql = testDtypeTable.crudInsert().getSql()
+    const schema = testDtypeSchema.omitSchema('id')
+    const action = (values: any[]) => mysql.call(sql, values)
+    return { schema, action }
+  }
+
   // 基本curd
   getCurdSql() {
     const add = testDtypeTable.crudInsert().getSql()

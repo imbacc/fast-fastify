@@ -1,5 +1,6 @@
 import fastifyFrame from 'fastify'
 
+import { isDev } from '@/config/index'
 import { ApiLimitMemory } from './apiLimitMemory'
 import { ApiLimitRedis } from './apiLimitRedis'
 import { SkipRouter } from './skipRouter'
@@ -9,26 +10,23 @@ import { Logger } from './fastifyLog'
 import { Redis } from '@/db/redis'
 import { MysqlExecute } from '@/db/mysql'
 
+const loggerConfig = {
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'yyyy-mm-dd HH:MM:ss',
+      ignore: 'pid',
+    },
+  },
+}
+
 // fastify实例对象
 export const fastify = fastifyFrame({
   // 30: 'info',
   // 40: 'warn',
   // 50: 'error',
-  logger: {
-    // transport: {
-    //   target: 'pino-pretty',
-    //   options: {
-    //     colorize: true,
-    //     translateTime: 'yyyy-mm-dd HH:MM:ss',
-    //     ignore: 'pid',
-    //   },
-    // },
-    //   serializers: {
-    //     req(request) {
-    //       return { url: request.url }
-    //     },
-    //   },
-  },
+  logger: isDev ? loggerConfig : {},
   bodyLimit: 524288,
   requestTimeout: 120,
 })

@@ -9,7 +9,7 @@ export class TestDtype implements TestDtype_DTYPE {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 16,
+    maxLength: 24,
     defaultFormat: 'date-time',
   }
 
@@ -75,6 +75,13 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
     desc: '名字',
     type: 'string',
     maxLength: 10,
+  }
+
+  vottt: string_DTYPE = {
+    desc: 'TestDtype Vo专属测试属性',
+    type: 'string',
+    maxLength: 10,
+    required: true,
   }
 }
 export const testDtypeTable = tableFactory<TestDtype>(TestDtype)

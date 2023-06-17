@@ -40,6 +40,14 @@ const typeTodtype = {
   json: 'object_DTYPE',
 }
 
+const tsType = {
+  integer_DTYPE: 'number',
+  number_DTYPE: 'number',
+  string_DTYPE: 'string',
+  object_DTYPE: 'object',
+  array_DTYPE: 'any[]',
+}
+
 // 转换表明格式 app_info -> AppInfo
 function toPascalCase(str: string): string {
   return str.split('_')
@@ -80,10 +88,18 @@ function generateDtype(formatTableName, fields) {
     return `  ${item.fieldName}${item.dontNull === 'YES' ? '?' : ''}: ${typeTodtype[item.filedType]}`
   }).join('\n')
 
+  const types2 = fields.map((item) => {
+    return `  ${item.fieldName}: ${tsType[typeTodtype[item.filedType]]}`
+  }).join('\n')
+
   const entityDTypeContent = `import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, entity_DTYPE } from '../compose/entity'\n
 export interface ${formatTableName}_DTYPE {
 ${types}
-}`
+}
+export interface ${formatTableName}Target_DTYPE {
+${types2}
+}
+`
   fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, entityDTypeContent)
   console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
 }

@@ -7,3 +7,11 @@ export interface TestDtype_DTYPE {
   money: number_DTYPE
   name: string_DTYPE
 }
+
+export interface TestDtypeTarget_DTYPE {
+  date: string
+  id: number
+  json: string
+  money: number
+  name: string
+}

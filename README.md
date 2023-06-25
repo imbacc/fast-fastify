@@ -12,6 +12,10 @@
 pnpm install && pnpm run dev
 ```
 
+## pnpm run c-router 生成路由
+## pnpm run c-entity 生成实体和申明类型
+## pnpm run create 生成路由和实体
+
 ## fastify 文档说明： <https://www.w3cschool.cn/fastify/>
 
 ```

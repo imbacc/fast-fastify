@@ -113,10 +113,6 @@ const _swagger: swagger_DTYPE = {
       name: 'Authorization',
       in: 'header',
     },
-    tags: [
-      { name: 'appinfo', description: '这里是appinfo接口模块' },
-      { name: 'token', description: '这里是授权接口模块' },
-    ],
     externalDocs: {
       description: '查看fastify文档',
       url: 'https://www.fastify.io/',

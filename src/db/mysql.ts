@@ -86,4 +86,19 @@ export class MysqlExecute {
       })
     })
   }
+
+  // 根据对象键值排序返回对应值格式 { b: 2, a: 1 } -> { a: 1, b: 2 } -> [1, 2]
+  getValues(targetValue: object | any, EndKey?: Array<string>) {
+    const keys = Object.keys(targetValue).sort()
+    const values: Array<string> = []
+
+    keys.forEach((key) => {
+      if (!EndKey?.includes(key)) {
+        values.unshift(targetValue[key])
+      } else {
+        values.push(targetValue[key])
+      }
+    })
+    return values
+  }
 }

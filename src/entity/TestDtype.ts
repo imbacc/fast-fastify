@@ -4,28 +4,11 @@ import type { TestDtype_DTYPE } from '#/entity/testDtype'
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'
 
 export class TestDtype implements TestDtype_DTYPE {
-  date: string_DTYPE = {
-    desc: '格式化的时间',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 24,
-    defaultFormat: 'date-time',
-  }
-
   id: integer_DTYPE = {
     desc: '主键ID',
     type: 'integer',
     primaryKey: true,
     maximum: 9999999999,
-  }
-
-  json: string_DTYPE = {
-    desc: 'json格式',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 200,
   }
 
   money: number_DTYPE = {
@@ -37,32 +20,29 @@ export class TestDtype implements TestDtype_DTYPE {
   name: string_DTYPE = {
     desc: '名字',
     type: 'string',
-    maxLength: 10,
+
+  }
+
+  date: string_DTYPE = {
+    desc: '格式化的时间',
+    type: 'string',
+    required: true,
+    minLength: 1,
+  }
+
+  json: string_DTYPE = {
+    desc: 'json格式',
+    type: 'string',
+    required: true,
+    minLength: 1,
   }
 }
 export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
-  date: string_DTYPE = {
-    desc: '格式化的时间',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 16,
-    defaultFormat: 'date-time',
-  }
-
   id: integer_DTYPE = {
     desc: '主键ID',
     type: 'integer',
     primaryKey: true,
     maximum: 9999999999,
-  }
-
-  json: string_DTYPE = {
-    desc: 'json格式',
-    type: 'string',
-    required: true,
-    minLength: 1,
-    maxLength: 200,
   }
 
   money: number_DTYPE = {
@@ -74,14 +54,28 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
   name: string_DTYPE = {
     desc: '名字',
     type: 'string',
-    maxLength: 10,
+
+  }
+
+  date: string_DTYPE = {
+    desc: '格式化的时间',
+    type: 'string',
+    required: true,
+    minLength: 1,
+  }
+
+  json: string_DTYPE = {
+    desc: 'json格式',
+    type: 'string',
+    required: true,
+    minLength: 1,
   }
 
   vottt: string_DTYPE = {
-    desc: 'TestDtype Vo专属测试属性',
+    desc: 'vottt',
     type: 'string',
-    maxLength: 10,
     required: true,
+    minLength: 1,
   }
 }
 export const testDtypeTable = tableFactory<TestDtype>(TestDtype)

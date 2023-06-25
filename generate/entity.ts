@@ -92,7 +92,7 @@ function generateDtype(formatTableName, fields) {
     return `  ${item.fieldName}: ${tsType[typeTodtype[item.filedType]]}`
   }).join('\n')
 
-  const entityDTypeContent = `import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, entity_DTYPE } from '../compose/entity'\n
+  const content = `import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, entity_DTYPE } from '../compose/entity'\n
 export interface ${formatTableName}_DTYPE {
 ${types}
 }
@@ -100,7 +100,7 @@ export interface ${formatTableName}Target_DTYPE {
 ${types2}
 }
 `
-  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, entityDTypeContent)
+  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, content)
   console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
 }
 
@@ -116,7 +116,8 @@ function generateEntity(formatTableName, fields) {
     ${item.dontNull === 'YES' ? 'required: true,' : ''}${item.isPrimaryKey === 'PRI' ? 'primaryKey: true,' : ''}`
 
     if (dtype === 'string_DTYPE') {
-      return `${entityStr}${item.dontNull === 'YES' ? 'minLength: 1,' : ''}maxLength: ${item.filedType === 'datetime' ? 16 : item.textLength},${item.filedType === 'datetime' ? 'defaultFormat: \'date-time\',' : ''}${item.filedType === 'date' ? 'defaultFormat: \'date\',' : ''}${item.filedType === 'time' ? 'defaultFormat: \'time\',' : ''}
+      // maxLength: ${item.filedType === 'datetime' ? 20 : item.textLength},${item.filedType === 'datetime' ? 'defaultFormat: \'date-time\',' : ''}${item.filedType === 'date' ? 'defaultFormat: \'date\',' : ''}${item.filedType === 'time' ? 'defaultFormat: \'time\',' : ''}
+      return `${entityStr}${item.dontNull === 'YES' ? 'minLength: 1,' : ''}
   }
 `
     } else if (dtype === 'number_DTYPE' || dtype === 'integer_DTYPE') {
@@ -126,7 +127,7 @@ function generateEntity(formatTableName, fields) {
     }
   }).join('\n')
 
-  const entityContent = `import type { integer_DTYPE, number_DTYPE, string_DTYPE, object_DTYPE } from '#/compose/entity'
+  const content = `import type { integer_DTYPE, number_DTYPE, string_DTYPE, object_DTYPE } from '#/compose/entity'
 import type { ${formatTableName}_DTYPE } from '#/entity/${lowercaseTableName}'\n
 import { tableFactory, schemaFactory } from '@/compose/composeFactory'\n
 export class ${formatTableName} implements ${formatTableName}_DTYPE {
@@ -137,8 +138,8 @@ ${types}
 }
 export const ${lowercaseTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
 export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}, ${formatTableName}Vo>(${formatTableName}, ${formatTableName}Vo)`
-  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, entityContent)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
+  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, content)
+  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
 }
 
 async function generateCreate() {
@@ -170,7 +171,7 @@ async function generateCreate() {
         where table_schema ='${mysqlConfig.database}' AND table_name = '${tableName}'
       `, (error, fields) => {
           if (error) throw error
-          console.log('%c [ generateTableName ]', 'font-size:14px; background:#41b883; color:#ffffff;', formatTableName)
+          console.log('%c [ generateTable name ]', 'font-size:14px; background:#41b883; color:#ffffff;', formatTableName)
           generateDtype(formatTableName, fields)
           generateEntity(formatTableName, fields)
 

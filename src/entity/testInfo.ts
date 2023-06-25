@@ -16,7 +16,6 @@ export class TestInfo implements TestInfo_DTYPE {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 30,
   }
 
   text: string_DTYPE = {
@@ -24,7 +23,6 @@ export class TestInfo implements TestInfo_DTYPE {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 50,
   }
 }
 export class TestInfoVo implements Partial<TestInfo_DTYPE> {
@@ -40,7 +38,6 @@ export class TestInfoVo implements Partial<TestInfo_DTYPE> {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 30,
   }
 
   text: string_DTYPE = {
@@ -48,7 +45,6 @@ export class TestInfoVo implements Partial<TestInfo_DTYPE> {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 50,
   }
 }
 export const testInfoTable = tableFactory<TestInfo>(TestInfo)

@@ -8,15 +8,15 @@ export class ComposeTable<T> {
   private tableKeyListBak: Array<keyof T>
   // sql语句
   private sql: string
+  // 主键key
+  private primaryKey: string
 
-  constructor(tableName: string, keyList: Array<keyof T> = [], omitKey?: keyof T | Array<keyof T>) {
+  constructor(tableName: string, keyList: Array<keyof T> = [], primaryKey?: string) {
     this.tableName = tableName
     this.tableKeyList = keyList
     this.tableKeyListBak = keyList
     this.sql = ''
-
-    // 初始化并筛选
-    if (omitKey) this.tableKeyList = this.omitKey(omitKey).tableKeyList
+    this.primaryKey = primaryKey || 'id'
   }
 
   // 获取表名
@@ -83,7 +83,7 @@ export class ComposeTable<T> {
 
   // 统计
   count(where = '', ID?: string) {
-    this.sql += `SELECT count(${ID || 'id'}) as count FROM ${this.tableName} ${where};`
+    this.sql += `SELECT count(${ID || this.primaryKey}) as count FROM ${this.tableName} ${where};`
     return this
   }
 
@@ -91,7 +91,7 @@ export class ComposeTable<T> {
 
   // 新增一条记录
   crudInsert(ID?: string) {
-    return this.omitKey((ID || 'id') as keyof T, this.tableKeyList.length === 0 ? this.tableKeyListBak : this.tableKeyList).insert()
+    return this.omitKey((ID || this.primaryKey) as keyof T, this.tableKeyList.length === 0 ? this.tableKeyListBak : this.tableKeyList).insert()
   }
 
   // 查询所有
@@ -101,17 +101,17 @@ export class ComposeTable<T> {
 
   // 根据ID查询
   curdSelectById(ID?: string) {
-    return this.select(`where ${ID || 'id'} = ?`)
+    return this.select(`where ${ID || this.primaryKey} = ?`)
   }
 
   // 根据ID更新
   curdUpdateById(ID?: string) {
-    return this.omitKey((ID || 'id') as keyof T, this.tableKeyList.length === 0 ? this.tableKeyListBak : this.tableKeyList).update(`where ${ID || 'id'} = ?`)
+    return this.omitKey((ID || this.primaryKey) as keyof T, this.tableKeyList.length === 0 ? this.tableKeyListBak : this.tableKeyList).update(`where ${ID || this.primaryKey} = ?`)
   }
 
   // 根据ID删除
   curdDeleteById(ID?: string) {
-    return this.delete(`where ${ID || 'id'} = ?`)
+    return this.delete(`where ${ID || this.primaryKey} = ?`)
   }
 
   // 查询分页
@@ -136,10 +136,24 @@ export class ComposeTable<T> {
     return this
   }
 
-  // 根据对象键值排序返回对应值格式 { b: 2, a: 1 } -> { a: 1, b: 2 } -> [1, 2]
-  getValues(targetValue: object) {
-    const keys = Object.keys(targetValue).sort()
-    return keys.map((key) => targetValue[key])
+  // 生成curd基本sql
+  getCurdAllSql() {
+    const findAll = this.crudSelectAll().getSql()
+    const findOne = this.curdSelectById().getSql()
+    const save = this.crudInsert().getSql()
+    const deleted = this.curdDeleteById().getSql()
+    const update = this.curdUpdateById().getSql()
+    const count = this.count().getSql()
+
+    return {
+      findAll,
+      findOne,
+      save,
+      add: save,
+      delete: deleted,
+      update,
+      count,
+    }
   }
 
   // --------------------私有函数

@@ -31,7 +31,12 @@ export type arrayRouter_DTYPE = {
   // api /v1 /v2 版本设定
   version?: string
   // schema配置
-  schema?: Partial<Record<keyof FastifySchema, JSONSchema>> & Partial<swagger_DTYPE>
+  schema?: {
+    body?: JSONSchema | object
+    params?: JSONSchema | object
+    headers?: JSONSchema | object
+    querystring?: JSONSchema | object
+  }
   handler: RouteHandlerMethod
   onRequest?: onRequestHookHandler // onRequest是在请求生命周期中执行的第一个钩子。上一个钩子没有，下一个钩子将进行预解析。注意：在onRequest钩子中，request.body将始终为null，因为body解析发生在preHandler钩子之前。
   preParsing?: preParsingHookHandler // 预解析是请求生命周期中要执行的第二个钩子。上一个钩子是onRequest，下一个钩子将是preValidation。注意：在preParsing钩子中，request.body将始终为null，因为body解析发生在preHandler钩子之前。
@@ -44,9 +49,12 @@ export type arrayRouter_DTYPE = {
 }
 
 export type firstRouter_DTYPE = {
+  // 是代理
   isProxy: boolean
   // swagger配置
   swagger?: swagger_DTYPE
+  // 路由前缀
+  prefix?: string
 } & Omit<arrayRouter_DTYPE, 'url' | 'method' | 'swagger' | 'handler'>
 
 export type router_DTYPE = [

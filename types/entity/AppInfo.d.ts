@@ -2,9 +2,17 @@ import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTY
 
 export interface AppInfo_DTYPE {
   id: integer_DTYPE
-  linkurl?: string_DTYPE
-  os?: integer_DTYPE
-  ostext?: string_DTYPE
   text?: string_DTYPE
   version?: integer_DTYPE
+  os?: integer_DTYPE
+  ostext?: string_DTYPE
+  linkurl?: string_DTYPE
+}
+export interface AppInfoTarget_DTYPE {
+  id: number
+  text: string
+  version: number
+  os: number
+  ostext: string
+  linkurl: string
 }

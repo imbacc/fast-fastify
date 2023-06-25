@@ -11,12 +11,19 @@ export class AppInfo implements AppInfo_DTYPE {
     maximum: 9999999999,
   }
 
-  linkurl: string_DTYPE = {
+  text: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 300,
+  }
+
+  version: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    required: true,
+    minimum: 1,
+    maximum: 9999999999,
   }
 
   os: integer_DTYPE = {
@@ -32,23 +39,13 @@ export class AppInfo implements AppInfo_DTYPE {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 6,
   }
 
-  text: string_DTYPE = {
+  linkurl: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 200,
-  }
-
-  version: integer_DTYPE = {
-    desc: '',
-    type: 'integer',
-    required: true,
-    minimum: 1,
-    maximum: 9999999999,
   }
 }
 export class AppInfoVo implements Partial<AppInfo_DTYPE> {
@@ -59,12 +56,19 @@ export class AppInfoVo implements Partial<AppInfo_DTYPE> {
     maximum: 9999999999,
   }
 
-  linkurl: string_DTYPE = {
+  text: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 300,
+  }
+
+  version: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    required: true,
+    minimum: 1,
+    maximum: 9999999999,
   }
 
   os: integer_DTYPE = {
@@ -80,23 +84,13 @@ export class AppInfoVo implements Partial<AppInfo_DTYPE> {
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 6,
   }
 
-  text: string_DTYPE = {
+  linkurl: string_DTYPE = {
     desc: '',
     type: 'string',
     required: true,
     minLength: 1,
-    maxLength: 200,
-  }
-
-  version: integer_DTYPE = {
-    desc: '',
-    type: 'integer',
-    required: true,
-    minimum: 1,
-    maximum: 9999999999,
   }
 }
 export const appInfoTable = tableFactory<AppInfo>(AppInfo)

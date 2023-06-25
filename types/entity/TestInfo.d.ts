@@ -5,3 +5,8 @@ export interface TestInfo_DTYPE {
   name?: string_DTYPE
   text?: string_DTYPE
 }
+export interface TestInfoTarget_DTYPE {
+  id: number
+  name: string
+  text: string
+}

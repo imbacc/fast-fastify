@@ -100,8 +100,8 @@ export interface ${formatTableName}Target_DTYPE {
 ${types2}
 }
 `
-  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, content)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
+  fs.writeFileSync(`types/entity/_${lowercaseTableName}.d.ts`, content)
+  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/_${lowercaseTableName}.d.ts`)
 }
 
 // 实体的属性 和 vo
@@ -138,8 +138,8 @@ ${types}
 }
 export const ${lowercaseTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
 export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}, ${formatTableName}Vo>(${formatTableName}, ${formatTableName}Vo)`
-  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, content)
-  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
+  fs.writeFileSync(`src/entity/_${lowercaseTableName}.ts`, content)
+  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/_${lowercaseTableName}.ts`)
 }
 
 async function generateCreate() {

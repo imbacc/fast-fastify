@@ -161,7 +161,7 @@ function generateRouter(formatName) {
 
   `
   fs.writeFileSync(`src/router/modules/_${formatName}.ts`, content)
-  console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/router/modules/${formatName}.ts`)
+  console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/router/modules/_${formatName}.ts`)
 }
 
 async function generateCreate() {

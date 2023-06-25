@@ -1,67 +1,51 @@
-// CREATE TABLE `test_info` (
-//   `id` int(11) NOT NULL AUTO_INCREMENT,
-//   `name` varchar(30) DEFAULT NULL,
-//   `text` varchar(30) DEFAULT NULL,
-//   PRIMARY KEY (`id`)
-// ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-import type { attr_DTYPE, entity_DTYPE, testInfo_DTYPE } from '#/entity'
+import type { integer_DTYPE, string_DTYPE } from '#/compose/entity'
+import type { TestInfo_DTYPE } from '#/entity/testInfo'
 
-import entityFactory from '@/common/entityFactory'
+import { tableFactory, schemaFactory } from '@/compose/composeFactory'
 
-class test_info implements testInfo_DTYPE {
-  [key: string]: attr_DTYPE
-  id: attr_DTYPE = {
-    desc: '唯一ID',
-    type: 'number', // number 为数字最小数和最大数
-    n1: 1,
-    n2: 'max',
-    len: 11
+export class TestInfo implements TestInfo_DTYPE {
+  id: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    primaryKey: true,
+    maximum: 9999999999,
   }
 
-  name: attr_DTYPE = {
-    desc: '名称啊',
-    type: 'string', // string 为字符串最少长度和最大长度
-    n1: 1,
-    n2: 'max',
-    len: 30
-  }
-
-  text: attr_DTYPE = {
-    desc: '文本啊',
+  name: string_DTYPE = {
+    desc: '',
     type: 'string',
-    n1: 1,
-    n2: 'max',
-    len: 30
+    required: true,
+    minLength: 1,
   }
 
-  vo: vo | any
-}
-
-class vo implements entity_DTYPE {
-  [key: string]: attr_DTYPE
-  qqq: attr_DTYPE = {
-    desc: '搜索用的关键字',
+  text: string_DTYPE = {
+    desc: '',
     type: 'string',
-    n1: 1,
-    n2: 'max',
-    len: 20
-  }
-
-  qwe: attr_DTYPE = {
-    desc: 'qwe',
-    type: 'string',
-    n1: 1,
-    n2: 'max',
-    len: 3
-  }
-
-  www: attr_DTYPE = {
-    desc: 'www',
-    type: 'string',
-    n1: 3,
-    n2: 'max',
-    len: 3
+    required: true,
+    minLength: 1,
   }
 }
+export class TestInfoVo implements Partial<TestInfo_DTYPE> {
+  id: integer_DTYPE = {
+    desc: '',
+    type: 'integer',
+    primaryKey: true,
+    maximum: 9999999999,
+  }
 
-export default entityFactory(test_info, vo)
+  name: string_DTYPE = {
+    desc: '',
+    type: 'string',
+    required: true,
+    minLength: 1,
+  }
+
+  text: string_DTYPE = {
+    desc: '',
+    type: 'string',
+    required: true,
+    minLength: 1,
+  }
+}
+export const testInfoTable = tableFactory<TestInfo>(TestInfo)
+export const testInfoSchema = schemaFactory<TestInfo, TestInfoVo>(TestInfo, TestInfoVo)

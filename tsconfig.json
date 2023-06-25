@@ -19,17 +19,19 @@
     "incremental": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "skipLibCheck": false,
-    "rootDir": "src",
     "outDir": "dist",
-    "types": ["node"],
-    "typeRoots": ["src/types", "node", "fastify", "node_modules/@types"],
+    "typeRoots": ["./types/*.ts", "node", "fastify"],
     "paths": {
-      "@/*": ["src/*"],
-      "#/*": ["src/types/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "#/*": [
+        "./types/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/**/*.js"],
   "exclude": ["node_modules", "dist", "tests", ".history"]
 }

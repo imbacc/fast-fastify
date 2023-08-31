@@ -1,11 +1,12 @@
 import { fastify, logger } from '@/effect'
 import { listenConfig } from '@/config'
 
-import '@/test/test1'
 import intercept from '@/common/intercept'
 import throws from '@/common/throw'
 import plugin from '@/common/plugin'
 import router from '@/router/index'
+
+import '@/test/test1'
 
 async function startServer() {
   intercept() // 注册拦截器

@@ -1,19 +1,16 @@
 import type { router_DTYPE } from '#/router/modules'
 
-import { mysql } from '@/effect/index'
-import { testInfoTable, testInfoSchema } from '@/entity/testInfo'
-
-const testInfoTableCurdSql = testInfoTable.getCurdAllSql()
+import { testDtypeSchema } from '@/entity/testDtype'
 
 export default () => {
   const list: router_DTYPE = [
     {
       // 全局代理操作对象
       isProxy: true,
-      prefix: '/testInfo',
+      prefix: '/testDtype',
       limit: [10, 5], // 10秒/5次 访问限制
       swagger: {
-        tags: ['testInfo'],
+        tags: ['testDtype'],
       },
     },
     {
@@ -24,8 +21,7 @@ export default () => {
         description: '查询所有数据description!',
       },
       handler: async (_reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.findAll)
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -36,11 +32,10 @@ export default () => {
         description: '根据ID查询单个数据description!',
       },
       schema: {
-        querystring: testInfoSchema.pickSchema('id'),
+        querystring: testDtypeSchema.pickSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.findOne, mysql.getValues(reque.query))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -52,11 +47,10 @@ export default () => {
         description: '新增一条数据description!',
       },
       schema: {
-        body: testInfoSchema.omitSchema('id'),
+        body: testDtypeSchema.omitSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.save, mysql.getValues(reque.body))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -68,11 +62,10 @@ export default () => {
         description: '删除一条数据description!',
       },
       schema: {
-        body: testInfoSchema.pickSchema('id'),
+        body: testDtypeSchema.pickSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.delete, mysql.getValues(reque.body))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -84,11 +77,10 @@ export default () => {
         description: '更新一条数据description!',
       },
       schema: {
-        body: testInfoSchema.getSchema(),
+        body: testDtypeSchema.getSchema(),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.update, mysql.getValues(reque.body, ['id']))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -99,8 +91,7 @@ export default () => {
         description: '统计数据description!',
       },
       handler: async (_reque, reply) => {
-        const res = await mysql.call(testInfoTableCurdSql.count)
-        reply.send(res)
+        reply.send('res')
       },
     },
     {

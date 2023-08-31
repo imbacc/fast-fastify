@@ -22,6 +22,7 @@ import type {
 } from '#/config'
 
 import md5 from 'imba-md5'
+import process from 'node:process'
 
 const env = process.env.NODE_ENV || 'dev'
 

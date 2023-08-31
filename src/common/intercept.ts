@@ -1,10 +1,11 @@
 import type { APICode } from '@/common/resultful'
+import type { FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify'
 
 import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect'
 import { resultful } from '@/common/resultful' // 返回数据构造
 import md5 from 'imba-md5'
 
-function checkCode(onlyid: string, reply, code: keyof APICode, httpCode: number, next) {
+function checkCode(onlyid: string, reply, code: keyof APICode, httpCode: number, next: HookHandlerDoneFunction) {
   logger.info(`intercept state = ${{ onlyid, code }},`)
   if (!(code === 'SUCCESS')) {
     reply.code(httpCode).send(resultful(code))
@@ -14,7 +15,7 @@ function checkCode(onlyid: string, reply, code: keyof APICode, httpCode: number,
 }
 
 // 检测JWT令牌
-function checkJwt(onlyid: string, reque, reply, next: Function) {
+function checkJwt(onlyid: string, reque: FastifyRequest, reply: FastifyReply, next: HookHandlerDoneFunction) {
   reque.jwtVerify((err) => {
     // 没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
     let code: keyof APICode = 'WHEREIS_CRACK'

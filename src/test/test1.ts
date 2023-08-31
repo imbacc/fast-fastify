@@ -1,39 +1,8 @@
 import type { number_DTYPE, string_DTYPE } from '#/compose/entity'
 
-import { testDtypeSchema, testDtypeTable } from '@/entity/testDtype'
+import { testDtypeSchema } from '@/entity/testDtype'
 
-class TestService {
-  // 基本curd
-  getCurdSql() {
-    const add = testDtypeTable.crudInsert().getSql()
-    const deleted = testDtypeTable.curdDeleteById().getSql()
-    const update = testDtypeTable.curdUpdateById().getSql()
-    const select1 = testDtypeTable.curdSelectById().getSql()
-    const select2 = testDtypeTable.curdSelectByPage().getSql()
-    const select3 = testDtypeTable.crudSelectAll().getSql()
-    return { add, deleted, update, select1, select2, select3 }
-  }
-
-  // 追加字段
-  getAppendKeySql() {
-    return testDtypeTable.appendKey('append').select('id = 1').getSql()
-  }
-
-  // 根据自定义sql并且串根据id更新的sql
-  getSetSql() {
-    return testDtypeTable.setSql('SELECT id,name,text FROM test_info').curdUpdateById().getSql()
-  }
-
-  // 排除id查询全部
-  getOmitKeySql() {
-    return testDtypeTable.omitKey('id').crudSelectAll().getSql()
-  }
-
-  // 只显示data字段查询全部
-  getPickKeySql() {
-    return testDtypeTable.pickKey('date').crudSelectAll().getSql()
-  }
-
+export class TestService {
   // 基本schema
   getSchema() {
     // 实体VO合并生成
@@ -112,10 +81,4 @@ class TestService {
 }
 
 const testService = new TestService()
-
-console.log('%c [ testService.getCurdSql() ]-8', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getCurdSql())
-console.log('%c [ testService.getAppendKeySql() ]-9', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getAppendKeySql())
-console.log('%c [ testService.getSetSql() ]-10', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getSetSql())
-console.log('%c [ testService.getOmitKeySql() ]-11', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getOmitKeySql())
-console.log('%c [ testService.getPickKeySql() ]-12', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getPickKeySql())
 console.log('%c [ testService.getSchema() ]-13', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getSchema())

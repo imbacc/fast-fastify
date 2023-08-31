@@ -1,7 +1,7 @@
 import type { integer_DTYPE, number_DTYPE, string_DTYPE } from '#/compose/entity'
 import type { TestDtype_DTYPE } from '#/entity/testDtype'
 
-import { tableFactory, schemaFactory } from '@/compose/composeFactory'
+import { schemaFactory } from '@/compose/composeFactory'
 
 export class TestDtype implements TestDtype_DTYPE {
   id: integer_DTYPE = {
@@ -78,5 +78,4 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
     minLength: 1,
   }
 }
-export const testDtypeTable = tableFactory<TestDtype>(TestDtype)
 export const testDtypeSchema = schemaFactory<TestDtype, TestDtypeVo>(TestDtype, TestDtypeVo)

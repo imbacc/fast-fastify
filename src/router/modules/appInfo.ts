@@ -1,9 +1,6 @@
 import type { router_DTYPE } from '#/router/modules'
 
-import { mysql } from '@/effect/index'
-import { appInfoTable, appInfoSchema } from '@/entity/appInfo'
-
-const appInfoTableCurdSql = appInfoTable.getCurdAllSql()
+import { appInfoSchema } from '@/entity/appInfo'
 
 export default () => {
   const list: router_DTYPE = [
@@ -25,8 +22,7 @@ export default () => {
         description: '查询所有数据description!',
       },
       handler: async (_reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.findAll)
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -40,8 +36,7 @@ export default () => {
         querystring: appInfoSchema.pickSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.findOne, mysql.getValues(reque.query))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -56,8 +51,7 @@ export default () => {
         body: appInfoSchema.omitSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.save, mysql.getValues(reque.body))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -72,8 +66,7 @@ export default () => {
         body: appInfoSchema.pickSchema('id'),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.delete, mysql.getValues(reque.body))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -88,8 +81,7 @@ export default () => {
         body: appInfoSchema.getSchema(),
       },
       handler: async (reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.update, mysql.getValues(reque.body, ['id']))
-        reply.send(res)
+        reply.send('res')
       },
     },
     {
@@ -100,8 +92,7 @@ export default () => {
         description: '统计数据description!',
       },
       handler: async (_reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.count)
-        reply.send(res)
+        reply.send('res')
       },
     },
     {

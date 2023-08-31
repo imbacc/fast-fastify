@@ -7,7 +7,9 @@
 
 import md5 from 'imba-md5'
 import { apiLimitConfig, isDev } from '@/config'
-import { redis } from '@/effect'
+import { Redis } from '@/db/redis'
+
+const redis = new Redis()
 
 const { open: _open, time: _time, count: _count } = apiLimitConfig
 
@@ -25,7 +27,7 @@ export class ApiLimitRedis {
    */
   async apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
     // false为关闭限流
-    if (!_open) return await true
+    if (!_open) return true
 
     const key = isDev ? `${spname}_${spid}` : md5(`${spname}_${spid}`)
     const keyTime = `apit_${key}`
@@ -38,8 +40,8 @@ export class ApiLimitRedis {
       count = cfgCount
     }
 
-    const apiTime: number = await this.getCache(keyTime) || 0 // 获取 访问API时间间隔
-    const apiCount: number = await this.getCache(keyNum) || 0 // 获取 访问API次数间隔的时间
+    const apiTime: number = await this.getCache(keyTime) // 获取 访问API时间间隔
+    const apiCount: number = await this.getCache(keyNum) // 获取 访问API次数间隔的时间
     const dateTime = new Date().getTime()
 
     if (apiTime && apiCount) {
@@ -49,19 +51,19 @@ export class ApiLimitRedis {
       if (second < time) {
         // Api次数限制
         const add = apiCount + 1
-        if (add > count) return await false
+        if (add > count) return false
         this.setCache(keyNum, add)
-        return await true
+        return true
       }
     }
 
     this.setCache(keyTime, dateTime)
     this.setCache(keyNum, 1)
-    return await true
+    return true
   }
 
-  private getCache<T = any>(key: string) {
-    return redis.getRedis<T>(key)
+  private async getCache<T = any>(key: string) {
+    return await redis.getRedis<T>(key) || 0
   }
 
   private setCache(key: string, val) {

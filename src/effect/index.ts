@@ -1,5 +1,6 @@
-import fastifyFrame from 'fastify'
+import type { PinoLoggerOptions } from 'fastify/types/logger'
 
+import fastifyFrame from 'fastify'
 import { isDev } from '@/config/index'
 import { ApiLimitMemory } from './apiLimitMemory'
 import { ApiLimitRedis } from './apiLimitRedis'
@@ -10,7 +11,7 @@ import { Logger } from './fastifyLog'
 import { Redis } from '@/db/redis'
 import { MysqlExecute } from '@/db/mysql'
 
-const loggerConfig = {
+const loggerConfig: PinoLoggerOptions = {
   transport: {
     target: 'pino-pretty',
     options: {
@@ -19,6 +20,7 @@ const loggerConfig = {
       ignore: 'pid',
     },
   },
+  timestamp: () => `,"time":"T${new Date().toLocaleString('zh', { hour12: false, month: '2-digit', day: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'Asia/Shanghai' })}"`,
 }
 
 // fastify实例对象

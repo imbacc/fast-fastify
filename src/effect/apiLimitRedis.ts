@@ -6,8 +6,8 @@
  */
 
 import md5 from 'imba-md5'
-import { apiLimitConfig, isDev } from '@/config'
-import { redis } from '@/effect'
+import { apiLimitConfig, isDev } from '@/config/index'
+import { redis } from '@/effect/index'
 
 const { open: _open, time: _time, count: _count } = apiLimitConfig
 

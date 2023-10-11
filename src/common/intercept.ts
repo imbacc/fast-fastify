@@ -1,6 +1,6 @@
 import type { APICode } from '@/common/resultful'
 
-import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect'
+import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect/index'
 import { resultful } from '@/common/resultful' // 返回数据构造
 import md5 from 'imba-md5'
 

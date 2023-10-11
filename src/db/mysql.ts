@@ -1,11 +1,10 @@
 import type { APIResultful_DTYPE } from '#/common/resultful'
 import type { APICode } from '@/common/resultful'
 
-import { resultful } from '@/common/resultful'
 import mysqlDrive from 'mysql'
-import { isDev, mysqlConfig } from '@/config'
-
-import { logger } from '@/effect'
+import { resultful } from '@/common/resultful'
+import { isDev, mysqlConfig } from '@/config/index'
+import { logger } from '@/effect/index'
 
 // 执行SQL事务封装
 export class MysqlExecute {

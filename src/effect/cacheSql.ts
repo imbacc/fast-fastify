@@ -1,5 +1,5 @@
 import md5 from 'imba-md5'
-import { redis, mysql } from '@/effect'
+import { redis, mysql } from '@/effect/index'
 
 export class CacheSql {
   async cache(sql: string, val: any[], time = 60 * 60) {

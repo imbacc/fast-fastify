@@ -1,5 +1,5 @@
-import { fastify } from '../effect'
-import { jwtKeyConfig } from '../config'
+import { fastify } from '@/effect/index'
+import { jwtKeyConfig } from '@/config/index'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import swagger from '@/plugins/swagger'

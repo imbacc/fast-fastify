@@ -1,5 +1,5 @@
-import { redisConfig } from '@/config'
-import { logger } from '@/effect'
+import { redisConfig } from '@/config/index'
+import { logger } from '@/effect/index'
 import { createClient } from 'redis'
 
 export class Redis {

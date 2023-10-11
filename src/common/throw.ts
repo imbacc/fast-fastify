@@ -1,4 +1,4 @@
-import { fastify, logger } from '../effect'
+import { fastify, logger } from '@/effect/index'
 
 export default () => {
   logger.start('use throw error!')

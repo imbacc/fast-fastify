@@ -5,7 +5,7 @@
  * count 为次数   默认 30秒/15次
  */
 
-import { apiLimitConfig, isDev } from '@/config'
+import { apiLimitConfig, isDev } from '@/config/index'
 import md5 from 'imba-md5'
 
 const { open: _open, time: _time, count: _count } = apiLimitConfig

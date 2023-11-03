@@ -1,6 +1,5 @@
 import fs from 'node:fs'
-
-// import path from 'node:path'
+import process from 'node:process'
 import mysql from 'mysql'
 import { mysqlConfig } from '../src/config/index'
 

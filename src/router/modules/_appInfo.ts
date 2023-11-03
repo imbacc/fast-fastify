@@ -1,7 +1,7 @@
 import type { router_DTYPE } from '#/router/modules'
 
 import { mysql } from '@/effect/index'
-import { appInfoTable, appInfoSchema } from '@/entity/appInfo'
+import { appInfoTable, appInfoSchema } from '@/entity/AppInfo'
 
 const appInfoTableCurdSql = appInfoTable.getCurdAllSql()
 

@@ -28,7 +28,8 @@ export const fastify = fastifyFrame({
   // 30: 'info',
   // 40: 'warn',
   // 50: 'error',
-  logger: isDev ? loggerConfig : {},
+  // logger: isDev ? loggerConfig : {},
+  logger: true,
   bodyLimit: 524288,
   requestTimeout: 120,
 })

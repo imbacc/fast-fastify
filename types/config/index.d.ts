@@ -74,3 +74,13 @@ export interface swagger_DTYPE extends CONFIG_DTYPE<any> {
   dev: swagger_CONFIG
   prod: Partial<Omit<swagger_CONFIG, 'use'>> & Pick<swagger_CONFIG, 'use'>
 }
+
+
+// alioss
+export interface aliOss_CONFIG {
+  region: string
+  accessKeyId: string
+  accessKeySecret: string
+  bucket: string
+}
+export type aliOss_DTYPE = CONFIG_DTYPE<aliOss_CONFIG>

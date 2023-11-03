@@ -2,32 +2,6 @@ import type { APICode } from '@/common/resultful'
 
 import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect/index'
 import { resultful } from '@/common/resultful' // 返回数据构造
-import md5 from 'imba-md5'
-
-function checkCode(onlyid: string, reply, code: keyof APICode, httpCode: number, next) {
-  logger.info(`intercept state = ${{ onlyid, code }},`)
-  if (!(code === 'SUCCESS')) {
-    reply.code(httpCode).send(resultful(code))
-    return
-  }
-  next()
-}
-
-// 检测JWT令牌
-function checkJwt(onlyid: string, reque, reply, next: Function) {
-  reque.jwtVerify((err) => {
-    // 没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
-    let code: keyof APICode = 'WHEREIS_CRACK'
-    let httpCode = 403
-    if (err) {
-      const bool = err.name === 'JsonWebTokenError'
-      code = bool ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
-      httpCode = bool ? 403 : 401
-    }
-    if (err === null) code = 'SUCCESS'
-    checkCode(onlyid, reply, code, httpCode, next)
-  })
-}
 
 const ICO = '/favicon.ico'
 // const H_KEY1 = 'Access-Control-Allow-Origin'
@@ -63,25 +37,46 @@ export default () => {
     const skipBool = skipRouter.checkSkip(urlRouter)
     const blurSkipBool = skipRouter.checkBlurSkip(urlRouter)
     if (skipBool || blurSkipBool) {
-      next()
+      apiLimitMemory.apiLimit(`${url}`, reque.ip).then((bool) => {
+        if (!bool) {
+          logger.info('server api limit!', { url, code: 403 })
+          reply.code(403).send(resultful('API_OUTTIME'))
+        } else {
+          next()
+        }
+      })
       return
     }
 
-    const { query, body, id, headers } = reque
-    if (!headers.authorization) {
+    if (!reque?.headers.authorization) {
       reply.code(401).send(resultful('UNMAKETOKEN_FAIL'))
-      return
     }
 
-    const onlyid = md5(headers.authorization || '')
-    logger.info('request intercept = ', { id, onlyid, url, query, body })
+    const { query, body, id, ip } = reque
+    logger.info('request intercept call = ', { id, ip, url, query, body })
 
-    apiLimitMemory.apiLimit(url as string, onlyid).then((bool) => {
+    apiLimitMemory.apiLimit(url as string, ip).then((bool) => {
       if (!bool) {
         logger.info('server api limit!', { url, code: 403 })
         reply.code(403).send(resultful('API_OUTTIME'))
       } else {
-        checkJwt(onlyid, reque, reply, next)
+        reque.jwtVerify((err) => {
+          // 没有携带令牌时 判断是否时授权路由=> 检测true为是授予令牌的接口 ,否则返回状态码 WHEREIS_CRACK
+          let code: keyof APICode = 'WHEREIS_CRACK'
+          let httpCode = 403
+          if (err) {
+            const bool = err.name === 'JsonWebTokenError'
+            code = bool ? 'UNMAKETOKEN_RUBBISH' : 'UNMAKETOKEN_FAIL'
+            httpCode = bool ? 403 : 401
+          }
+          if (err === null) code = 'SUCCESS'
+          logger.info('request intercept state = ', { ip, code })
+          if (!(code === 'SUCCESS')) {
+            reply.code(httpCode).send(resultful(code))
+            return
+          }
+          next()
+        })
       }
     })
   })

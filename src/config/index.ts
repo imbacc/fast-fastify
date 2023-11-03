@@ -127,22 +127,6 @@ const _swagger: swagger_DTYPE = {
   },
 }
 
-// alioss
-const _aliOss: aliOss_DTYPE = {
-  dev: {
-    region: 'xxxx',
-    accessKeyId: 'xxx',
-    accessKeySecret: 'xxxx',
-    bucket: 'xxx',
-  },
-  prod: {
-    region: 'xxxx',
-    accessKeyId: 'xxx',
-    accessKeySecret: 'xxxx',
-    bucket: 'xxx',
-  },
-}
-
 export const mysqlConfig = _mysql[env] as mysql_CONFIG
 export const redisConfig = _redis[env] as redis_CONFIG
 export const checkAuthConfig = _checkAuth[env] as checkAuth_CONFIG

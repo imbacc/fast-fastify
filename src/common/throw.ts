@@ -15,10 +15,10 @@ export default () => {
     if (error.validation) {
       const msg = Array.from(error.validation, ({ message }) => message).join(',')
       const str = `validation failed of the ${error.validationContext}! ${msg}`
-      logger.info(`verify = ${str}`)
+      logger.error(`verify = ${str}`)
       reply.status(400).send(str)
     } else {
-      logger.info(`error = ${error}`)
+      logger.error(`error = ${error}`)
       reply.status(400).send(error)
     }
   })

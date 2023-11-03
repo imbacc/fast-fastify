@@ -1,6 +1,5 @@
 import fs from 'node:fs'
-
-// import path from 'node:path'
+import process from 'node:process'
 import mysql from 'mysql'
 import { mysqlConfig } from '../src/config/index'
 
@@ -37,7 +36,7 @@ const typeTodtype = {
   datetime: 'string_DTYPE',
   timestamp: 'string_DTYPE',
   boolean: 'integer_DTYPE',
-  json: 'object_DTYPE',
+  json: 'string_DTYPE',
 }
 
 const tsType = {

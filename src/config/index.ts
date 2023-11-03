@@ -19,8 +19,12 @@ import type {
   // swagger
   swagger_CONFIG,
   swagger_DTYPE,
+  // alioss
+  aliOss_CONFIG,
+  aliOss_DTYPE,
 } from '#/config'
 
+import process from 'node:process'
 import md5 from 'imba-md5'
 
 const env = process.env.NODE_ENV || 'dev'
@@ -123,6 +127,22 @@ const _swagger: swagger_DTYPE = {
   },
 }
 
+// alioss
+const _aliOss: aliOss_DTYPE = {
+  dev: {
+    region: 'oss-cn-wuhan',
+    accessKeyId: 'LTAI5tLDf3EHF68p5chqHMZB',
+    accessKeySecret: 'IAMfxojxkGN4mD3QBOhq3zj4EeiNhh',
+    bucket: 'imba-poe-web',
+  },
+  prod: {
+    region: 'oss-cn-wuhan',
+    accessKeyId: 'LTAI5tLDf3EHF68p5chqHMZB',
+    accessKeySecret: 'IAMfxojxkGN4mD3QBOhq3zj4EeiNhh',
+    bucket: 'imba-poe-web',
+  },
+}
+
 export const mysqlConfig = _mysql[env] as mysql_CONFIG
 export const redisConfig = _redis[env] as redis_CONFIG
 export const checkAuthConfig = _checkAuth[env] as checkAuth_CONFIG
@@ -131,3 +151,4 @@ export const apiLimitConfig = _apiLimit[env] as apiLimit_CONFIG
 export const listenConfig = _listen[env] as listen_CONFIG
 export const swaggerConfig = _swagger[env] as swagger_CONFIG
 export const isDev = Boolean(env === 'dev')
+export const aliOssConfig = _aliOss[env] as aliOss_CONFIG

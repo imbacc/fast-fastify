@@ -33,9 +33,9 @@ export type arrayRouter_DTYPE = {
   // schema配置
   schema?: {
     body?: JSONSchema | object
+    querystring?: JSONSchema | object
     params?: JSONSchema | object
     headers?: JSONSchema | object
-    querystring?: JSONSchema | object
   }
   handler: RouteHandlerMethod
   onRequest?: onRequestHookHandler // onRequest是在请求生命周期中执行的第一个钩子。上一个钩子没有，下一个钩子将进行预解析。注意：在onRequest钩子中，request.body将始终为null，因为body解析发生在preHandler钩子之前。

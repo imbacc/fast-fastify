@@ -130,16 +130,16 @@ const _swagger: swagger_DTYPE = {
 // alioss
 const _aliOss: aliOss_DTYPE = {
   dev: {
-    region: 'oss-cn-wuhan',
-    accessKeyId: 'LTAI5tLDf3EHF68p5chqHMZB',
-    accessKeySecret: 'IAMfxojxkGN4mD3QBOhq3zj4EeiNhh',
-    bucket: 'imba-poe-web',
+    region: 'xxxx',
+    accessKeyId: 'xxx',
+    accessKeySecret: 'xxxx',
+    bucket: 'xxx',
   },
   prod: {
-    region: 'oss-cn-wuhan',
-    accessKeyId: 'LTAI5tLDf3EHF68p5chqHMZB',
-    accessKeySecret: 'IAMfxojxkGN4mD3QBOhq3zj4EeiNhh',
-    bucket: 'imba-poe-web',
+    region: 'xxxx',
+    accessKeyId: 'xxx',
+    accessKeySecret: 'xxxx',
+    bucket: 'xxx',
   },
 }
 

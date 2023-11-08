@@ -5,12 +5,18 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fastify/cors':
+    specifier: ^8.4.1
+    version: 8.4.1
   '@fastify/jwt':
     specifier: ^7.2.2
     version: 7.2.2
   '@fastify/multipart':
     specifier: ^8.0.0
     version: 8.0.0
+  '@fastify/schedule':
+    specifier: ^4.1.1
+    version: 4.1.1(fastify@4.24.3)(toad-scheduler@3.0.0)
   '@fastify/swagger':
     specifier: ^8.12.0
     version: 8.12.0
@@ -47,6 +53,9 @@ dependencies:
   redis:
     specifier: ^4.6.10
     version: 4.6.10
+  toad-scheduler:
+    specifier: ^3.0.0
+    version: 3.0.0
 
 devDependencies:
   '@antfu/eslint-config':
@@ -55,9 +64,6 @@ devDependencies:
   '@commitlint/config-conventional':
     specifier: ^18.1.0
     version: 18.1.0
-  '@fastify/cors':
-    specifier: ^8.4.1
-    version: 8.4.1
   '@fastify/type-provider-json-schema-to-ts':
     specifier: ^2.2.2
     version: 2.2.2(fastify@4.24.3)(json-schema-to-ts@2.9.2)
@@ -82,6 +88,9 @@ devDependencies:
   cz-customizable:
     specifier: ^7.0.0
     version: 7.0.0
+  dotenv:
+    specifier: ^16.3.1
+    version: 16.3.1
   eslint:
     specifier: ^8.52.0
     version: 8.52.0
@@ -489,7 +498,7 @@ packages:
     dependencies:
       fastify-plugin: 4.5.0
       mnemonist: 0.39.5
-    dev: true
+    dev: false
 
   /@fastify/deepmerge@1.3.0:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
@@ -531,6 +540,17 @@ packages:
       - supports-color
     dev: false
 
+  /@fastify/schedule@4.1.1(fastify@4.24.3)(toad-scheduler@3.0.0):
+    resolution: {integrity: sha512-riIh+eumfpoDDpNqMqzHdzYofWVhaHJYxH69OMQyVzGUJikF5luvr4LMx/uxedE1VJfmHJCUjBuMVcPLB7KsZg==}
+    peerDependencies:
+      fastify: ^4.0.0
+      toad-scheduler: '>= 2.0.0 < 4'
+    dependencies:
+      fastify: 4.24.3
+      fastify-plugin: 4.5.0
+      toad-scheduler: 3.0.0
+    dev: false
+
   /@fastify/send@2.1.0:
     resolution: {integrity: sha512-yNYiY6sDkexoJR0D8IDy3aRP3+L4wdqCpvx5WP+VtEU58sn7USmKynBzDQex5X42Zzvw2gNzzYgP90UfWShLFA==}
     dependencies:
@@ -541,8 +561,8 @@ packages:
       mime: 3.0.0
     dev: false
 
-  /@fastify/static@6.10.2:
-    resolution: {integrity: sha512-UoaMvIHSBLCZBYOVZwFRYqX2ufUhd7FFMYGDeSf0Z+D8jhYtwljjmuQGuanUP8kS4y/ZEV1a8mfLha3zNwsnnQ==}
+  /@fastify/static@6.12.0:
+    resolution: {integrity: sha512-KK1B84E6QD/FcQWxDI2aiUCwHxMJBI1KeCUzm1BwYpPY1b742+jeKruGHP2uOluuM6OkBPI8CIANrXcCRtC2oQ==}
     dependencies:
       '@fastify/accept-negotiator': 1.1.0
       '@fastify/send': 2.1.0
@@ -550,13 +570,12 @@ packages:
       fastify-plugin: 4.5.0
       glob: 8.1.0
       p-limit: 3.1.0
-      readable-stream: 4.4.0
     dev: false
 
   /@fastify/swagger-ui@1.10.1:
     resolution: {integrity: sha512-u3EJqNKvVr3X+6jY5i6pbs6/tXCrSlqc2Y+PVjnHBTOGh/d36uHMz+z4jPFy9gie2my6iHUrAdM8itlVmoUjog==}
     dependencies:
-      '@fastify/static': 6.10.2
+      '@fastify/static': 6.12.0
       fastify-plugin: 4.5.0
       openapi-types: 12.1.3
       rfdc: 1.3.0
@@ -2139,6 +2158,11 @@ packages:
       is-obj: 2.0.0
     dev: true
 
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
+    dev: true
+
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
@@ -2834,6 +2858,7 @@ packages:
 
   /fastify-plugin@4.5.0:
     resolution: {integrity: sha512-79ak0JxddO0utAXAQ5ccKhvs6vX2MGyHHMMsmZkBANrq3hXc1CHzvNPHOcvTsVMEPl5I+NT+RO4YKMGehOfSIg==}
+    dev: false
 
   /fastify@4.24.3:
     resolution: {integrity: sha512-6HHJ+R2x2LS3y1PqxnwEIjOTZxFl+8h4kSC/TuDPXtA+v2JnV9yEtOsNSKK1RMD7sIR2y1ZsA4BEFaid/cK5pg==}
@@ -4185,6 +4210,7 @@ packages:
     resolution: {integrity: sha512-FPUtkhtJ0efmEFGpU14x7jGbTB+s18LrzRL2KgoWz9YvcY3cPomz8tih01GbHwnGk/OmkOKfqd/RAQoc8Lm7DQ==}
     dependencies:
       obliterator: 2.0.4
+    dev: false
 
   /module-alias@2.2.3:
     resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
@@ -4366,6 +4392,7 @@ packages:
 
   /obliterator@2.0.4:
     resolution: {integrity: sha512-lgHwxlxV1qIg1Eap7LgIeoBWIMFibOjbrYPIPJZcI1mmGAI2m3lNYpK12Y+GBdPQ0U1hRwSord7GIaawz962qQ==}
+    dev: false
 
   /on-exit-leak-free@2.1.0:
     resolution: {integrity: sha512-VuCaZZAjReZ3vUwgOB8LxAosIurDiAW0s13rI1YwmaP++jvcxP77AWoQvenZebpCA2m8WC1/EosPYPMjnRAp/w==}
@@ -5495,6 +5522,10 @@ packages:
   /toad-cache@3.3.0:
     resolution: {integrity: sha512-3oDzcogWGHZdkwrHyvJVpPjA7oNzY6ENOV3PsWJY9XYPZ6INo94Yd47s5may1U+nleBPwDhrRiTPMIvKaa3MQg==}
     engines: {node: '>=12'}
+
+  /toad-scheduler@3.0.0:
+    resolution: {integrity: sha512-BYmrORvaGmjziir/ra8qD3qAKczJveqK5ZOO/wn7oS5qLI4iibOza3DBGgu+EwNp9zdlBTKSeZPmxZxzGy1dxw==}
+    dev: false
 
   /toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}

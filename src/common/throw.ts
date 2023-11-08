@@ -1,16 +1,16 @@
 import { fastify, logger } from '@/effect/index'
 
 export default () => {
-  logger.start('use throw error!')
+  logger.start('use throw failed!')
 
-  // fastify.setNotFoundHandler((_request, reply) => {
+  // fastify.setNotFoundHandler((request, reply) => {
   //   reply.code(404).send({
   //     statusCode: 404,
   //     error: 'Bad Request',
   //   })
   // })
 
-  fastify.setErrorHandler((error, _request, reply) => {
+  fastify.setErrorHandler((error, request, reply) => {
     // error.validationContext 是 [body, params, querystring, headers] 之中的值
     if (error.validation) {
       const msg = Array.from(error.validation, ({ message }) => message).join(',')

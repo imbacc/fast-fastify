@@ -30,7 +30,7 @@ export class ApiLimitMemory {
    * @returns
    */
   apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
-    return new Promise((resolve) => {
+    return new Promise<boolean>((resolve) => {
       // false为关闭限流
       if (!_open) return resolve(true)
 

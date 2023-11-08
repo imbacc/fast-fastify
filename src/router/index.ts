@@ -49,7 +49,30 @@ export default async () => {
         module.schema = Object.assign(module.schema || {}, module.swagger)
         delete module.swagger
       }
+
+      interface IQuerystring {
+        username: string;
+        password: string;
+      }
+
+      interface IHeaders {
+        'h-Custom': string;
+      }
+
+      interface IReply {
+        200: { success: boolean };
+        302: { url: string };
+        '4xx': { error: string };
+      }
+      // if (module.method === 'GET') {
+      //   fastify.get<{
+      //     Querystring: IQuerystring,
+      //     Headers: IHeaders,
+      //     Reply: IReply
+      //   }>(module.url, module.handler)
+      // } else {
       fastify.route(module as RouteOptions)
+      // }
     })
   }) // 循环子模块路由配置 生产路由
 

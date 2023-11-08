@@ -8,8 +8,9 @@ import { SkipRouter } from './skipRouter'
 import { Base64 } from './base64'
 import { CacheSql } from './cacheSql'
 import { Logger } from './fastifyLog'
-import { Redis } from '@/db/redis'
-import { MysqlExecute } from '@/db/mysql'
+import { Redis } from './redis'
+import { MysqlExecute } from './mysql'
+import { Scheduler } from './schedule'
 
 const loggerConfig: PinoLoggerOptions = {
   transport: {
@@ -57,3 +58,6 @@ export const mysql = new MysqlExecute()
 
 // redis实例对象
 export const redis = new Redis()
+
+// scheduler实例对象
+export const scheduler = new Scheduler()

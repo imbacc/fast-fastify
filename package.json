@@ -37,8 +37,10 @@
   },
   "homepage": "https://github.com/imbacc/fast-fastify#readme",
   "dependencies": {
+    "@fastify/cors": "^8.4.1",
     "@fastify/jwt": "^7.2.2",
     "@fastify/multipart": "^8.0.0",
+    "@fastify/schedule": "^4.1.1",
     "@fastify/swagger": "^8.12.0",
     "@fastify/swagger-ui": "^1.10.1",
     "@prisma/client": "^5.5.2",
@@ -50,12 +52,12 @@
     "mysql": "^2.18.1",
     "pino-pretty": "^10.2.3",
     "prisma": "^5.5.2",
-    "redis": "^4.6.10"
+    "redis": "^4.6.10",
+    "toad-scheduler": "^3.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.5",
     "@commitlint/config-conventional": "^18.1.0",
-    "@fastify/cors": "^8.4.1",
     "@fastify/type-provider-json-schema-to-ts": "^2.2.2",
     "@types/module-alias": "^2.0.3",
     "@types/mysql": "^2.15.23",
@@ -64,6 +66,7 @@
     "commitlint": "^18.2.0",
     "cross-env": "^7.0.3",
     "cz-customizable": "^7.0.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.52.0",
     "husky": "^8.0.3",
     "imba-config": "^1.0.8",

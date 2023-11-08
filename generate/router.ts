@@ -42,7 +42,7 @@ function generateRouter(formatName) {
           summary: '查询所有数据',
           description: '查询所有数据description!',
         },
-        handler: async (_reque, reply) => {
+        handler: async (request, reply) => {
           const res = await mysql.call(${formatName}TableCurdSql.findAll)
           reply.send(res)
         },
@@ -117,7 +117,7 @@ function generateRouter(formatName) {
           summary: '统计数据',
           description: '统计数据description!',
         },
-        handler: async (_reque, reply) => {
+        handler: async (request, reply) => {
           const res = await mysql.call(${formatName}TableCurdSql.count)
           reply.send(res)
         },
@@ -126,30 +126,30 @@ function generateRouter(formatName) {
         url: '/xxx/:id',
         method: 'GET',
         limit: [10, 5],
-        handler: (_reque, reply) => {
+        handler: (request, reply) => {
           reply.send('xxx')
         },
         // 路由选项文档 https://www.w3cschool.cn/fastify/fastify-ko5l35zk.html
-        onRequest: (_reque, reply, done) => {
+        onRequest: (request, reply, done) => {
           // 箭头函数会破坏this实列对象
           // 开启浏览器缓存 Cache-control 3600秒
           reply.header('Cache-control', 'max-age=3600')
           reply.header('Last-Modified', new Date().toUTCString())
           done()
         },
-        onResponse(_reque, _reply, done) {
+        onResponse(request, reply, done) {
           // 该钩子总是在共享的 onResponse 钩子后被执行
           done()
         },
-        preValidation(_reque, _reply, done) {
+        preValidation(request, reply, done) {
           // 该钩子总是在共享的 preValidation 钩子后被执行
           done()
         },
-        preHandler(_reque, _reply, done) {
+        preHandler(request, reply, done) {
           // 该钩子总是在共享的 preHandler 钩子后被执行
           done()
         },
-        preSerialization: (_reque, _reply, payload, done) => {
+        preSerialization: (request, reply, payload, done) => {
           // 该钩子总是在共享的 preSerialization 钩子后被执行
           done(null, payload)
         },

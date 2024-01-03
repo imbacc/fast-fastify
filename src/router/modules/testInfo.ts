@@ -1,19 +1,32 @@
 import type { router_DTYPE } from '#/router/modules'
+import type { FastifyRequest } from 'fastify/types/request'
+import type { TestInfoTarget_DTYPE } from '#/entity/testInfo'
 
-import { mysql } from '@/effect/index'
-import { testDtypeTable, testDtypeSchema } from '@/entity/testDtype'
+import { logger, mysql, prisma } from '@/effect/index'
+import { testInfoTable, testInfoSchema } from '@/entity/testInfo'
+import { resultful } from '@/common/resultful'
 
-const testDtypeTableCurdSql = testDtypeTable.getCurdAllSql()
+const testInfoTableCurdSql = testInfoTable.getCurdAllSql()
+
+  type requestBody_DTYPE = FastifyRequest<{
+    Body: TestInfoTarget_DTYPE
+  }>
+  type requestQuery_DTYPE = FastifyRequest<{
+    Querystring: TestInfoTarget_DTYPE
+  }>
+  type requestParams_DTYPE = FastifyRequest<{
+    Params: TestInfoTarget_DTYPE
+  }>
 
 export default () => {
   const list: router_DTYPE = [
     {
       // 全局代理操作对象
       isProxy: true,
-      prefix: '/testDtype',
+      prefix: '/testInfo',
       limit: [10, 5], // 10秒/5次 访问限制
       swagger: {
-        tags: ['testDtype'],
+        tags: ['testInfo'],
       },
     },
     {
@@ -24,8 +37,11 @@ export default () => {
         description: '查询所有数据description!',
       },
       handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.findAll)
-        reply.send(res)
+        const res = await prisma.app_info.findMany()
+        reply.send(resultful('SUCCESS', res))
+
+        // const res = await mysql.call(testInfoTableCurdSql.findAll)
+        // reply.send(res)
       },
     },
     {
@@ -36,10 +52,10 @@ export default () => {
         description: '根据ID查询单个数据description!',
       },
       schema: {
-        querystring: testDtypeSchema.pickSchema('id'),
+        querystring: testInfoSchema.pickSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.findOne, mysql.getValues(reque.query))
+      handler: async (request: requestQuery_DTYPE, reply) => {
+        const res = await mysql.call(testInfoTableCurdSql.findOne, [request.query.id])
         reply.send(res)
       },
     },
@@ -52,10 +68,10 @@ export default () => {
         description: '新增一条数据description!',
       },
       schema: {
-        body: testDtypeSchema.omitSchema('id'),
+        body: testInfoSchema.omitSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.save, mysql.getValues(reque.body))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testInfoTableCurdSql.save, mysql.getValues(request.body))
         reply.send(res)
       },
     },
@@ -68,10 +84,10 @@ export default () => {
         description: '删除一条数据description!',
       },
       schema: {
-        body: testDtypeSchema.pickSchema('id'),
+        body: testInfoSchema.pickSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.delete, mysql.getValues(reque.body))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testInfoTableCurdSql.delete, mysql.getValues(request.body))
         reply.send(res)
       },
     },
@@ -84,10 +100,10 @@ export default () => {
         description: '更新一条数据description!',
       },
       schema: {
-        body: testDtypeSchema.getSchema(),
+        body: testInfoSchema.getSchema(),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.update, mysql.getValues(reque.body, ['id']))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testInfoTableCurdSql.update, mysql.getValues(request.body, ['id']))
         reply.send(res)
       },
     },
@@ -99,7 +115,7 @@ export default () => {
         description: '统计数据description!',
       },
       handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.count)
+        const res = await mysql.call(testInfoTableCurdSql.count)
         reply.send(res)
       },
     },

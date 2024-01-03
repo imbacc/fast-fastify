@@ -5,7 +5,7 @@ function convertCamelToSnake(name: string) {
   return name.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`).slice(1)
 }
 
-function ceonvertFactory<T>(Target) {
+export function convertFactory<T>(Target) {
   const ctx = new Target()
   const name = convertCamelToSnake(Target.name)
 
@@ -22,7 +22,7 @@ function ceonvertFactory<T>(Target) {
 }
 
 export function tableFactory<T>(Target): ComposeTable<T> {
-  const { name, keyList, primaryKey } = ceonvertFactory<T>(Target)
+  const { name, keyList, primaryKey } = convertFactory<T>(Target)
 
   const _entity = {
     [name]: class extends ComposeTable<T> {
@@ -35,14 +35,13 @@ export function tableFactory<T>(Target): ComposeTable<T> {
   return new _entity[name]()
 }
 
-export function schemaFactory<T, Y>(Target, TargetVo): ComposeSchema<T, Y> {
-  const { ctx, name, keyList } = ceonvertFactory<T>(Target)
-  const { ctx: voCtx, keyList: voKeyList } = ceonvertFactory<Y>(TargetVo)
+export function schemaFactory<T>(Target): ComposeSchema<T> {
+  const { ctx, name, keyList } = convertFactory<T>(Target)
 
   const _entity = {
-    [name]: class extends ComposeSchema<T, Y> {
+    [name]: class extends ComposeSchema<T> {
       constructor() {
-        super(ctx, voCtx, keyList, voKeyList)
+        super(ctx, keyList)
       }
     },
   }

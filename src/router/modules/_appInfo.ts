@@ -1,13 +1,21 @@
 import type { router_DTYPE } from '#/router/modules'
 import type { FastifyRequest } from 'fastify/types/request'
+import type { AppInfoTarget_DTYPE } from '#/entity/appInfo'
 
-import { mysql } from '@/effect/index'
-import { appInfoTable, appInfoSchema } from '@/entity/AppInfo'
+import { mysql, prisma } from '@/effect/index'
+import { appInfoTable, appInfoSchema } from '@/entity/appInfo'
+import { resultful } from '@/common/resultful'
 
 const appInfoTableCurdSql = appInfoTable.getCurdAllSql()
 
-type CustomRequest = FastifyRequest<{
-  Querystring: { test: boolean };
+type requestBody_DTYPE = FastifyRequest<{
+  Body: AppInfoTarget_DTYPE
+}>
+type requestQuery_DTYPE = FastifyRequest<{
+  Querystring: AppInfoTarget_DTYPE
+}>
+type requestParams_DTYPE = FastifyRequest<{
+  Params: AppInfoTarget_DTYPE
 }>
 
 export default () => {
@@ -29,11 +37,9 @@ export default () => {
         summary: '查询所有数据',
         description: '查询所有数据description!',
       },
-      handler: async (request: CustomRequest, reply) => {
-        const test = request.query.test
-        console.log('%c [ test ]-34', 'font-size:14px; background:#41b883; color:#ffffff;', test)
-        const res = await mysql.call(appInfoTableCurdSql.findAll)
-        reply.send(res)
+      handler: async (request, reply) => {
+        const res = await prisma.app_info.findMany()
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -46,8 +52,8 @@ export default () => {
       schema: {
         querystring: appInfoSchema.pickSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.findOne, mysql.getValues(reque.query))
+      handler: async (request: requestQuery_DTYPE, reply) => {
+        const res = await mysql.call(appInfoTableCurdSql.findOne, [request.query.id])
         reply.send(res)
       },
     },

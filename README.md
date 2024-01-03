@@ -1,8 +1,7 @@
 # fast-fastify
+### fastify 文档： https://fastify.dev/ https://www.w3cschool.cn/fastify/
 
-当前为 ts 为版本 js 版本为 jsBranch 分支 git clone -b jsBranch git@github.com:imbacc/fast-fastify.git
-
-> 依赖于 fastify 框架，搭建架构!
+js 版本分支 git clone -b jsBranch git@github.com:imbacc/fast-fastify.git
 
 ## pnpm install
 
@@ -10,7 +9,21 @@
 pnpm i && pnpm run dev
 ```
 
-## prisma 命令
+> 基础使用流程,先创建数据库表,可使用Chat2DB快速构建关系 https://github.com/chat2db/Chat2DB
+
+```
+获取数据库信息并生成新的prisma客户端
+pnpm prisma introspect
+或者使用
+pnpm prisma db pull
+在执行以下命令生成schema实体类和路由
+pnpm run create
+或者以下分解的命令
+pnpm run c-entity
+pnpm run c-router
+```
+
+### prisma 命令 https://prisma.yoga/concepts
 ```
 命令	描述
 init	初始化项目和配置文件
@@ -38,23 +51,4 @@ migrate deploy	部署迁移，将已生成的迁移文件应用到数据库以�
 migrate resolve	解决冲突，手动解决与数据库迁移相关的冲突或问题
 migrate status	显示数据库状态，检查当前数据库与迁移历史的一致性
 migrate diff	生成数据库模式的变更差异，与已应用的迁移历史进行比较
-```
-
-## prisma可视化modal
-```
-pnpm run prisma:studio
-```
-
-
-
-
-## fastify 文档说明： <https://www.w3cschool.cn/fastify/>
-
-```
-  ├── node_modules                依赖包
-  ├── src                         源码
-  ├── .gitignore                  git忽略提交目录
-  ├── .prettierignore             prettier忽略格式化目录
-  ├── .prettierrc              prettier配置信息
-  ├── packageon                依赖包及配置信息文件
 ```

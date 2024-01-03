@@ -1,9 +1,22 @@
 import type { router_DTYPE } from '#/router/modules'
+import type { FastifyRequest } from 'fastify/types/request'
+import type { TestDtypeTarget_DTYPE } from '#/entity/testDtype'
 
-import { mysql } from '@/effect/index'
+import { logger, mysql, prisma } from '@/effect/index'
 import { testDtypeTable, testDtypeSchema } from '@/entity/testDtype'
+import { resultful } from '@/common/resultful'
 
 const testDtypeTableCurdSql = testDtypeTable.getCurdAllSql()
+
+  type requestBody_DTYPE = FastifyRequest<{
+    Body: TestDtypeTarget_DTYPE
+  }>
+  type requestQuery_DTYPE = FastifyRequest<{
+    Querystring: TestDtypeTarget_DTYPE
+  }>
+  type requestParams_DTYPE = FastifyRequest<{
+    Params: TestDtypeTarget_DTYPE
+  }>
 
 export default () => {
   const list: router_DTYPE = [
@@ -24,8 +37,11 @@ export default () => {
         description: '查询所有数据description!',
       },
       handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.findAll)
-        reply.send(res)
+        const res = await prisma.app_info.findMany()
+        reply.send(resultful('SUCCESS', res))
+
+        // const res = await mysql.call(testDtypeTableCurdSql.findAll)
+        // reply.send(res)
       },
     },
     {
@@ -38,8 +54,8 @@ export default () => {
       schema: {
         querystring: testDtypeSchema.pickSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.findOne, mysql.getValues(reque.query))
+      handler: async (request: requestQuery_DTYPE, reply) => {
+        const res = await mysql.call(testDtypeTableCurdSql.findOne, [request.query.id])
         reply.send(res)
       },
     },
@@ -54,8 +70,8 @@ export default () => {
       schema: {
         body: testDtypeSchema.omitSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.save, mysql.getValues(reque.body))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testDtypeTableCurdSql.save, mysql.getValues(request.body))
         reply.send(res)
       },
     },
@@ -70,8 +86,8 @@ export default () => {
       schema: {
         body: testDtypeSchema.pickSchema('id'),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.delete, mysql.getValues(reque.body))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testDtypeTableCurdSql.delete, mysql.getValues(request.body))
         reply.send(res)
       },
     },
@@ -86,8 +102,8 @@ export default () => {
       schema: {
         body: testDtypeSchema.getSchema(),
       },
-      handler: async (reque, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.update, mysql.getValues(reque.body, ['id']))
+      handler: async (request, reply) => {
+        const res = await mysql.call(testDtypeTableCurdSql.update, mysql.getValues(request.body, ['id']))
         reply.send(res)
       },
     },

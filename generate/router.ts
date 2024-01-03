@@ -15,14 +15,37 @@ function firstLetterToLowercase(str) {
   return str.charAt(0).toLowerCase() + str.slice(1)
 }
 
+//  首字母大写 appInfo -> AppInfo
+function firstLetterToUpcase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 const connection = mysql.createConnection(mysqlConfig)
 
 // 路由
 function generateRouter(formatName) {
-  const content = `import type { router_DTYPE } from '#/router/modules'\n
-  import { logger, mysql } from '@/effect/index'
-  import { ${formatName}Table, ${formatName}Schema } from '@/entity/${formatName}'\n
+  const upCaseName = firstLetterToUpcase(formatName)
+  const content = `import type { router_DTYPE } from '#/router/modules'
+  import type { FastifyRequest } from 'fastify/types/request'
+  import type { ${upCaseName}Target_DTYPE } from '#/entity/${formatName}'
+  \n
+
+  import { logger, mysql, prisma } from '@/effect/index'
+  import { ${formatName}Table, ${formatName}Schema } from '@/entity/${formatName}'
+  import { resultful } from '@/common/resultful'
+  \n
+  
   const ${formatName}TableCurdSql = ${formatName}Table.getCurdAllSql()
+
+  type requestBody_DTYPE = FastifyRequest<{
+    Body: ${upCaseName}Target_DTYPE
+  }>
+  type requestQuery_DTYPE = FastifyRequest<{
+    Querystring: ${upCaseName}Target_DTYPE
+  }>
+  type requestParams_DTYPE = FastifyRequest<{
+    Params: ${upCaseName}Target_DTYPE
+  }>
   
   export default () => {
     const list: router_DTYPE = [
@@ -43,8 +66,11 @@ function generateRouter(formatName) {
           description: '查询所有数据description!',
         },
         handler: async (request, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.findAll)
-          reply.send(res)
+          const res = await prisma.app_info.findMany()
+          reply.send(resultful('SUCCESS', res))
+
+          // const res = await mysql.call(${formatName}TableCurdSql.findAll)
+          // reply.send(res)
         },
       },
       {
@@ -57,8 +83,8 @@ function generateRouter(formatName) {
         schema: {
           querystring: ${formatName}Schema.pickSchema('id'),
         },
-        handler: async (reque, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.findOne, mysql.getValues(reque.query))
+        handler: async (request: requestQuery_DTYPE, reply) => {
+          const res = await mysql.call(${formatName}TableCurdSql.findOne, [request.query.id])
           reply.send(res)
         },
       },
@@ -73,8 +99,8 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.omitSchema('id'),
         },
-        handler: async (reque, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.save, mysql.getValues(reque.body))
+        handler: async (request, reply) => {
+          const res = await mysql.call(${formatName}TableCurdSql.save, mysql.getValues(request.body))
           reply.send(res)
         },
       },
@@ -89,8 +115,8 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.pickSchema('id'),
         },
-        handler: async (reque, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.delete, mysql.getValues(reque.body))
+        handler: async (request, reply) => {
+          const res = await mysql.call(${formatName}TableCurdSql.delete, mysql.getValues(request.body))
           reply.send(res)
         },
       },
@@ -105,8 +131,8 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.getSchema(),
         },
-        handler: async (reque, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.update, mysql.getValues(reque.body, ['id']))
+        handler: async (request, reply) => {
+          const res = await mysql.call(${formatName}TableCurdSql.update, mysql.getValues(request.body, ['id']))
           reply.send(res)
         },
       },
@@ -159,8 +185,8 @@ function generateRouter(formatName) {
 }
 
   `
-  fs.writeFileSync(`src/router/modules/_${formatName}.ts`, content)
-  console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/router/modules/_${formatName}.ts`)
+  fs.writeFileSync(`src/router/modules/${formatName}.ts`, content)
+  console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/router/modules/${formatName}.ts`)
 }
 
 async function generateCreate() {

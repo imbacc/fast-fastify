@@ -11,6 +11,7 @@ import { Logger } from './fastifyLog'
 import { Redis } from './redis'
 import { MysqlExecute } from './mysql'
 import { Scheduler } from './schedule'
+export { prisma } from '@/prisma/index'
 
 const loggerConfig: PinoLoggerOptions = {
   transport: {

@@ -1,8 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+}
+
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
 }
 
 datasource db {
@@ -10,8 +11,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id Int @id @default(autoincrement()) @db.UnsignedInt
-  username String
-  age Int
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model app_info {
+  id          Int     @id @default(autoincrement())
+  text        String? @default("text默认值") @db.VarChar(200)
+  version     Int?
+  os          Int?
+  ostext      String? @db.VarChar(6)
+  linkurl     String? @db.VarChar(300)
+  decimalTest Float?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model test_dtype {
+  id    Int      @id @default(autoincrement())
+  date  DateTime @db.DateTime(0)
+  json  String   @db.VarChar(200)
+  money Decimal? @db.Decimal(8, 2)
+  name  String?  @default("aaabbbccc") @db.VarChar(20)
+}
+
+model test_info {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(30)
+  text String? @db.VarChar(50)
 }

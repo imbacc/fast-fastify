@@ -95,12 +95,13 @@ function generateDtype(formatTableName, fields) {
 export interface ${formatTableName}_DTYPE {
 ${types}
 }
+
 export interface ${formatTableName}Target_DTYPE {
 ${types2}
 }
 `
-  fs.writeFileSync(`types/entity/_${lowercaseTableName}.d.ts`, content)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/_${lowercaseTableName}.d.ts`)
+  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, content)
+  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
 }
 
 // 实体的属性 和 vo
@@ -110,7 +111,7 @@ function generateEntity(formatTableName, fields) {
     const dtype = typeTodtype[item.filedType]
 
     const entityStr = `  ${item.fieldName}: ${dtype} = {
-    desc: '${item.remarks}',
+    description: '${item.remarks}',
     type: '${dtype.replace('_DTYPE', '')}',
     ${item.dontNull === 'YES' ? 'required: true,' : ''}${item.isPrimaryKey === 'PRI' ? 'primaryKey: true,' : ''}`
 
@@ -132,13 +133,17 @@ import { tableFactory, schemaFactory } from '@/compose/composeFactory'\n
 export class ${formatTableName} implements ${formatTableName}_DTYPE {
 ${types}
 }
+
 export class ${formatTableName}Vo implements Partial<${formatTableName}_DTYPE> {
 ${types}
 }
+
 export const ${lowercaseTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
-export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}, ${formatTableName}Vo>(${formatTableName}, ${formatTableName}Vo)`
-  fs.writeFileSync(`src/entity/_${lowercaseTableName}.ts`, content)
-  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/_${lowercaseTableName}.ts`)
+export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}>(${formatTableName})
+export const ${lowercaseTableName}SchemaVo = schemaFactory<${formatTableName}Vo>(${formatTableName}Vo)
+`
+  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, content)
+  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
 }
 
 async function generateCreate() {

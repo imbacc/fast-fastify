@@ -1,5 +1,5 @@
-import { fastify, skipRouter, logger } from '@/effect'
-import { listenConfig, swaggerConfig } from '@/config'
+import { fastify, skipRouter, logger } from '@/effect/index'
+import { listenConfig, swaggerConfig } from '@/config/index'
 
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
@@ -32,7 +32,7 @@ export default async () => {
   await fastify.register(fastifySwaggerUi, {
     routePrefix: route,
     uiConfig: {
-      docExpansion: 'list',
+      docExpansion: 'full',
       deepLinking: false,
     },
     staticCSP: true,

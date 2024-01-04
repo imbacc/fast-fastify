@@ -25,25 +25,6 @@ export type listen_DTYPE = CONFIG_DTYPE<listen_CONFIG>
 export type jwt_CONFIG = string
 export type jwt_DTYPE = CONFIG_DTYPE<jwt_CONFIG>
 
-// mysql
-export interface mysql_CONFIG {
-  host: string | '127.0.0.1'
-  user: string
-  password: string
-  port: number | 3306
-  database: string
-}
-export type mysql_DTYPE = CONFIG_DTYPE<mysql_CONFIG>
-
-// redis
-export interface redis_CONFIG {
-  username: string
-  password: string
-  host: string | '127.0.0.1'
-  port: number | 6379
-}
-export type redis_DTYPE = CONFIG_DTYPE<redis_CONFIG>
-
 // apiLimit
 export interface apiLimit_CONFIG {
   open: boolean

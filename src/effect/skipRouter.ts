@@ -1,4 +1,4 @@
-import { checkAuthConfig } from '@/config'
+import { checkAuthConfig } from '@/config/index'
 
 export class SkipRouter {
   private skipAuth: Array<string> = []

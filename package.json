@@ -8,14 +8,13 @@
     "debug": "cross-env NODE_ENV=dev && nodemon --inspect-brk src/index.ts",
     "serve": "cross-env NODE_ENV=prod && node",
     "build": "cross-env NODE_ENV=prod && tsc -p tsconfig.json",
-    "mysqlts": "pnpm dlx mysqltots -u root -p root -h localhost -d test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "czc": "git add . && pnpm exec cz",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "update:list": "ncu",
-    "update:up": "ncu -u"
+    "up": "taze",
+    "up:max": "taze major"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
   "homepage": "https://github.com/imbacc/fast-fastify#readme",
   "dependencies": {
     "@fastify/jwt": "^7.2.0",
+    "@fastify/schedule": "^4.1.1",
     "@fastify/swagger": "^8.9.0",
     "@fastify/swagger-ui": "^1.9.3",
     "fastify": "4.22.0",
@@ -36,7 +36,8 @@
     "fluent-json-schema": "^4.1.1",
     "imba-md5": "^1.0.0",
     "pino-pretty": "^10.2.0",
-    "redis": "^4.6.8"
+    "redis": "^4.6.8",
+    "toad-scheduler": "^3.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.41.0",

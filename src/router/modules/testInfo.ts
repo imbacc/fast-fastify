@@ -1,6 +1,19 @@
 import type { router_DTYPE } from '#/router/modules'
+import type { FastifyRequest } from 'fastify/types/request'
+import type { TestInfoTarget_DTYPE } from '#/entity/testInfo'
 
+import { logger } from '@/effect/index'
 import { testInfoSchema } from '@/entity/testInfo'
+
+type requestBody_DTYPE = FastifyRequest<{
+  Body: TestInfoTarget_DTYPE
+}>
+type requestQuery_DTYPE = FastifyRequest<{
+  Querystring: TestInfoTarget_DTYPE
+}>
+type requestParams_DTYPE = FastifyRequest<{
+  Params: TestInfoTarget_DTYPE
+}>
 
 export default () => {
   const list: router_DTYPE = [
@@ -35,6 +48,7 @@ export default () => {
         querystring: testInfoSchema.pickSchema('id'),
       },
       handler: async (reque, reply) => {
+        logger.tag('api', 'res')
         reply.send('res')
       },
     },

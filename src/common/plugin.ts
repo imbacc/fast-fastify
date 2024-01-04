@@ -1,12 +1,19 @@
-import { fastify } from '../effect'
-import { jwtKeyConfig } from '../config'
-import fastifyCors from '@fastify/cors'
-import fastifyJwt from '@fastify/jwt'
+import { fastify } from '@/effect/index'
+import { jwtKeyConfig } from '@/config/index'
+
 import swagger from '@/plugins/swagger'
+import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
+import schedule from '@fastify/schedule'
+
+// fastify-elasticsearch
+// @fastify/multipart
+// fastify-sentry
+// fastify-axios
 
 export default async () => {
-  // JWT令牌
-  await fastify.register(fastifyCors)
-  await fastify.register(fastifyJwt, { secret: jwtKeyConfig })
   await swagger()
+  await fastify.register(cors, { methods: ['GET', 'PUT', 'POST'] })
+  await fastify.register(jwt, { secret: jwtKeyConfig })
+  await fastify.register(schedule)
 }

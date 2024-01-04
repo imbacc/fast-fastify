@@ -1,12 +1,11 @@
-import { fastify, logger } from '@/effect'
+import { fastify, logger, scheduler } from '@/effect'
 import { listenConfig } from '@/config'
 
+import '@/test/test1'
 import intercept from '@/common/intercept'
 import throws from '@/common/throw'
 import plugin from '@/common/plugin'
 import router from '@/router/index'
-
-import '@/test/test1'
 
 async function startServer() {
   intercept() // 注册拦截器
@@ -20,6 +19,7 @@ async function startServer() {
       logger.error(`server start error = ${err.message}`)
       throw err
     }
+    scheduler.start()
     // logger.info(`路由树形结构:\n ${fastify.printRoutes()}`)
   })
 }

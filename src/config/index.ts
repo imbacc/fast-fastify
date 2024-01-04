@@ -7,12 +7,6 @@ import type {
   // jwt
   jwt_CONFIG,
   jwt_DTYPE,
-  // mysql
-  mysql_CONFIG,
-  mysql_DTYPE,
-  // redis
-  redis_CONFIG,
-  redis_DTYPE,
   // apiLimit
   apiLimit_CONFIG,
   apiLimit_DTYPE,
@@ -48,40 +42,6 @@ const _listen: listen_DTYPE = {
 const _jwtKey: jwt_DTYPE = {
   dev: md5('imbacc'),
   prod: md5('by imbacc'),
-}
-
-// mysql
-const _mysql: mysql_DTYPE = {
-  dev: {
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    port: 3306,
-    database: 'test',
-  },
-  prod: {
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    port: 3306,
-    database: 'test',
-  },
-}
-
-// redis
-const _redis: redis_DTYPE = {
-  dev: {
-    username: 'root',
-    password: '',
-    host: '127.0.0.1',
-    port: 6379,
-  },
-  prod: {
-    username: 'root',
-    password: 'root',
-    host: '127.0.0.1',
-    port: 6379,
-  },
 }
 
 // 每个接口限流 也可在Nginx上限流
@@ -124,8 +84,6 @@ const _swagger: swagger_DTYPE = {
   },
 }
 
-export const mysqlConfig = _mysql[env] as mysql_CONFIG
-export const redisConfig = _redis[env] as redis_CONFIG
 export const checkAuthConfig = _checkAuth[env] as checkAuth_CONFIG
 export const jwtKeyConfig = _jwtKey[env] as jwt_CONFIG
 export const apiLimitConfig = _apiLimit[env] as apiLimit_CONFIG

@@ -5,7 +5,8 @@
  * count 为次数   默认 30秒/15次
  */
 
-import { apiLimitConfig } from '@/config'
+import { apiLimitConfig, isDev } from '@/config/index'
+import md5 from 'imba-md5'
 
 const { open: _open, time: _time, count: _count } = apiLimitConfig
 
@@ -29,11 +30,11 @@ export class ApiLimitMemory {
    * @returns
    */
   apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
-    return new Promise((resolve) => {
+    return new Promise<boolean>((resolve) => {
       // false为关闭限流
       if (!_open) return resolve(true)
 
-      const key = `${spname}_${spid}`
+      const key = isDev ? `${spname}_${spid}` : md5(`${spname}_${spid}`)
       const keyTime = `apit_${key}`
       const keyNum = `apin_${key}`
       const cfg = this.getLimit(spname.split('?')[0])
@@ -44,8 +45,8 @@ export class ApiLimitMemory {
         count = cfgCount
       }
 
-      const apiTime: number = this.getCache(keyTime) // 获取 访问API时间间隔
-      const apiCount: number = this.getCache(keyNum) // 获取 访问API次数间隔的时间
+      const apiTime: number = this.getCache(keyTime) || 0 // 获取 访问API时间间隔
+      const apiCount: number = this.getCache(keyNum) || 0 // 获取 访问API次数间隔的时间
       const dateTime = new Date().getTime()
 
       if (apiTime && apiCount) {
@@ -68,7 +69,7 @@ export class ApiLimitMemory {
   }
 
   private getCache(key: string) {
-    return this.cache[key] || 0
+    return this.cache[key]
   }
 
   private setCache(key: string, val) {

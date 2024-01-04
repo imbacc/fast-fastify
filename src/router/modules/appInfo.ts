@@ -1,6 +1,19 @@
 import type { router_DTYPE } from '#/router/modules'
+import type { FastifyRequest } from 'fastify/types/request'
+import type { AppInfoTarget_DTYPE } from '#/entity/appInfo'
 
+import { logger } from '@/effect/index'
 import { appInfoSchema } from '@/entity/appInfo'
+
+type requestBody_DTYPE = FastifyRequest<{
+  Body: AppInfoTarget_DTYPE
+}>
+type requestQuery_DTYPE = FastifyRequest<{
+  Querystring: AppInfoTarget_DTYPE
+}>
+type requestParams_DTYPE = FastifyRequest<{
+  Params: AppInfoTarget_DTYPE
+}>
 
 export default () => {
   const list: router_DTYPE = [

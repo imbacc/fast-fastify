@@ -7,6 +7,7 @@ export interface AppInfo_DTYPE {
   os?: integer_DTYPE
   ostext?: string_DTYPE
   linkurl?: string_DTYPE
+  decimalTest?: number_DTYPE
 }
 export interface AppInfoTarget_DTYPE {
   id: number
@@ -15,4 +16,5 @@ export interface AppInfoTarget_DTYPE {
   os: number
   ostext: string
   linkurl: string
+  decimalTest: number
 }

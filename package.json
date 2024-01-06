@@ -12,11 +12,11 @@
     "c-entity": "ts-node ./generate/entity.ts && eslint ./src/entity/*.ts --fix --quiet",
     "c-router": "ts-node ./generate/router.ts && eslint ./src/router/modules/*.ts --fix --quiet",
     "create": "pnpm run c-entity && pnpm run c-router",
-    "lint": "eslint .  --quiet",
+    "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "czc": "git add . && pnpm exec cz",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky install",
+    "prepare": "husky install && prisma generate",
     "up": "taze",
     "up:max": "taze major"
   },

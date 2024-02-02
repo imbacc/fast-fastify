@@ -1,4 +1,3 @@
-import { ComposeTable } from './composeTable'
 import { ComposeSchema } from './composeSchema'
 
 function convertCamelToSnake(name: string) {
@@ -19,20 +18,6 @@ export function convertFactory<T>(Target) {
   }
 
   return { ctx, name, keyList, primaryKey }
-}
-
-export function tableFactory<T>(Target): ComposeTable<T> {
-  const { name, keyList, primaryKey } = convertFactory<T>(Target)
-
-  const _entity = {
-    [name]: class extends ComposeTable<T> {
-      constructor() {
-        super(name, keyList, primaryKey)
-      }
-    },
-  }
-
-  return new _entity[name]()
 }
 
 export function schemaFactory<T>(Target): ComposeSchema<T> {

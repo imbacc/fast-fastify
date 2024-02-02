@@ -22,7 +22,7 @@
     "noImplicitAny": false,
     "skipLibCheck": false,
     "outDir": "dist",
-    "typeRoots": ["./types/*.ts", "node", "fastify"],
+    "typeRoots": ["types/**/*.ts", "node", "fastify"],
     "paths": {
       "@/*": [
         "./src/*"

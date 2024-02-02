@@ -8,7 +8,6 @@
     "debug": "cross-env NODE_ENV=dev && nodemon --inspect-brk src/index.ts",
     "serve": "cross-env NODE_ENV=prod && node",
     "build": "cross-env NODE_ENV=prod && tsc -p tsconfig.json",
-    "mysqlts": "pnpm dlx mysqltots -u root -p root -h localhost -d test",
     "c-entity": "ts-node ./generate/entity.ts && eslint ./src/entity/*.ts --fix --quiet",
     "c-router": "ts-node ./generate/router.ts && eslint ./src/router/modules/*.ts --fix --quiet",
     "create": "pnpm run c-entity && pnpm run c-router",
@@ -44,7 +43,6 @@
     "fluent-json-schema": "^4.2.1",
     "imba-md5": "^1.0.0",
     "mysql": "^2.18.1",
-    "pino-pretty": "^10.3.1",
     "prisma": "^5.7.1",
     "redis": "^4.6.12",
     "toad-scheduler": "^3.0.0"

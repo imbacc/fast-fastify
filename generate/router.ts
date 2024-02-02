@@ -23,29 +23,17 @@ function firstLetterToUpcase(str) {
 const connection = mysql.createConnection(mysqlConfig)
 
 // 路由
-function generateRouter(formatName) {
-  const upCaseName = firstLetterToUpcase(formatName)
+function generateRouter(formatName: string, tableName: string) {
+  const upLowName = firstLetterToLowercase(formatName)
   const content = `import type { router_DTYPE } from '#/router/modules'
-  import type { FastifyRequest } from 'fastify/types/request'
-  import type { ${upCaseName}Target_DTYPE } from '#/entity/${formatName}'
+  import type { request_DTYPE } from '#/global'
+  import type { ${upLowName}Target_DTYPE } from '#/entity/${formatName}'
   \n
 
-  import { logger, mysql, prisma } from '@/effect/index'
-  import { ${formatName}Table, ${formatName}Schema } from '@/entity/${formatName}'
   import { resultful } from '@/common/resultful'
+  import { logger, prisma } from '@/effect/index'
+  import { ${formatName}Schema } from '@/entity/${formatName}'
   \n
-  
-  const ${formatName}TableCurdSql = ${formatName}Table.getCurdAllSql()
-
-  type requestBody_DTYPE = FastifyRequest<{
-    Body: ${upCaseName}Target_DTYPE
-  }>
-  type requestQuery_DTYPE = FastifyRequest<{
-    Querystring: ${upCaseName}Target_DTYPE
-  }>
-  type requestParams_DTYPE = FastifyRequest<{
-    Params: ${upCaseName}Target_DTYPE
-  }>
   
   export default () => {
     const list: router_DTYPE = [
@@ -65,12 +53,9 @@ function generateRouter(formatName) {
           summary: '查询所有数据',
           description: '查询所有数据description!',
         },
-        handler: async (request, reply) => {
-          const res = await prisma.app_info.findMany()
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.findMany()
           reply.send(resultful('SUCCESS', res))
-
-          // const res = await mysql.call(${formatName}TableCurdSql.findAll)
-          // reply.send(res)
         },
       },
       {
@@ -83,9 +68,9 @@ function generateRouter(formatName) {
         schema: {
           querystring: ${formatName}Schema.pickSchema('id'),
         },
-        handler: async (request: requestQuery_DTYPE, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.findOne, [request.query.id])
-          reply.send(res)
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.findUnique({ where: { id: request.query.id } })
+          reply.send(resultful('SUCCESS', res))
         },
       },
       {
@@ -99,9 +84,9 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.omitSchema('id'),
         },
-        handler: async (request, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.save, mysql.getValues(request.body))
-          reply.send(res)
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.create({ data: Object.assign({}, request.body) })
+          reply.send(resultful('SUCCESS', res))
         },
       },
       {
@@ -115,9 +100,9 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.pickSchema('id'),
         },
-        handler: async (request, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.delete, mysql.getValues(request.body))
-          reply.send(res)
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.delete({ where: { id: request.body.id } })
+          reply.send(resultful('SUCCESS', res))
         },
       },
       {
@@ -131,9 +116,9 @@ function generateRouter(formatName) {
         schema: {
           body: ${formatName}Schema.getSchema(),
         },
-        handler: async (request, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.update, mysql.getValues(request.body, ['id']))
-          reply.send(res)
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.update({ where: { id: request.body.id }, data: Object.assign({}, request.body) })
+          reply.send(resultful('SUCCESS', res))
         },
       },
       {
@@ -143,17 +128,17 @@ function generateRouter(formatName) {
           summary: '统计数据',
           description: '统计数据description!',
         },
-        handler: async (request, reply) => {
-          const res = await mysql.call(${formatName}TableCurdSql.count)
-          reply.send(res)
+        handler: async (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          const res = await prisma.${tableName}.count()
+          reply.send(resultful('SUCCESS', res))
         },
       },
       {
         url: '/xxx/:id',
         method: 'GET',
         limit: [10, 5],
-        handler: (request, reply) => {
-          reply.send('xxx')
+        handler: (request: request_DTYPE<${upLowName}Target_DTYPE>, reply) => {
+          reply.send(resultful('SUCCESS', 'xxx/:id'))
         },
         // 路由选项文档 https://www.w3cschool.cn/fastify/fastify-ko5l35zk.html
         onRequest: (request, reply, done) => {
@@ -185,8 +170,14 @@ function generateRouter(formatName) {
 }
 
   `
-  fs.writeFileSync(`src/router/modules/${formatName}.ts`, content)
-  console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/router/modules/${formatName}.ts`)
+
+  const filePath = `src/router/modules/${formatName}.ts`
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, content)
+    console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', filePath)
+  } else {
+    fs.writeFileSync(`src/router/modules/${formatName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`, content)
+  }
 }
 
 async function generateCreate() {
@@ -217,7 +208,7 @@ async function generateCreate() {
       `, (error) => {
           if (error) throw error
           console.log('%c [ generateRouter name ]', 'font-size:14px; background:#41b883; color:#ffffff;', formatName)
-          generateRouter(formatName)
+          generateRouter(formatName, tableName)
 
           resolve()
         })

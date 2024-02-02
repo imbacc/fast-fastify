@@ -25,7 +25,7 @@ export class ApiLimitRedis {
    */
   async apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
     // false为关闭限流
-    if (!_open) return await true
+    if (!_open) return true
 
     const key = isDev ? `${spname}_${spid}` : md5(`${spname}_${spid}`)
     const keyTime = `apit_${key}`
@@ -49,15 +49,15 @@ export class ApiLimitRedis {
       if (second < time) {
         // Api次数限制
         const add = apiCount + 1
-        if (add > count) return await false
+        if (add > count) return false
         this.setCache(keyNum, add)
-        return await true
+        return true
       }
     }
 
     this.setCache(keyTime, dateTime)
     this.setCache(keyNum, 1)
-    return await true
+    return true
   }
 
   private getCache<T = any>(key: string) {

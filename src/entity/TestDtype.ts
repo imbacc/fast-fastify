@@ -1,12 +1,13 @@
 import type { integer_DTYPE, number_DTYPE, string_DTYPE, object_DTYPE, array_DTYPE } from '#/compose/entity'
-import type { TestDtype_DTYPE } from '#/entity/testDtype'
+import type { testDtype_DTYPE } from '#/entity/testDtype'
 
-import { tableFactory, schemaFactory } from '@/compose/composeFactory'
+import { schemaFactory } from '@/compose/composeFactory'
 
-export class TestDtype implements TestDtype_DTYPE {
+export class TestDtype implements testDtype_DTYPE {
   id: integer_DTYPE = {
     description: '主键ID',
     type: 'integer',
+    required: true,
     primaryKey: true,
     maximum: 9999999999,
   }
@@ -151,7 +152,7 @@ class Arr4 {
   }
 }
 
-export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
+export class TestDtypeVo implements Partial<testDtype_DTYPE> {
   id: integer_DTYPE = {
     description: '主键ID',
     type: 'integer',
@@ -208,6 +209,5 @@ export class TestDtypeVo implements Partial<TestDtype_DTYPE> {
     items: [{ ...new Arr3() }, { ...new Arr4() }],
   }
 }
-export const testDtypeTable = tableFactory<TestDtype>(TestDtype)
 export const testDtypeSchema = schemaFactory<TestDtype>(TestDtype)
 export const testDtypeSchemaVo = schemaFactory<TestDtypeVo>(TestDtypeVo)

@@ -1,4 +1,4 @@
-import type { APIResultful_DTYPE } from '#/common/resultful'
+import type { apiResultful_DTYPE } from '#/common/resultful'
 
 // 虚拟枚举类型 自己定义
 export class APICode {
@@ -14,7 +14,7 @@ export class APICode {
   MYSQL_CONNECT_WARN = [-9, '数据库链接异常,请稍后重试']
 
   // -10到-99 参数验证区块
-  IS_NULL = [-10, '空值参数']
+  IS_NULL = [-10, '参数必填']
   VAL_FAIL = [-11, '参数错误']
   VAL_CODE = [-12, '参数不规范']
 
@@ -47,7 +47,7 @@ class APIResultful {
   public msg = ''
   public data: any = null
 
-  resultful(result: APIResultful_DTYPE) {
+  resultful(result: apiResultful_DTYPE) {
     this.code = result.code
     this.msg = result.msg
     this.data = result.data || null
@@ -61,4 +61,9 @@ const apiCode = new APICode()
 export const resultful = <T = any>(key: keyof APICode, data?: T) => {
   const [code, msg] = apiCode[key] as [number, string]
   return apiResultful.resultful({ code, msg, data })
+}
+
+export const resultfulError = (key: keyof APICode, appendMsg: string = '') => {
+  const [code, msg] = apiCode[key] as [number, string]
+  return apiResultful.resultful({ code, msg: `${msg} ${appendMsg}`, data: null })
 }

@@ -1,7 +1,7 @@
 import type { integer_DTYPE, object_DTYPE, string_DTYPE } from '#/compose/entity'
-import type { AppInfo_DTYPE } from '#/entity/appInfo'
+import type { appInfo_DTYPE } from '#/entity/appInfo'
 
-import { tableFactory, schemaFactory } from '@/compose/composeFactory'
+import { schemaFactory } from '@/compose/composeFactory'
 
 import schema from 'fluent-json-schema'
 
@@ -11,10 +11,11 @@ class AppInfoSchema2 {
   father = schema.object().prop('aa', schema.integer()).prop('bb', schema.string()).required().description('this is father')
 }
 
-export class AppInfo implements AppInfo_DTYPE {
+export class AppInfo implements appInfo_DTYPE {
   id: integer_DTYPE = {
     description: '',
     type: 'integer',
+    required: true,
     primaryKey: true,
     maximum: 9999999999,
   }
@@ -73,7 +74,7 @@ class Obj {
   }
 }
 
-export class AppInfoVo implements Partial<AppInfo_DTYPE> {
+export class AppInfoVo implements Partial<appInfo_DTYPE> {
   id: integer_DTYPE = {
     description: '',
     type: 'integer',
@@ -89,6 +90,5 @@ export class AppInfoVo implements Partial<AppInfo_DTYPE> {
   }
 }
 
-export const appInfoTable = tableFactory<AppInfo>(AppInfo)
 export const appInfoSchema = schemaFactory<AppInfo>(AppInfo)
 export const appInfoSchemaVo = schemaFactory<AppInfoVo>(AppInfoVo)

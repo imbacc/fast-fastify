@@ -1,22 +1,10 @@
 import type { router_DTYPE } from '#/router/modules'
-import type { FastifyRequest } from 'fastify/types/request'
-import type { AppInfoTarget_DTYPE } from '#/entity/appInfo'
+import type { request_DTYPE } from '#/global'
+import type { appInfoTarget_DTYPE } from '#/entity/appInfo'
 
-import { logger, mysql, prisma } from '@/effect/index'
-import { appInfoTable, appInfoSchema } from '@/entity/appInfo'
 import { resultful } from '@/common/resultful'
-
-const appInfoTableCurdSql = appInfoTable.getCurdAllSql()
-
-  type requestBody_DTYPE = FastifyRequest<{
-    Body: AppInfoTarget_DTYPE
-  }>
-  type requestQuery_DTYPE = FastifyRequest<{
-    Querystring: AppInfoTarget_DTYPE
-  }>
-  type requestParams_DTYPE = FastifyRequest<{
-    Params: AppInfoTarget_DTYPE
-  }>
+import { logger, prisma } from '@/effect/index'
+import { appInfoSchema } from '@/entity/appInfo'
 
 export default () => {
   const list: router_DTYPE = [
@@ -24,6 +12,7 @@ export default () => {
       // 全局代理操作对象
       isProxy: true,
       prefix: '/appInfo',
+      skip: true, // 不检测token
       limit: [10, 5], // 10秒/5次 访问限制
       swagger: {
         tags: ['appInfo'],
@@ -36,12 +25,9 @@ export default () => {
         summary: '查询所有数据',
         description: '查询所有数据description!',
       },
-      handler: async (request, reply) => {
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
         const res = await prisma.app_info.findMany()
         reply.send(resultful('SUCCESS', res))
-
-        // const res = await mysql.call(appInfoTableCurdSql.findAll)
-        // reply.send(res)
       },
     },
     {
@@ -54,9 +40,9 @@ export default () => {
       schema: {
         querystring: appInfoSchema.pickSchema('id'),
       },
-      handler: async (request: requestQuery_DTYPE, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.findOne, [request.query.id])
-        reply.send(res)
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        const res = await prisma.app_info.findUnique({ where: { id: request.query.id } })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -70,9 +56,9 @@ export default () => {
       schema: {
         body: appInfoSchema.omitSchema('id'),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.save, mysql.getValues(request.body))
-        reply.send(res)
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        const res = await prisma.app_info.create({ data: Object.assign({}, request.body) })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -86,9 +72,9 @@ export default () => {
       schema: {
         body: appInfoSchema.pickSchema('id'),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.delete, mysql.getValues(request.body))
-        reply.send(res)
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        const res = await prisma.app_info.delete({ where: { id: request.body.id } })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -102,9 +88,9 @@ export default () => {
       schema: {
         body: appInfoSchema.getSchema(),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.update, mysql.getValues(request.body, ['id']))
-        reply.send(res)
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        const res = await prisma.app_info.update({ where: { id: request.body.id }, data: Object.assign({}, request.body) })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -114,17 +100,17 @@ export default () => {
         summary: '统计数据',
         description: '统计数据description!',
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(appInfoTableCurdSql.count)
-        reply.send(res)
+      handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        const res = await prisma.app_info.count()
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
       url: '/xxx/:id',
       method: 'GET',
       limit: [10, 5],
-      handler: (request, reply) => {
-        reply.send('xxx')
+      handler: (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
+        reply.send(resultful('SUCCESS', 'xxx/:id'))
       },
       // 路由选项文档 https://www.w3cschool.cn/fastify/fastify-ko5l35zk.html
       onRequest: (request, reply, done) => {

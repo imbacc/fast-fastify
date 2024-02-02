@@ -53,7 +53,7 @@ export default () => {
     }
 
     const { query, body, id, ip } = reque
-    logger.info('request intercept call = ', { id, ip, url, query, body })
+    // logger.info('request intercept call = ', { id, ip, url, query, body })
 
     apiLimitMemory.apiLimit(url as string, ip).then((bool) => {
       if (!bool) {
@@ -70,7 +70,7 @@ export default () => {
             httpCode = bool ? 403 : 401
           }
           if (err === null) code = 'SUCCESS'
-          logger.info('request intercept state = ', { ip, code })
+          // logger.info('request intercept state = ', { ip, code })
           if (!(code === 'SUCCESS')) {
             reply.code(httpCode).send(resultful(code))
             return

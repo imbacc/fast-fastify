@@ -32,18 +32,24 @@ export class Redis {
         if (`${res}`.includes('[')) {
           try {
             res = JSON.parse(res as string)
-          } catch (e) { }
+          } catch (error) {
+            logger.error(`getRedis JSON.parse = ${error?.toString()}`)
+          }
         }
-        resolve(res as unknown as T)
+        resolve(res as T)
       }).catch((err) => {
         logger.error(`redis error = ${err}`)
-        resolve(false as unknown as T)
+        resolve(false as any)
       })
     })
   }
 
   setRedis(key: string, value, time?: number) {
-    this.redis.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
+    try {
+      this.redis.set(key, typeof value === 'object' ? JSON.stringify(value) : value)
+    } catch (error) {
+      logger.error(`setRedis JSON.stringify = ${error?.toString()}`)
+    }
     if (time) this.redis.expire(key, time)
   }
 }

@@ -1,22 +1,10 @@
 import type { router_DTYPE } from '#/router/modules'
-import type { FastifyRequest } from 'fastify/types/request'
-import type { TestDtypeTarget_DTYPE } from '#/entity/testDtype'
+import type { request_DTYPE } from '#/global'
+import type { testDtypeTarget_DTYPE } from '#/entity/testDtype'
 
-import { logger, mysql, prisma } from '@/effect/index'
-import { testDtypeTable, testDtypeSchema } from '@/entity/testDtype'
 import { resultful } from '@/common/resultful'
-
-const testDtypeTableCurdSql = testDtypeTable.getCurdAllSql()
-
-  type requestBody_DTYPE = FastifyRequest<{
-    Body: TestDtypeTarget_DTYPE
-  }>
-  type requestQuery_DTYPE = FastifyRequest<{
-    Querystring: TestDtypeTarget_DTYPE
-  }>
-  type requestParams_DTYPE = FastifyRequest<{
-    Params: TestDtypeTarget_DTYPE
-  }>
+import { logger, prisma } from '@/effect/index'
+import { testDtypeSchema } from '@/entity/testDtype'
 
 export default () => {
   const list: router_DTYPE = [
@@ -36,12 +24,9 @@ export default () => {
         summary: '查询所有数据',
         description: '查询所有数据description!',
       },
-      handler: async (request, reply) => {
-        const res = await prisma.app_info.findMany()
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.findMany()
         reply.send(resultful('SUCCESS', res))
-
-        // const res = await mysql.call(testDtypeTableCurdSql.findAll)
-        // reply.send(res)
       },
     },
     {
@@ -54,9 +39,9 @@ export default () => {
       schema: {
         querystring: testDtypeSchema.pickSchema('id'),
       },
-      handler: async (request: requestQuery_DTYPE, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.findOne, [request.query.id])
-        reply.send(res)
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.findUnique({ where: { id: request.query.id } })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -70,9 +55,9 @@ export default () => {
       schema: {
         body: testDtypeSchema.omitSchema('id'),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.save, mysql.getValues(request.body))
-        reply.send(res)
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.create({ data: Object.assign({}, request.body) })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -86,9 +71,9 @@ export default () => {
       schema: {
         body: testDtypeSchema.pickSchema('id'),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.delete, mysql.getValues(request.body))
-        reply.send(res)
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.delete({ where: { id: request.body.id } })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -102,9 +87,9 @@ export default () => {
       schema: {
         body: testDtypeSchema.getSchema(),
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.update, mysql.getValues(request.body, ['id']))
-        reply.send(res)
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.update({ where: { id: request.body.id }, data: Object.assign({}, request.body) })
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
@@ -114,17 +99,17 @@ export default () => {
         summary: '统计数据',
         description: '统计数据description!',
       },
-      handler: async (request, reply) => {
-        const res = await mysql.call(testDtypeTableCurdSql.count)
-        reply.send(res)
+      handler: async (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        const res = await prisma.test_dtype.count()
+        reply.send(resultful('SUCCESS', res))
       },
     },
     {
       url: '/xxx/:id',
       method: 'GET',
       limit: [10, 5],
-      handler: (request, reply) => {
-        reply.send('xxx')
+      handler: (request: request_DTYPE<testDtypeTarget_DTYPE>, reply) => {
+        reply.send(resultful('SUCCESS', 'xxx/:id'))
       },
       // 路由选项文档 https://www.w3cschool.cn/fastify/fastify-ko5l35zk.html
       onRequest: (request, reply, done) => {

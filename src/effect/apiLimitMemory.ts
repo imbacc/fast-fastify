@@ -7,17 +7,23 @@
 
 import { apiLimitConfig, isDev } from '@/config/index'
 import md5 from 'imba-md5'
+import v8 from 'node:v8'
+
+function getObjectSize(obj) {
+  const bytes = v8.serialize(obj).byteLength
+  return bytes / 1000000
+}
 
 const { open: _open, time: _time, count: _count } = apiLimitConfig
 
 export class ApiLimitMemory {
-  private max = 10000
+  private max = 1000000
   private cache = {}
   private limit: Record<string, [number, number]> = {}
   private proMark
 
   constructor(max?: number) {
-    this.max = max || 10000
+    this.max = max || 1000000
   }
 
   /**
@@ -74,6 +80,8 @@ export class ApiLimitMemory {
 
   private setCache(key: string, val) {
     this.cache[key] = val
+    // const sizeInMB = getObjectSize(this.cache)
+    // console.log(`对象占用的内存大小为: ${sizeInMB} MB`)
     this.delayClear()
   }
 

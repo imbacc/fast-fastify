@@ -1,6 +1,6 @@
 import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, entity_DTYPE } from '../compose/entity'
 
-export interface AppInfo_DTYPE {
+export interface appInfo_DTYPE {
   id: integer_DTYPE
   text?: string_DTYPE
   version?: integer_DTYPE
@@ -9,7 +9,8 @@ export interface AppInfo_DTYPE {
   linkurl?: string_DTYPE
   decimalTest?: number_DTYPE
 }
-export interface AppInfoTarget_DTYPE {
+
+export interface appInfoTarget_DTYPE {
   id: number
   text: string
   version: number

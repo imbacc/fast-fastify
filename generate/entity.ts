@@ -92,11 +92,11 @@ function generateDtype(formatTableName, fields) {
   }).join('\n')
 
   const content = `import type { string_DTYPE, number_DTYPE, integer_DTYPE, array_DTYPE, object_DTYPE, entity_DTYPE } from '../compose/entity'\n
-export interface ${formatTableName}_DTYPE {
+export interface ${lowercaseTableName}_DTYPE {
 ${types}
 }
 
-export interface ${formatTableName}Target_DTYPE {
+export interface ${lowercaseTableName}Target_DTYPE {
 ${types2}
 }
 `
@@ -113,7 +113,7 @@ function generateEntity(formatTableName, fields) {
     const entityStr = `  ${item.fieldName}: ${dtype} = {
     description: '${item.remarks}',
     type: '${dtype.replace('_DTYPE', '')}',
-    ${item.dontNull === 'YES' ? 'required: true,' : ''}${item.isPrimaryKey === 'PRI' ? 'primaryKey: true,' : ''}`
+    ${item.dontNull === 'YES' ? 'required: true,' : ''}${item.isPrimaryKey === 'PRI' ? 'primaryKey: true,required: true,' : ''}`
 
     if (dtype === 'string_DTYPE') {
       // maxLength: ${item.filedType === 'datetime' ? 20 : item.textLength},${item.filedType === 'datetime' ? 'defaultFormat: \'date-time\',' : ''}${item.filedType === 'date' ? 'defaultFormat: \'date\',' : ''}${item.filedType === 'time' ? 'defaultFormat: \'time\',' : ''}
@@ -128,22 +128,28 @@ function generateEntity(formatTableName, fields) {
   }).join('\n')
 
   const content = `import type { integer_DTYPE, number_DTYPE, string_DTYPE, object_DTYPE } from '#/compose/entity'
-import type { ${formatTableName}_DTYPE } from '#/entity/${lowercaseTableName}'\n
-import { tableFactory, schemaFactory } from '@/compose/composeFactory'\n
-export class ${formatTableName} implements ${formatTableName}_DTYPE {
+import type { ${lowercaseTableName}_DTYPE } from '#/entity/${lowercaseTableName}'\n
+
+import { schemaFactory } from '@/compose/composeFactory'
+
+export class ${formatTableName} implements ${lowercaseTableName}_DTYPE {
 ${types}
 }
 
-export class ${formatTableName}Vo implements Partial<${formatTableName}_DTYPE> {
+export class ${formatTableName}Vo implements Partial<${lowercaseTableName}_DTYPE> {
 ${types}
 }
 
-export const ${lowercaseTableName}Table = tableFactory<${formatTableName}>(${formatTableName})
 export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}>(${formatTableName})
 export const ${lowercaseTableName}SchemaVo = schemaFactory<${formatTableName}Vo>(${formatTableName}Vo)
 `
-  fs.writeFileSync(`src/entity/${lowercaseTableName}.ts`, content)
-  console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `src/entity/${lowercaseTableName}.ts`)
+  const filePath = `src/entity/${lowercaseTableName}.ts`
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, content)
+    console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', filePath)
+  } else {
+    fs.writeFileSync(`src/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`, content)
+  }
 }
 
 async function generateCreate() {
@@ -175,7 +181,7 @@ async function generateCreate() {
         where table_schema ='${mysqlConfig.database}' AND table_name = '${tableName}'
       `, (error, fields) => {
           if (error) throw error
-          console.log('%c [ generateTable name ]', 'font-size:14px; background:#41b883; color:#ffffff;', formatTableName)
+          console.log('%c [ tableName name ]', 'font-size:14px; background:#41b883; color:#ffffff;', tableName)
           generateDtype(formatTableName, fields)
           generateEntity(formatTableName, fields)
 

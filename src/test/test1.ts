@@ -1,48 +1,17 @@
 import type { number_DTYPE, integer_DTYPE, string_DTYPE } from '#/compose/entity'
 
 import { schemaFactory } from '@/compose/composeFactory'
-import { testDtypeSchema, testDtypeSchemaVo, testDtypeTable } from '@/entity/testDtype'
+import { testDtypeSchema, testDtypeSchemaVo } from '@/entity/testDtype'
 import { prisma } from '@/effect/index'
 
 class TestService {
   // 基本curd 两种可选
-  getCurdSql() {
+  async getCurdSql() {
     // prisma执行
-    prisma.app_info.findMany().then((res1) => {
-    })
-    prisma.test_dtype.findMany().then((res2) => {
-    })
-    prisma.test_info.findMany().then((res3) => {
-    })
-
-    // 老版本table
-    const add = testDtypeTable.crudInsert().getSql()
-    const deleted = testDtypeTable.curdDeleteById().getSql()
-    const update = testDtypeTable.curdUpdateById().getSql()
-    const select1 = testDtypeTable.curdSelectById().getSql()
-    const select2 = testDtypeTable.curdSelectByPage().getSql()
-    const select3 = testDtypeTable.crudSelectAll().getSql()
-    return { add, deleted, update, select1, select2, select3 }
-  }
-
-  // 追加字段
-  getAppendKeySql() {
-    return testDtypeTable.appendKey('append').select('id = 1').getSql()
-  }
-
-  // 根据自定义sql并且串根据id更新的sql
-  getSetSql() {
-    return testDtypeTable.setSql('SELECT id,name,text FROM test_info').curdUpdateById().getSql()
-  }
-
-  // 排除id查询全部
-  getOmitKeySql() {
-    return testDtypeTable.omitKey('id').crudSelectAll().getSql()
-  }
-
-  // 只显示data字段查询全部
-  getPickKeySql() {
-    return testDtypeTable.pickKey('date').crudSelectAll().getSql()
+    const res1 = await prisma.app_info.findMany()
+    const res2 = await prisma.test_dtype.findMany()
+    const res3 = await prisma.test_info.findMany()
+    console.log('%c [ testService.getCurdSql() ]-13', 'font-size:14px; background:#41b883; color:#ffffff;', { res1: JSON.stringify(res1), res2: JSON.stringify(res2), res3: JSON.stringify(res3) })
   }
 
   // 基本schema
@@ -107,7 +76,7 @@ class TestService {
     const schema13EntitySchema = testDtypeSchema.omitEntitySchema(['json', 'date'])
     const schema13 = testDtypeSchema.getSchema(schema13EntitySchema)
 
-    return {
+    const result = {
       schema1: JSON.stringify(schema1),
       schema2: JSON.stringify(schema2),
       schema3: JSON.stringify(schema3),
@@ -122,14 +91,11 @@ class TestService {
       schema12: JSON.stringify(schema12),
       schema13: JSON.stringify(schema13),
     }
+
+    console.log('%c [ testService.getSchema() ]-13', 'font-size:14px; background:#41b883; color:#ffffff;', result)
   }
 }
 
 const testService = new TestService()
-
-console.log('%c [ testService.getCurdSql() ]-8', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getCurdSql())
-console.log('%c [ testService.getAppendKeySql() ]-9', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getAppendKeySql())
-console.log('%c [ testService.getSetSql() ]-10', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getSetSql())
-console.log('%c [ testService.getOmitKeySql() ]-11', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getOmitKeySql())
-console.log('%c [ testService.getPickKeySql() ]-12', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getPickKeySql())
-console.log('%c [ testService.getSchema() ]-13', 'font-size:14px; background:#41b883; color:#ffffff;', testService.getSchema())
+testService.getCurdSql()
+testService.getSchema()

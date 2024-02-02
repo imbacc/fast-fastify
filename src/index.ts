@@ -8,6 +8,7 @@ import plugin from '@/common/plugin'
 import router from '@/router/index'
 
 async function startServer() {
+  console.time('启动时间')
   intercept() // 注册拦截器
   throws() // 注册抛异常
   await plugin() // 注册插件
@@ -20,6 +21,7 @@ async function startServer() {
       throw err
     }
     scheduler.start()
+    setTimeout(() => console.timeEnd('启动时间'))
     // logger.info(`路由树形结构:\n ${fastify.printRoutes()}`)
   })
 }

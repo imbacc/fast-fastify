@@ -22,8 +22,8 @@ export class APICode {
   REPEATREG = [-101, '手机号重复注册']
   TESTCODE_FAIL = [-102, '验证码验证失败']
   SMS_ERRPR = [-103, '短信发送失败']
-  SUCCESS_LOGIN_FALSE = [-100, '登录失败']
-  REPETA_REGISTER = [-200, '注册重复']
+  SUCCESS_LOGIN_FALSE = [-110, '登录失败']
+  REPETA_REGISTER = [-111, '注册重复']
 
   // -1000到-9999 请求其他区块
   UPLOAD_FAIL = [-9999, '上传失败']
@@ -65,5 +65,5 @@ export const resultful = <T = any>(key: keyof APICode, data?: T) => {
 
 export const resultfulError = (key: keyof APICode, appendMsg: string = '') => {
   const [code, msg] = apiCode[key] as [number, string]
-  return apiResultful.resultful({ code, msg: `${msg} ${appendMsg}`, data: null })
+  return apiResultful.resultful({ code, msg: `${msg}${appendMsg ? ' ' : ''}${appendMsg}`, data: null })
 }

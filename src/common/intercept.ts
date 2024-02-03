@@ -50,6 +50,7 @@ export default () => {
 
     if (!reque?.headers.authorization) {
       reply.code(401).send(resultful('UNMAKETOKEN_FAIL'))
+      return
     }
 
     const { query, body, id, ip } = reque

@@ -2,6 +2,7 @@ import type { APICode } from '@/common/resultful'
 
 import { fastify, logger } from '@/effect/index'
 import { resultfulError } from '@/common/resultful'
+import { isDev } from '@/config/index'
 
 export default () => {
   logger.start('use throw failed!')
@@ -15,6 +16,12 @@ export default () => {
 
   let code: keyof APICode = 'FAIL'
 
+  function extractErrorLine(errorString, lineNumber) {
+    const lines = errorString.split('\n')
+    const line = lines[lineNumber - 1]
+    return line.trim()
+  }
+
   fastify.setErrorHandler((error, request, reply) => {
     // error.validationContext 是 [body, params, querystring, headers] 之中的值
     if (error.validation) {
@@ -27,7 +34,7 @@ export default () => {
     } else {
       logger.error(`error = ${error.message}`)
       code = 'API_ERROR'
-      reply.status(400).send(resultfulError(code, error.message))
+      reply.status(400).send(resultfulError(code, isDev ? error.message : ''))
     }
   })
 }

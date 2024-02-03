@@ -16,6 +16,9 @@ pnpm i && pnpm run dev
 pnpm prisma introspect
 或者使用
 pnpm prisma db pull
+-----
+prisma generate
+-----
 在执行以下命令生成schema实体类和路由
 pnpm run create
 或者以下分解的命令

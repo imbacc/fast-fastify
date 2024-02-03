@@ -1,7 +1,7 @@
 import { fastify, logger, scheduler } from '@/effect'
 import { listenConfig } from '@/config'
 
-import '@/test/test1'
+// import '@/test/test1'
 import intercept from '@/common/intercept'
 import throws from '@/common/throw'
 import plugin from '@/common/plugin'

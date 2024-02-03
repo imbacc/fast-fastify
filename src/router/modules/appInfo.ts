@@ -26,7 +26,17 @@ export default () => {
         description: '查询所有数据description!',
       },
       handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
-        const res = await prisma.app_info.findMany()
+        // 分页
+        // const results = await prisma.app_info.findMany({
+        //   skip: 3,
+        //   take: 4,
+        // })
+        const res = await prisma.app_info.findMany({
+          // select: {
+          //   // 不显示这个字段
+          //   decimalTest: false,
+          // },
+        })
         reply.send(resultful('SUCCESS', res))
       },
     },
@@ -73,7 +83,7 @@ export default () => {
         body: appInfoSchema.pickSchema('id'),
       },
       handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
-        const res = await prisma.app_info.delete({ where: { id: request.body.id } })
+        const res = await prisma.app_info.deleteMany({ where: { id: request.body.id } })
         reply.send(resultful('SUCCESS', res))
       },
     },
@@ -90,6 +100,7 @@ export default () => {
       },
       handler: async (request: request_DTYPE<appInfoTarget_DTYPE>, reply) => {
         const res = await prisma.app_info.update({ where: { id: request.body.id }, data: Object.assign({}, request.body) })
+        console.log('%c [ res ]-93', 'font-size:14px; background:#41b883; color:#ffffff;', res)
         reply.send(resultful('SUCCESS', res))
       },
     },

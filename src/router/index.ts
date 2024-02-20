@@ -31,34 +31,25 @@ export default async () => {
             module.schema = Object.assign(module.schema || {}, first.swagger)
           } else if (key === 'prefix' && first.prefix) {
             module.url = first.prefix + module.url
-          } else {
-            module[key] = typeof first[key] !== 'undefined' ? first[key] : module[key]
+          } else if (typeof first[key] !== 'undefined') {
+            module[key] = first[key]
           }
         })
       }
-      // console.log('%c [ module ]-32', 'font-size:14px; background:#41b883; color:#ffffff;', JSON.stringify(module))
       if (module.limit && Array.isArray(module.limit)) {
         apiLimitMemory.setLimit(module.url, module.limit)
-        delete module.limit
+        // delete module.limit
       }
       if (module.skip) {
         skipRouter.addSkip(module.url)
-        delete module.skip
+        // delete module.skip
       }
       if (module.swagger) {
         module.schema = Object.assign(module.schema || {}, module.swagger)
         delete module.swagger
       }
 
-      // if (module.method === 'GET') {
-      //   fastify.get<{
-      //     Querystring: IQuerystring,
-      //     Headers: IHeaders,
-      //     Reply: IReply
-      //   }>(module.url, module.handler)
-      // } else {
       fastify.route(module as RouteOptions)
-      // }
     })
   }) // 循环子模块路由配置 生产路由
 

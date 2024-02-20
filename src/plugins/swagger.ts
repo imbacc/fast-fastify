@@ -32,7 +32,8 @@ export default async () => {
   await fastify.register(fastifySwaggerUi, {
     routePrefix: route,
     uiConfig: {
-      docExpansion: 'full',
+      // full展开列表 list收缩列表
+      docExpansion: 'list',
       deepLinking: false,
     },
     staticCSP: true,

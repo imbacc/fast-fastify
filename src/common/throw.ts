@@ -15,13 +15,6 @@ export default () => {
   // })
 
   let code: keyof APICode = 'FAIL'
-
-  function extractErrorLine(errorString, lineNumber) {
-    const lines = errorString.split('\n')
-    const line = lines[lineNumber - 1]
-    return line.trim()
-  }
-
   fastify.setErrorHandler((error, request, reply) => {
     // error.validationContext 是 [body, params, querystring, headers] 之中的值
     if (error.validation) {

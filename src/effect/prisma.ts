@@ -9,10 +9,12 @@ export class Prisma extends PrismaClient {
       log: ['query', 'warn', 'error'],
     })
 
-    this.expandQuery()
-    this.expandModel()
-    this.expandResult()
-    this.expandClient()
+    setTimeout(() => {
+      this.expandQuery()
+      this.expandModel()
+      this.expandResult()
+      this.expandClient()
+    })
   }
 
   private expandQuery() {

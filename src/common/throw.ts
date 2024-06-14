@@ -5,7 +5,7 @@ import { resultfulError } from '@/common/resultful'
 import { isDev } from '@/config/index'
 
 export default () => {
-  logger.start('use throw failed!')
+  logger.start('use throw error!')
 
   // fastify.setNotFoundHandler((request, reply) => {
   //   reply.code(404).send({

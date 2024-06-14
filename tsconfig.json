@@ -11,9 +11,12 @@
     "noUnusedParameters": false,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["es6"],
+    "lib": [
+      "esnext",
+      "es6"
+    ],
     "alwaysStrict": true,
-    "declaration": true,
+    "declaration": false,
     "removeComments": true,
     "diagnostics": true,
     "incremental": true,
@@ -22,7 +25,7 @@
     "noImplicitAny": false,
     "skipLibCheck": false,
     "outDir": "dist",
-    "typeRoots": ["types/**/*.ts", "node", "fastify"],
+    "typeRoots": ["types/**/*.ts", "fastify"],
     "paths": {
       "@/*": [
         "./src/*"

@@ -2,7 +2,7 @@ import type { RouteOptions } from 'fastify'
 import type { firstRouter_DTYPE, arrayRouter_DTYPE } from '#/router/modules'
 
 import fs from 'node:fs'
-import { fastify, apiLimitMemory, skipRouter, logger } from '@/effect'
+import { fastify, apiLimitRedis, skipRouter, logger } from '@/effect'
 
 const path = './src/router/modules'
 async function fsModules() {
@@ -17,7 +17,9 @@ async function fsModules() {
 }
 
 export default async () => {
+  console.time('router')
   const list = await fsModules()
+  console.timeEnd('router')
 
   list.forEach((info) => {
     const first = info[0] as Partial<firstRouter_DTYPE>
@@ -37,7 +39,7 @@ export default async () => {
         })
       }
       if (module.limit && Array.isArray(module.limit)) {
-        apiLimitMemory.setLimit(module.url, module.limit)
+        apiLimitRedis.setLimit(module.url, module.limit)
         // delete module.limit
       }
       if (module.skip) {

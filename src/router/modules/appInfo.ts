@@ -31,12 +31,14 @@ export default () => {
         //   skip: 3,
         //   take: 4,
         // })
-        const res = await prisma.app_info.findMany({
-          // select: {
-          //   // 不显示这个字段
-          //   decimalTest: false,
-          // },
-        })
+        const res = await prisma.app_info.findMany(
+          // {
+          //   select: {
+          //     // 不显示这个字段
+          //     decimalTest: false,
+          //   },
+          // }
+        )
         reply.send(resultful('SUCCESS', res))
       },
     },

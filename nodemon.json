@@ -1,6 +1,9 @@
 {
   "watch": [
-    "src"
+    "src",
+    ".env",
+    ".env.dev",
+    ".env.prod"
   ],
   "ignore": [".git", "node_modules/", "dist/"],
   "ext": "ts,js,json",

@@ -1,27 +1,30 @@
 # fast-fastify
 ### fastify 文档： https://fastify.dev/ https://www.w3cschool.cn/fastify/
 
-js 版本分支 git clone -b jsBranch git@github.com:imbacc/fast-fastify.git
-
 ## pnpm install
 
 ```
+# node 18.12.1
+# npm 9.4.0
+# pnpm 8.15.3
+
 pnpm i && pnpm run dev
 ```
 
 > 基础使用流程,先创建数据库表,可使用Chat2DB快速构建关系 https://github.com/chat2db/Chat2DB
 
 ```
-获取数据库信息并生成新的prisma客户端
+# 获取数据库信息并生成新的prisma客户端
 pnpm prisma introspect
-或者使用
 pnpm prisma db pull
------
+或者使用
+pnpm run prisma:pull
+-----------------------------
 prisma generate
 -----
-在执行以下命令生成schema实体类和路由
+# 在执行以下命令生成schema实体类和路由
 pnpm run create
-或者以下分解的命令
+# 或者以下分解的命令
 pnpm run c-entity
 pnpm run c-router
 ```

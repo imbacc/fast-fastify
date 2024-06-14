@@ -20,8 +20,8 @@ async function startServer() {
       logger.error(`server start error = ${err.message}`)
       throw err
     }
-    scheduler.start()
-    setTimeout(() => console.timeEnd('启动时间'))
+    scheduler?.start()
+    console.timeEnd('启动时间')
     // logger.info(`路由树形结构:\n ${fastify.printRoutes()}`)
   })
 }

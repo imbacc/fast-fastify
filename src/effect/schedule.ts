@@ -30,7 +30,7 @@ export class Scheduler {
     )
     const job = new SimpleIntervalJob({ seconds }, task)
     fastify.ready().then(() => {
-      fastify.scheduler.addSimpleIntervalJob(job)
+      fastify.scheduler?.addSimpleIntervalJob(job)
     })
   }
 }

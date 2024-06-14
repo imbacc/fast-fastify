@@ -63,7 +63,7 @@ export const resultful = <T = any>(key: keyof APICode, data?: T) => {
   return apiResultful.resultful({ code, msg, data })
 }
 
-export const resultfulError = (key: keyof APICode, appendMsg: string = '') => {
+export const resultfulError = (key: keyof APICode, appendMsg = '') => {
   const [code, msg] = apiCode[key] as [number, string]
   return apiResultful.resultful({ code, msg: `${msg}${appendMsg ? ' ' : ''}${appendMsg}`, data: null })
 }

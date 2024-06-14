@@ -18,7 +18,7 @@ const { open: _open, time: _time, count: _count } = apiLimitConfig
 
 export class ApiLimitMemory {
   private max = 1000000
-  private cache = {}
+  private cache: Record<string, number> = {}
   private limit: Record<string, [number, number]> = {}
   private proMark
 
@@ -51,8 +51,8 @@ export class ApiLimitMemory {
         count = cfgCount
       }
 
-      const apiTime: number = this.getCache(keyTime) || 0 // 获取 访问API时间间隔
-      const apiCount: number = this.getCache(keyNum) || 0 // 获取 访问API次数间隔的时间
+      const apiTime = this.getCache(keyTime) || 0 // 获取 访问API时间间隔
+      const apiCount = this.getCache(keyNum) || 0 // 获取 访问API次数间隔的时间
       const dateTime = new Date().getTime()
 
       if (apiTime && apiCount) {

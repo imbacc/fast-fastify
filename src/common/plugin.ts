@@ -1,5 +1,5 @@
 import { fastify } from '@/effect/index'
-import { jwtKeyConfig } from '@/config/index'
+import { swaggerConfig, jwtKeyConfig } from '@/config/index'
 
 import swagger from '@/plugins/swagger'
 import cors from '@fastify/cors'
@@ -13,7 +13,7 @@ import schedule from '@fastify/schedule'
 
 export default async () => {
   await swagger()
-  await fastify.register(cors, { methods: ['GET', 'PUT', 'POST'] })
-  await fastify.register(jwt, { secret: jwtKeyConfig })
-  await fastify.register(schedule)
+  fastify.register(cors, { methods: ['GET', 'PUT', 'POST'] })
+  fastify.register(jwt, { secret: jwtKeyConfig })
+  fastify.register(schedule)
 }

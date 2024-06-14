@@ -1,11 +1,9 @@
-import type { PinoLoggerOptions } from 'fastify/types/logger'
-
 import fastifyFrame from 'fastify'
 // import { isDev } from '@/config/index'
-import { ApiLimitMemory } from './apiLimitMemory'
+// import { ApiLimitMemory } from './apiLimitMemory'
 import { ApiLimitRedis } from './apiLimitRedis'
 import { SkipRouter } from './skipRouter'
-import { Base64 } from './base64'
+// import { Base64 } from './base64'
 import { Logger } from './fastifyLog'
 import { Redis } from './redis'
 import { Scheduler } from './schedule'
@@ -38,19 +36,16 @@ export const fastify = fastifyFrame({
 export const logger = new Logger(fastify.log)
 
 // api接口限流 内存版本
-export const apiLimitMemory = new ApiLimitMemory()
+// export const apiLimitMemory = new ApiLimitMemory()
+
+// redis实例对象
+export const redis = new Redis()
 
 // api接口限流 redis版本
 export const apiLimitRedis = new ApiLimitRedis()
 
 // 路由权限验证是否跳过
 export const skipRouter = new SkipRouter()
-
-// base64加密和解密
-export const base64 = new Base64()
-
-// redis实例对象
-export const redis = new Redis()
 
 // scheduler实例对象
 export const scheduler = new Scheduler()

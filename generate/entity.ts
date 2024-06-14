@@ -100,8 +100,9 @@ export interface ${lowercaseTableName}Target_DTYPE {
 ${types2}
 }
 `
-  fs.writeFileSync(`types/entity/${lowercaseTableName}.d.ts`, content)
-  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', `types/entity/${lowercaseTableName}.d.ts`)
+  const fileURL = `types/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.d.ts`
+  fs.writeFileSync(fileURL, content)
+  console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', fileURL)
 }
 
 // 实体的属性 和 vo
@@ -148,7 +149,9 @@ export const ${lowercaseTableName}SchemaVo = schemaFactory<${formatTableName}Vo>
     fs.writeFileSync(filePath, content)
     console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', filePath)
   } else {
-    fs.writeFileSync(`src/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`, content)
+    const fileURL = `src/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`
+    fs.writeFileSync(fileURL, content)
+    console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', fileURL)
   }
 }
 

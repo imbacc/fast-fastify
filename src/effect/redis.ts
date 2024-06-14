@@ -9,22 +9,24 @@ export class Redis {
     // Redis驱动
     // redis[s]://[[username][:password]@][host][:port][/db-number]:
     // url: 'redis://alice:foobared@awesome.redis.server:6380'
-    this.redis.on('error', (err) => {
-      logger.error(`redis error = ${err.message}`)
-      if (err.message?.indexOf('connect ECONNREFUSED') !== -1) {
-        this.redis.disconnect()
-      }
-    })
-    this.redis.on('connect', () => logger.start('use redis server!'))
-
-    this.redis.connect()
-    if (redisConfig.password) {
-      this.redis.auth({
-        username: redisConfig.username,
-        password: redisConfig.password,
+    setTimeout(() => {
+      this.redis.on('error', (err) => {
+        logger.error(`redis error = ${err.message}`)
+        if (err.message?.indexOf('connect ECONNREFUSED') !== -1) {
+          this.redis.disconnect()
+        }
       })
-    }
-    // this.redis.disconnect()
+      this.redis.on('connect', () => logger.start('connect redis server!'))
+
+      this.redis.connect()
+      if (redisConfig.password) {
+        this.redis.auth({
+          username: redisConfig.username,
+          password: redisConfig.password,
+        })
+      }
+      // this.redis.disconnect()
+    })
   }
 
   async getRedis<T = any>(key: string) {

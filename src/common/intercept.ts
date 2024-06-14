@@ -1,6 +1,6 @@
 import type { APICode } from '@/common/resultful'
 
-import { logger, fastify, skipRouter, apiLimitMemory } from '@/effect/index'
+import { logger, fastify, skipRouter, apiLimitRedis } from '@/effect/index'
 import { resultful } from '@/common/resultful' // 返回数据构造
 
 const ICO = '/favicon.ico'
@@ -37,7 +37,7 @@ export default () => {
     const skipBool = skipRouter.checkSkip(urlRouter)
     const blurSkipBool = skipRouter.checkBlurSkip(urlRouter)
     if (skipBool || blurSkipBool) {
-      apiLimitMemory.apiLimit(`${url}`, reque.ip).then((bool) => {
+      apiLimitRedis.apiLimit(`${url}`, reque.ip).then((bool) => {
         if (!bool) {
           logger.info('server api limit!', { url, code: 403 })
           reply.code(403).send(resultful('API_OUTTIME'))
@@ -46,17 +46,17 @@ export default () => {
         }
       })
       return
+    } else {
+      if (!reque?.headers.authorization) {
+        reply.code(401).send(resultful('UNMAKETOKEN_FAIL'))
+        return
+      }
     }
 
-    if (!reque?.headers.authorization) {
-      reply.code(401).send(resultful('UNMAKETOKEN_FAIL'))
-      return
-    }
-
-    const { query, body, id, ip } = reque
+    // const { query, body, id, ip } = reque
     // logger.info('request intercept call = ', { id, ip, url, query, body })
 
-    apiLimitMemory.apiLimit(url as string, ip).then((bool) => {
+    apiLimitRedis.apiLimit(url as string, reque.ip).then((bool) => {
       if (!bool) {
         logger.info('server api limit!', { url, code: 403 })
         reply.code(403).send(resultful('API_OUTTIME'))

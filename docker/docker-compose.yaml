@@ -1,0 +1,6 @@
+version: "3.4"
+
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:latest

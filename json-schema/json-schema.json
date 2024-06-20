@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "app_info": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "text默认值"
+        },
+        "version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "os": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ostext": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linkurl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decimalTest": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "test_dtype": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "json": {
+          "type": "string"
+        },
+        "money": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "aaabbbccc"
+        }
+      }
+    },
+    "test_info": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "app_info": {
+      "$ref": "#/definitions/app_info"
+    },
+    "test_dtype": {
+      "$ref": "#/definitions/test_dtype"
+    },
+    "test_info": {
+      "$ref": "#/definitions/test_info"
+    }
+  }
+}

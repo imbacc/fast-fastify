@@ -39,7 +39,7 @@ export default () => {
     if (skipBool || blurSkipBool) {
       apiLimitRedis.apiLimit(`${url}`, reque.ip).then((bool) => {
         if (!bool) {
-          logger.info('server api limit!', { url, code: 403 })
+          // logger.info('server api limit!', { url, code: 403 })
           reply.code(403).send(resultful('API_OUTTIME'))
         } else {
           next()
@@ -58,7 +58,7 @@ export default () => {
 
     apiLimitRedis.apiLimit(url as string, reque.ip).then((bool) => {
       if (!bool) {
-        logger.info('server api limit!', { url, code: 403 })
+        // logger.info('server api limit!', { url, code: 403 })
         reply.code(403).send(resultful('API_OUTTIME'))
       } else {
         reque.jwtVerify((err) => {

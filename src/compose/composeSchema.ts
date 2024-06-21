@@ -147,9 +147,9 @@ export class ComposeSchema<T> {
   }
 
   /**
- * 只有排除的字段
- * @param key 字符串或字符串集合
- */
+   * 只有排除的字段
+   * @param key 字符串或字符串集合
+   */
   omitEntitySchema(key: keyof T | Array<keyof T>, targetEntity?: T): ObjectSchema {
     return this.handleSchema<T>(key, this.keys, targetEntity || this.entity, false).schema
   }

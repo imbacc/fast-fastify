@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import process from 'node:process'
 import mysql from 'mysql'
 import { mysqlConfig } from '../src/config/index'
@@ -101,7 +101,7 @@ ${types2}
 }
 `
   const fileURL = `types/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.d.ts`
-  fs.writeFileSync(fileURL, content)
+  writeFileSync(fileURL, content)
   console.log('%c [ generateDtype path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', fileURL)
 }
 
@@ -145,12 +145,12 @@ export const ${lowercaseTableName}Schema = schemaFactory<${formatTableName}>(${f
 export const ${lowercaseTableName}SchemaVo = schemaFactory<${formatTableName}Vo>(${formatTableName}Vo)
 `
   const filePath = `src/entity/${lowercaseTableName}.ts`
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, content)
+  if (!existsSync(filePath)) {
+    writeFileSync(filePath, content)
     console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', filePath)
   } else {
     const fileURL = `src/entity/${lowercaseTableName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`
-    fs.writeFileSync(fileURL, content)
+    writeFileSync(fileURL, content)
     console.log('%c [ generateEntity path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', fileURL)
   }
 }

@@ -1,25 +1,25 @@
 import type { RouteOptions } from 'fastify'
 import type { firstRouter_DTYPE, arrayRouter_DTYPE } from '#/router/modules'
 
-import fs from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { fastify, apiLimitRedis, skipRouter, logger } from '@/effect'
 
 const path = './src/router/modules'
 async function fsModules() {
   const modules: Array<any> = []
-  await fs.readdirSync(path).map(async (fileName) => {
-    const res = await import(`./modules/${fileName}`)
-    modules.push(res.default())
-  })
-  // modules.push(appinfo())
-  // modules.push(token())
+  const fileList = await readdirSync(path)
+
+  for (const fileName of fileList) {
+    const module = await import(`./modules/${fileName}`)
+    modules.push(module.default())
+  }
   return modules
 }
 
 export default async () => {
-  console.time('router')
+  console.time('路由加载')
   const list = await fsModules()
-  console.timeEnd('router')
+  console.timeEnd('路由加载')
 
   list.forEach((info) => {
     const first = info[0] as Partial<firstRouter_DTYPE>

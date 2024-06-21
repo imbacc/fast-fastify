@@ -7,7 +7,7 @@ import type {
   ArraySchema,
 } from 'fluent-json-schema'
 
-type FORMATS = {
+interface FORMATS {
   RELATIVE_JSON_POINTER: 'relative-json-pointer'
   JSON_POINTER: 'json-pointer'
   UUID: 'uuid'
@@ -25,7 +25,7 @@ type FORMATS = {
   DATE_TIME: 'date-time'
 }
 
-type types_DTYPE = {
+interface types_DTYPE {
   string: StringSchema
   number: NumberSchema
   integer: IntegerSchema
@@ -37,7 +37,7 @@ type types_DTYPE = {
 type props_DTYPE = StringSchema | NumberSchema | IntegerSchema | ObjectSchema | ArraySchema
 type attribute_DTYPE = string_DTYPE | number_DTYPE | integer_DTYPE | array_DTYPE | object_DTYPE
 
-type entity_DTYPE = {
+interface entity_DTYPE {
   // schema类型
   type: keyof types_DTYPE
   // 描述
@@ -106,7 +106,7 @@ export type number_DTYPE = {
   // appendOriginSchema: NumberSchema
 } & entity_DTYPE
 
-// integer用于整数 
+// integer用于整数
 export type integer_DTYPE = {
   type: 'integer'
   // 追加原有规则

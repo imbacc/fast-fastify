@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import process from 'node:process'
 import mysql from 'mysql'
 import { mysqlConfig } from '../src/config/index'
@@ -172,11 +172,11 @@ function generateRouter(formatName: string, tableName: string) {
   `
 
   const filePath = `src/router/modules/${formatName}.ts`
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, content)
+  if (!existsSync(filePath)) {
+    writeFileSync(filePath, content)
     console.log('%c [ generateRouter path ]-87', 'font-size:14px; background:#41b883; color:#ffffff;', filePath)
   } else {
-    fs.writeFileSync(`src/router/modules/${formatName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`, content)
+    writeFileSync(`src/router/modules/${formatName}_${new Date().toLocaleDateString().replace(/\//g, '-')}.ts`, content)
   }
 }
 

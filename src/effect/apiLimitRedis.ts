@@ -22,7 +22,7 @@ export class ApiLimitRedis {
    * @param count 数量
    * @param update 是否更新替换config参数
    * @returns
-  */
+   */
   async apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
     // false为关闭限流
     if (!_open) return true

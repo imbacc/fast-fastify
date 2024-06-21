@@ -67,14 +67,13 @@ export interface swagger_CONFIG {
     name: string | 'Authorization'
     in: string | 'header'
   }
-  tags?: Array<{ name: string; description: string }>
-  externalDocs?: { description: string; url: string }
+  tags?: Array<{ name: string, description: string }>
+  externalDocs?: { description: string, url: string }
 }
 // export interface swagger_DTYPE extends CONFIG_DTYPE<any> {
 //   dev: swagger_CONFIG
 //   prod: Partial<Omit<swagger_CONFIG, 'use'>> & Pick<swagger_CONFIG, 'use'>
 // }
-
 
 // alioss
 export interface aliOss_CONFIG {

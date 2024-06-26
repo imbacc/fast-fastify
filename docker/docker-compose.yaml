@@ -1,6 +1,43 @@
 version: "3.4"
 
 services:
-  db:
-    platform: linux/amd64
+  mysql:
+    container_name: 'mysql2'
     image: mysql:latest
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root # 设置root用户的密码
+      MYSQL_DATABASE: 'mydb' # 初始化数据库
+      MYSQL_USER: 'userdev' # 创建新用户
+      MYSQL_PASSWORD: '123456789' # 新用户的密码
+    restart: always
+    volumes:
+      - /home/mysql/conf:/etc/mysql/conf.d
+      - /home/mysql/data:/var/lib/mysql
+    command: # 覆盖默认启动命令，添加自定义配置
+      - '--character-set-server=utf8mb4' # 设置字符集
+      - '--collation-server=utf8mb4_unicode_ci' # 设置校对集
+      - '--sql_mode=""' # 设置SQL模式，移除ONLY_FULL_GROUP_BY等限制
+      - '--skip-name-resolve' # 提升性能，禁用DNS解析
+      - '--explicit_defaults_for_timestamp' # 为timestamp列启用明确默认值
+  redis:
+    container_name: 'redis2'
+    image: redis:latest
+    ports:
+      - "${REDIS_PORT}:6379"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    restart: always
+    volumes:
+      - /home/redis/conf:/etc/redis/redis.conf
+    command: ['redis-server', '--appendonly', 'yes']
+  server:
+    build: .
+    ports:
+      - "${PORT}:3000"
+    container_name: 'server2'
+    environment:
+      - NODE_ENV=production
+    image: 'server:latest'
+

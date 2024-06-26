@@ -1,25 +1,39 @@
 import type { RouteOptions } from 'fastify'
 import type { firstRouter_DTYPE, arrayRouter_DTYPE } from '#/router/modules'
 
-import { readdirSync, readdir } from 'node:fs'
+import Bun from 'bun'
+import process from 'node:process'
+import { readdirSync } from 'node:fs'
 import { fastify, apiLimitRedis, skipRouter, logger } from '@/effect'
-
-const path = './src/router/modules'
 async function fsModules() {
   const modules: Array<any> = []
-  const fileList = await readdirSync(path)
-
-  for (const fileName of fileList) {
-    const module = await import(`./modules/${fileName}`)
-    modules.push(module.default())
+  if (process.env.NODE_ENV === 'dev') {
+    const path = './src/router/modules'
+    const fileList = await readdirSync(path)
+    for (const fileName of fileList) {
+      const module = await import(`./modules/${fileName}`)
+      modules.push(module.default())
+    }
+    if (modules.length > 0) {
+      const expd = `export default ${JSON.stringify(modules)}`
+      await Bun.write(`${import.meta.dir}/routerList.ts`, expd)
+    } else {
+      await Bun.write(`${import.meta.dir}/routerList.ts`, `export default []`)
+    }
+    return modules
+  } else {
+    modules.push((await import('./modules/appInfo.ts')).default())
+    modules.push((await import('./modules/testDtype.ts')).default())
+    modules.push((await import('./modules/testInfo.ts')).default())
+    // console.log('%c [ routerList ]-23', 'font-size:14px; background:#41b883; color:#ffffff;', routerList)
+    return modules
   }
-  return modules
 }
 
 export default async () => {
-  console.time('router')
+  console.time('路由加载')
   const list = await fsModules()
-  console.timeEnd('router')
+  console.timeEnd('路由加载')
 
   list.forEach((info) => {
     const first = info[0] as Partial<firstRouter_DTYPE>

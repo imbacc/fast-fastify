@@ -1,5 +1,8 @@
-import { env } from 'bun'
+// import { env } from 'bun'
+import process from 'node:process'
 import dotenv from 'dotenv'
+
+const env = process.env
 
 const ENV = env.NODE_ENV
 dotenv.config({

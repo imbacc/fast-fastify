@@ -28,7 +28,7 @@ export class ApiLimitRedis {
     if (!_open) return true
 
     const key = isDev ? `${spname}_${spid}` : md5(`${spname}_${spid}`)
-    console.log('%c [ key ]-31', 'font-size:14px; background:#41b883; color:#ffffff;', key)
+    // console.log('%c [ key ]-31', 'font-size:14px; background:#41b883; color:#ffffff;', key)
     const keyTime = `apit_${key}`
     const keyNum = `apin_${key}`
     const cfg = this.getLimit(spname.split('?')[0])

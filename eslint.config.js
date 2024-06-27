@@ -1,6 +1,8 @@
 const { antfu } = require('@antfu/eslint-config')
 const { eslintConfig, ignoresConfig } = require('imba-config')
 
+ignoresConfig.push('**/**/routerList.ts')
+
 module.exports = antfu({
   typescript: true,
   vue: false,

@@ -1,6 +1,8 @@
 # fast-fastify
 ### fastify 文档： https://fastify.dev/ https://www.w3cschool.cn/fastify/
 
+### bun框架运行 -> bun分支
+
 ## pnpm install
 
 ```

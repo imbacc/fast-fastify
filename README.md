@@ -3,6 +3,15 @@
 
 ### bun框架运行 -> bun分支
 
+## ✨ Features
+
+- **Fastify** - 由fastify强力驱动,使用 TypeScript 书写
+- **prisma** - 使用prisma操作数据库
+- **接口限流** - 路由页接口限流，全局限流
+- **全局代理** - 路由页全局前缀，swagger归类，更多自定义操作
+- **快捷生成** - 使用c-entity生成数据库实体类，c-router生成路由
+- **验证工厂** - 使用schemaFactory来约束路由接口参数
+
 ## pnpm install
 
 ```

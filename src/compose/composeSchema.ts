@@ -4,7 +4,6 @@ import type {
 } from 'fluent-json-schema'
 import type { string_DTYPE, number_DTYPE, array_DTYPE, object_DTYPE, props_DTYPE, attribute_DTYPE } from '#/compose/entity'
 
-import { convertFactory } from './composeFactory'
 import schema from 'fluent-json-schema'
 
 export class ComposeSchema<T> {

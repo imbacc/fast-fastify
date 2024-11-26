@@ -12,14 +12,16 @@ const IP = process.env.IP as string
 const MD5KEY = process.env.MD5KEY as string
 
 // .env.*.配置
-const IGNORE_AUTH = JSON.parse(process.env.IGNORE_AUTH as string) as string[]
+const IGNORE_AUTH = process.env.IGNORE_AUTH ? process.env.IGNORE_AUTH.split(',') : []
 // mysql
+const MYSQL_USE = process.env.MYSQL_USE === 'true'
 const MYSQL_HOST = process.env.MYSQL_HOST as string
 const MYSQL_PORT = Number(process.env.MYSQL_PORT)
 const MYSQL_USER = process.env.MYSQL_USER as string
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD as string
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE as string
 // redis
+const REDIS_USE = process.env.REDIS_USE === 'true'
 const REDIS_HOST = process.env.REDIS_HOST as string
 const REDIS_PORT = Number(process.env.REDIS_PORT)
 const REDIS_USERNAME = process.env.REDIS_USERNAME as string
@@ -53,11 +55,13 @@ export default {
   IP,
   MD5KEY,
   IGNORE_AUTH,
+  MYSQL_USE,
   MYSQL_HOST,
   MYSQL_PORT,
   MYSQL_USER,
   MYSQL_PASSWORD,
   MYSQL_DATABASE,
+  REDIS_USE,
   REDIS_HOST,
   REDIS_PORT,
   REDIS_USERNAME,

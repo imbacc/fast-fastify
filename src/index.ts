@@ -7,8 +7,8 @@ import throws from '@/common/throw'
 import plugin from '@/common/plugin'
 import router from '@/router/index'
 
-import asd from '../rust-package/index'
-console.log('%c [ asd ]-11', 'font-size:14px; background:#41b883; color:#ffffff;', asd)
+// import asd from '../rust-package/index'
+// console.log('%c [ asd ]-11', 'font-size:14px; background:#41b883; color:#ffffff;', asd)
 
 async function startServer() {
   console.time('启动时间')

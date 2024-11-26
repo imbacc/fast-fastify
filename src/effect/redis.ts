@@ -3,9 +3,12 @@ import { logger } from '@/effect/index'
 import { createClient } from 'redis'
 
 export class Redis {
-  private redis = createClient({ url: `redis://${redisConfig.host}:${redisConfig.port}` })
+  private redis = createClient()
 
   constructor() {
+    if (!redisConfig.use) return
+
+    this.redis = createClient({ url: `redis://${redisConfig.host}:${redisConfig.port}` })
     // Redis驱动
     // redis[s]://[[username][:password]@][host][:port][/db-number]:
     // url: 'redis://alice:foobared@awesome.redis.server:6380'

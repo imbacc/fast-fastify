@@ -1,17 +1,20 @@
 import type { RouteOptions } from 'fastify'
 import type { firstRouter_DTYPE, arrayRouter_DTYPE } from '#/router/modules'
 
-import { readdirSync } from 'node:fs'
-import { fastify, apiLimitRedis, skipRouter, logger } from '@/effect'
+import { fastify, apiLimit, skipRouter, logger } from '@/effect'
+import { isDev } from '@/config'
+import path from 'node:path'
+import fs from 'node:fs'
 
-const path = './src/router/modules'
+const dirPath = path.join(__dirname, isDev ? 'modules' : 'router/modules')
 async function fsModules() {
   const modules: Array<any> = []
-  const fileList = await readdirSync(path)
+  const fileList = await fs.readdirSync(dirPath)
 
   for (const fileName of fileList) {
-    const module = await import(`./modules/${fileName}`)
-    modules.push(module.default())
+    const modulePath = isDev ? `./modules/${fileName}` : `./router/modules/${fileName}`
+    const module = await import(modulePath)
+    modules.push(module?.default())
   }
   return modules
 }
@@ -39,7 +42,7 @@ export default async () => {
         })
       }
       if (module.limit && Array.isArray(module.limit)) {
-        apiLimitRedis.setLimit(module.url, module.limit)
+        apiLimit.setLimit(module.url, module.limit)
         // delete module.limit
       }
       if (module.skip) {

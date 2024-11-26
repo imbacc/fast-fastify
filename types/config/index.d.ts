@@ -27,6 +27,7 @@ export type jwt_CONFIG = string
 
 // mysql
 export interface mysql_CONFIG {
+  use: boolean
   host: string | '127.0.0.1'
   user: string
   password: string
@@ -37,6 +38,7 @@ export interface mysql_CONFIG {
 
 // redis
 export interface redis_CONFIG {
+  use: boolean
   username: string
   password: string
   host: string | '127.0.0.1'
@@ -54,7 +56,7 @@ export interface apiLimit_CONFIG {
 
 // swagger
 export interface swagger_CONFIG {
-  use: boolean | true
+  use: boolean
   route: string
   info: {
     title: string

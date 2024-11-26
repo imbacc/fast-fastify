@@ -6,6 +6,7 @@ generator jsonSchema {
   provider = "prisma-json-schema-generator"
 }
 
+// 不需要连接数据库填入provider = "sqlite",url = "file:./dev.db"
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")

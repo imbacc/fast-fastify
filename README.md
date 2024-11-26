@@ -25,15 +25,15 @@ pnpm i && pnpm run dev
 > 基础使用流程,先创建数据库表,可使用Chat2DB快速构建关系 https://github.com/chat2db/Chat2DB
 
 ```
-# 获取数据库信息并生成新的prisma客户端
-pnpm prisma introspect
-pnpm prisma db pull
-或者使用
-pnpm run prisma:pull
------------------------------
-prisma generate
------
-# 在执行以下命令生成schema实体类和路由
+# 获取数据库信息并生成新的prisma客户端 <- pnpm install后必须执行一次pnpm run dbpull
+pnpm run dbpull
+
+# 或者使用原始命名↓
+# pnpm prisma introspect
+# pnpm prisma db pull
+# prisma generate
+
+# 执行以下命令生成schema实体类和路由 必须成功生成prisma文件后执行
 pnpm run create
 # 或者以下分解的命令
 pnpm run c-entity

@@ -33,6 +33,7 @@ const _jwtKey: jwt_CONFIG = md5(envConfig.MD5KEY)
 
 // mysql
 const _mysql: mysql_CONFIG = {
+  use: envConfig.MYSQL_USE,
   host: envConfig.MYSQL_HOST,
   user: envConfig.MYSQL_USER,
   password: envConfig.MYSQL_PASSWORD,
@@ -42,6 +43,7 @@ const _mysql: mysql_CONFIG = {
 
 // redis
 const _redis: redis_CONFIG = {
+  use: envConfig.REDIS_USE,
   username: envConfig.REDIS_USERNAME,
   password: envConfig.REDIS_PASSWORD,
   host: envConfig.REDIS_HOST,
@@ -58,7 +60,7 @@ const _apiLimit: apiLimit_CONFIG = {
 // swagger信息
 const _swagger: swagger_CONFIG = {
   use: envConfig.SWAGGER_USE,
-  route: envConfig.SWAGGER_ROUTE.replace('#{SWAGGER_MD5KEY}', md5(envConfig.SWAGGER_MD5KEY)),
+  route: envConfig.SWAGGER_ROUTE?.replace('#{SWAGGER_MD5KEY}', md5(envConfig.SWAGGER_MD5KEY)),
   info: {
     title: envConfig.SWAGGER_INFO_TITLE,
     version: envConfig.SWAGGER_INFO_VERSION,

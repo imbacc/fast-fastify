@@ -21,6 +21,7 @@ export default () => {
     // reply.header(H_KEY3, H_VAL3)
 
     const { url, method } = reque.raw
+    console.log('%c [ url ]-24', 'font-size:14px; background:#41b883; color:#ffffff;', url)
     if (url === ICO) {
       next()
       return
@@ -35,7 +36,9 @@ export default () => {
     const urlIndex = url?.indexOf('?')
     const urlRouter = (urlIndex !== -1 ? url?.substring(0, urlIndex) : url) as string
     const skipBool = skipRouter.checkSkip(urlRouter)
+    console.log('%c [ skipBool ]-38', 'font-size:14px; background:#41b883; color:#ffffff;', skipBool)
     const blurSkipBool = skipRouter.checkBlurSkip(urlRouter)
+    console.log('%c [ blurSkipBool ]-40', 'font-size:14px; background:#41b883; color:#ffffff;', blurSkipBool)
     if (skipBool || blurSkipBool) {
       apiLimit.apiLimitCall(`${url}`, reque.ip).then((bool) => {
         if (!bool) {

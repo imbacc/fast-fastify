@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 const ENV = process.env.NODE_ENV
 dotenv.config({
-  path: [`.env.${ENV}`, '.env'],
+  path: [`.env.${ENV}`],
 })
 
 // .env公共配置

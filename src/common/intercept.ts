@@ -1,6 +1,6 @@
 import type { APICode } from '@/common/resultful'
 
-import { logger, fastify, skipRouter, apiLimitRedis } from '@/effect/index'
+import { logger, fastify, skipRouter, apiLimit } from '@/effect/index'
 import { resultful } from '@/common/resultful' // 返回数据构造
 
 const ICO = '/favicon.ico'
@@ -37,9 +37,9 @@ export default () => {
     const skipBool = skipRouter.checkSkip(urlRouter)
     const blurSkipBool = skipRouter.checkBlurSkip(urlRouter)
     if (skipBool || blurSkipBool) {
-      apiLimitRedis.apiLimit(`${url}`, reque.ip).then((bool) => {
+      apiLimit.apiLimitCall(`${url}`, reque.ip).then((bool) => {
         if (!bool) {
-          logger.info('server api limit!', { url, code: 403 })
+          // logger.info('server api limit!', { url, code: 403 })
           reply.code(403).send(resultful('API_OUTTIME'))
         } else {
           next()
@@ -56,9 +56,9 @@ export default () => {
     // const { query, body, id, ip } = reque
     // logger.info('request intercept call = ', { id, ip, url, query, body })
 
-    apiLimitRedis.apiLimit(url as string, reque.ip).then((bool) => {
+    apiLimit.apiLimitCall(url as string, reque.ip).then((bool) => {
       if (!bool) {
-        logger.info('server api limit!', { url, code: 403 })
+        // logger.info('server api limit!', { url, code: 403 })
         reply.code(403).send(resultful('API_OUTTIME'))
       } else {
         reque.jwtVerify((err) => {

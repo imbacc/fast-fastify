@@ -2,15 +2,15 @@ version: "3.4"
 
 services:
   mysql:
-    container_name: 'mysql2'
+    container_name: 'mysql'
     image: mysql:latest
     ports:
       - "${MYSQL_PORT}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root # 设置root用户的密码
-      MYSQL_DATABASE: 'mydb' # 初始化数据库
-      MYSQL_USER: 'userdev' # 创建新用户
-      MYSQL_PASSWORD: '123456789' # 新用户的密码
+      MYSQL_DATABASE: 'test' # 初始化数据库
+      MYSQL_USER: 'root' # 创建新用户
+      MYSQL_PASSWORD: 'root' # 新用户的密码
     restart: always
     volumes:
       - /home/mysql/conf:/etc/mysql/conf.d
@@ -22,7 +22,7 @@ services:
       - '--skip-name-resolve' # 提升性能，禁用DNS解析
       - '--explicit_defaults_for_timestamp' # 为timestamp列启用明确默认值
   redis:
-    container_name: 'redis2'
+    container_name: 'redis'
     image: redis:latest
     ports:
       - "${REDIS_PORT}:6379"
@@ -33,11 +33,19 @@ services:
       - /home/redis/conf:/etc/redis/redis.conf
     command: ['redis-server', '--appendonly', 'yes']
   server:
-    build: .
+    container_name: 'server'
+    image: 'server:latest'
+    image: node:20-alpine
     ports:
-      - "${PORT}:3000"
-    container_name: 'server2'
+      - "3100:3100"
+      - "3200:3200"
     environment:
       - NODE_ENV=production
-    image: 'server:latest'
+    volumes:
+      - /app:/
+    working_dir: /app
+    command: >
+      sh -c "set -e && npm config set registry https://registry.npmmirror.com &&
+      npm i -g pnpm && npm i -g pm2 && pnpm install && pnpm run dbpull &&
+      pm2-runtime start ecosystem.config.js"
 

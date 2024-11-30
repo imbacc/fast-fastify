@@ -18,6 +18,7 @@ import type {
 
 import md5 from 'imba-md5'
 import envConfig from './envExport'
+console.log('%c [ envConfig ]-21', 'font-size:14px; background:#41b883; color:#ffffff;', envConfig)
 
 // 赋予路由跳过检测权限
 const _checkAuth: checkAuth_CONFIG = envConfig.IGNORE_AUTH
@@ -33,6 +34,7 @@ const _jwtKey: jwt_CONFIG = md5(envConfig.MD5KEY)
 
 // mysql
 const _mysql: mysql_CONFIG = {
+  use: envConfig.MYSQL_USE,
   host: envConfig.MYSQL_HOST,
   user: envConfig.MYSQL_USER,
   password: envConfig.MYSQL_PASSWORD,
@@ -42,6 +44,7 @@ const _mysql: mysql_CONFIG = {
 
 // redis
 const _redis: redis_CONFIG = {
+  use: envConfig.REDIS_USE,
   username: envConfig.REDIS_USERNAME,
   password: envConfig.REDIS_PASSWORD,
   host: envConfig.REDIS_HOST,
@@ -58,7 +61,7 @@ const _apiLimit: apiLimit_CONFIG = {
 // swagger信息
 const _swagger: swagger_CONFIG = {
   use: envConfig.SWAGGER_USE,
-  route: envConfig.SWAGGER_ROUTE.replace('#{SWAGGER_MD5KEY}', md5(envConfig.SWAGGER_MD5KEY)),
+  route: envConfig.SWAGGER_ROUTE?.replace('#{SWAGGER_MD5KEY}', md5(envConfig.SWAGGER_MD5KEY)),
   info: {
     title: envConfig.SWAGGER_INFO_TITLE,
     version: envConfig.SWAGGER_INFO_VERSION,

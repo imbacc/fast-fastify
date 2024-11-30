@@ -42,7 +42,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.js"
+    "src/**/*.js",
+    "tsup.config.js"
   ],
   "exclude": [
     "node_modules",

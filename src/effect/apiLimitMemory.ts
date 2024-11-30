@@ -35,7 +35,7 @@ export class ApiLimitMemory {
    * @param update 是否更新替换config参数
    * @returns
    */
-  apiLimit(spname: string, spid: string, time = _time, count = _count, update = false) {
+  apiLimitCall(spname: string, spid: string, time = _time, count = _count, update = false) {
     return new Promise<boolean>((resolve) => {
       // false为关闭限流
       if (!_open) return resolve(true)

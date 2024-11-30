@@ -1,6 +1,6 @@
 import fastifyFrame from 'fastify'
-// import { isDev } from '@/config/index'
-// import { ApiLimitMemory } from './apiLimitMemory'
+import { redisConfig } from '@/config/index'
+import { ApiLimitMemory } from './apiLimitMemory'
 import { ApiLimitRedis } from './apiLimitRedis'
 import { SkipRouter } from './skipRouter'
 // import { Base64 } from './base64'
@@ -35,14 +35,11 @@ export const fastify = fastifyFrame({
 // pino日志
 export const logger = new Logger(fastify.log)
 
-// api接口限流 内存版本
-// export const apiLimitMemory = new ApiLimitMemory()
-
 // redis实例对象
 export const redis = new Redis()
 
-// api接口限流 redis版本
-export const apiLimitRedis = new ApiLimitRedis()
+// api接口限流 redis版本和 内存版本
+export const apiLimit = redisConfig.use ? new ApiLimitRedis() : new ApiLimitMemory()
 
 // 路由权限验证是否跳过
 export const skipRouter = new SkipRouter()

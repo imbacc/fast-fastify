@@ -1,12 +1,25 @@
 // https://www.prisma.io/docs/orm/reference/prisma-client-reference#prismaclient
 
 import { PrismaClient } from '@prisma/client'
+import { mysqlConfig } from '@/config/index'
+import { logger } from '@/effect/index'
 
 // prisma实例对象
 export class Prisma extends PrismaClient {
   constructor() {
     super({
       log: ['query', 'warn', 'error'],
+    })
+
+    if (!mysqlConfig.use) {
+      this.$disconnect()
+      return
+    }
+
+    this.$connect().then(() => {
+      logger.start('connect prisma mysql server!')
+    }).catch((error) => {
+      this.$disconnect().finally(() => logger.error(`prsima mysql error = ${error}`))
     })
 
     setTimeout(() => {

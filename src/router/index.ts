@@ -1,33 +1,22 @@
 import type { RouteOptions } from 'fastify'
 import type { firstRouter_DTYPE, arrayRouter_DTYPE } from '#/router/modules'
 
-import Bun from 'bun'
-import process from 'node:process'
-import { readdirSync } from 'node:fs'
-import { fastify, apiLimitRedis, skipRouter, logger } from '@/effect'
+import { fastify, apiLimit, skipRouter, logger } from '@/effect'
+import { isDev } from '@/config'
+import path from 'node:path'
+import fs from 'node:fs'
+
+const dirPath = path.join(__dirname, isDev ? 'modules' : 'router/modules')
 async function fsModules() {
   const modules: Array<any> = []
-  if (process.env.NODE_ENV === 'dev') {
-    const path = './src/router/modules'
-    const fileList = await readdirSync(path)
-    for (const fileName of fileList) {
-      const module = await import(`./modules/${fileName}`)
-      modules.push(module.default())
-    }
-    if (modules.length > 0) {
-      const expd = `export default ${JSON.stringify(modules)}`
-      await Bun.write(`${import.meta.dir}/routerList.ts`, expd)
-    } else {
-      await Bun.write(`${import.meta.dir}/routerList.ts`, `export default []`)
-    }
-    return modules
-  } else {
-    modules.push((await import('./modules/appInfo.ts')).default())
-    modules.push((await import('./modules/testDtype.ts')).default())
-    modules.push((await import('./modules/testInfo.ts')).default())
-    // console.log('%c [ routerList ]-23', 'font-size:14px; background:#41b883; color:#ffffff;', routerList)
-    return modules
+  const fileList = await fs.readdirSync(dirPath)
+
+  for (const fileName of fileList) {
+    const modulePath = isDev ? `./modules/${fileName}` : `./router/modules/${fileName}`
+    const module = await import(modulePath)
+    modules.push(module?.default())
   }
+  return modules
 }
 
 export default async () => {
@@ -53,7 +42,7 @@ export default async () => {
         })
       }
       if (module.limit && Array.isArray(module.limit)) {
-        apiLimitRedis.setLimit(module.url, module.limit)
+        apiLimit.setLimit(module.url, module.limit)
         // delete module.limit
       }
       if (module.skip) {

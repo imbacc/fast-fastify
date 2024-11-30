@@ -23,21 +23,20 @@ bun i && bun run dev
 > 基础使用流程,先创建数据库表,可使用Chat2DB快速构建关系 https://github.com/chat2db/Chat2DB
 
 ```
-# 获取数据库信息并生成新的prisma客户端
-bun prisma introspect
-bun prisma db pull
-或者使用
-bun run prisma:pull
------------------------------
-prisma generate
------
-# 在执行以下命令生成schema实体类和路由
+# 获取数据库信息并生成新的prisma客户端 <- pnpm install后必须执行一次pnpm run dbpull
+bun run dbpull
+
+# 或者使用原始命名↓
+# bun prisma introspect
+# bun prisma db pull
+# prisma generate
+
+# 执行以下命令生成schema实体类和路由 必须成功生成prisma文件后执行
 bun run create
 # 或者以下分解的命令
 bun run c-entity
 bun run c-router
 ```
-
 ### prisma 命令 https://prisma.yoga/concepts
 ```
 命令	描述

@@ -1,38 +1,44 @@
 {
   "name": "bun-fastify",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/imbacc/fast-fastify.git"
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-customizable"
-    }
-  },
+  "description": "bun fastify",
   "main": "src/index.ts",
   "module": "src/index.ts",
-  "description": "bun fastify",
   "scripts": {
     "dev": "bun --env-file=.env.dev --watch src/index.ts",
     "dev:test": "bun --env-file=.env.test --watch src/index.ts",
     "dev:prod": "bun --env-file=.env.prod --watch src/index.ts",
-    "server": "bun --env-file=.env.prod dist/index.js",
-    "build:test": "bun --env-file=.env.prod build --sourcemap=external --target=bun src/index.ts --outdir=dist --minify",
-    "build:prod": "bun --env-file=.env.prod build --sourcemap=external --target=bun src/index.ts --outdir=dist --minify",
+    "cat:dist": "bun --env-file=.env.test dist/src/index.js",
+    "server": "bun run server:prod",
+    "server:test": "bun --env-file=.env.test dist/index.js",
+    "server:prod": "bun --env-file=.env.prod dist/index.js",
+    "build": "bun run build:prod",
+    "build:test": "bun --env-file=.env.test tsup src --env.NODE_ENV test",
+    "build:prod": "bun --env-file=.env.prod tsup src --env.NODE_ENV prod",
     "c-entity": "bun --env-file=.env.prod ./generate/entity.ts && eslint ./src/entity/*.ts --fix --quiet",
     "c-router": "bun --env-file=.env.prod ./generate/router.ts && eslint ./src/router/modules/*.ts --fix --quiet",
     "create:all": "bun run c-entity && bun run c-router",
-    "prisma:pull": "dotenv -e .env.dev -- bun prisma db pull && bun prisma generate",
+    "dbpull": "bun run dbpull:prod",
+    "dbpull:test": "dotenv -e .env.test -- bun prisma db pull && bun prisma generate",
+    "dbpull:prod": "dotenv -e .env.prod -- bun prisma db pull && bun prisma generate",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "czc": "git add . && bun exec cz",
     "preinstall": "npx only-allow bun",
-    "prepare": "husky install && prisma generate",
-    "docker-compose": "pnpm run build:prod && docker-compose -f ./docker/docker-compose.yaml --env-file .env.prod up -d",
+    "prepare": "husky install",
     "up": "taze",
     "up:max": "taze major"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imbacc/fast-fastify.git"
+  },
+  "author": "imbacc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imbacc/fast-fastify/issues"
+  },
+  "homepage": "https://github.com/imbacc/fast-fastify#readme",
   "dependencies": {
     "@fastify/cors": "^8.5.0",
     "@fastify/jwt": "^7.2.4",
@@ -45,7 +51,7 @@
     "fastify": "4.24.3",
     "fastify-no-icon": "^6.0.0",
     "fluent-json-schema": "^4.2.1",
-    "imba-md5": "^1.0.0",
+    "imba-md5": "^1.0.6",
     "mysql": "^2.18.1",
     "prisma": "^5.15.0",
     "redis": "^4.6.14",
@@ -66,9 +72,15 @@
     "dotenv-cli": "^7.4.2",
     "globals": "^15.4.0",
     "husky": "^8.0.3",
-    "imba-config": "^2.0.2",
+    "imba-config": "^2.0.4",
     "lint-staged": "^15.2.6",
     "prisma-json-schema-generator": "^5.1.4",
-    "taze": "^0.13.8"
+    "taze": "^0.13.8",
+    "tsup": "^8.3.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
   }
 }

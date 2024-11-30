@@ -1,13 +1,30 @@
 module.exports = {
-  apps: [{
-    name: 'bun-fastify',
-    script: 'index.js',
-    instances: 2, // 应用实例数量
-    autorestart: true, // 异常自动重启
-    watch: false,
-    max_memory_restart: '1G',
-    env: {
-      NODE_ENV: 'prod',
+  apps: [
+    {
+      name: 'app1',
+      script: './src/index.js',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      exec_mode: 'cluster',
+      max_memory_restart: '512M',
+      env: {
+        NODE_ENV: 'prod',
+        PORT: 3100,
+      },
     },
-  }],
+    {
+      name: 'app2',
+      script: './src/index.js',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      exec_mode: 'cluster',
+      max_memory_restart: '512M',
+      env: {
+        NODE_ENV: 'prod',
+        PORT: 3200,
+      },
+    },
+  ],
 }

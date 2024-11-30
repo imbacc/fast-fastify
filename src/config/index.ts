@@ -18,7 +18,6 @@ import type {
 
 import md5 from 'imba-md5'
 import envConfig from './envExport'
-console.log('%c [ envConfig ]-21', 'font-size:14px; background:#41b883; color:#ffffff;', envConfig)
 
 // 赋予路由跳过检测权限
 const _checkAuth: checkAuth_CONFIG = envConfig.IGNORE_AUTH

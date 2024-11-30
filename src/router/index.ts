@@ -9,6 +9,7 @@ import fs from 'node:fs'
 const dirPath = path.join(__dirname, isDev ? 'modules' : 'router/modules')
 async function fsModules() {
   const modules: Array<any> = []
+  console.log('%c [ dirPath ]-14', 'font-size:14px; background:#41b883; color:#ffffff;', dirPath)
   const fileList = await fs.readdirSync(dirPath)
 
   for (const fileName of fileList) {

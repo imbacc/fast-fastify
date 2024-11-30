@@ -5,7 +5,7 @@ import { testDtypeSchema, testDtypeSchemaVo } from '@/entity/testDtype'
 import { prisma } from '@/effect/index'
 
 class TestService {
-  // 基本curd 两种可选
+  // 基本curd
   async getCurdSql() {
     // prisma执行
     const res1 = await prisma.app_info.findMany()

@@ -29,7 +29,7 @@ export default defineConfig((option) => {
         { src: '.env.prod', dest: 'dist/.env.prod' },
         { src: '.env.test', dest: 'dist/.env.test' },
         { src: 'docker/.dockerignore', dest: 'dist/.dockerignore' },
-        { src: 'docker/dk.sh', dest: 'dist/dk.sh' },
+        // { src: 'docker/dk.sh', dest: 'dist/dk.sh' },
         { src: 'docker/Dockerfile', dest: 'dist/Dockerfile' },
         { src: 'docker/ecosystem.config.js', dest: 'dist/ecosystem.config.js' },
       ]

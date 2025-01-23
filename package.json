@@ -42,7 +42,7 @@
   "dependencies": {
     "@fastify/cors": "^8.5.0",
     "@fastify/jwt": "^7.2.4",
-    "@fastify/multipart": "^8.3.0",
+    "@fastify/multipart": "^8.3.1",
     "@fastify/schedule": "^4.1.1",
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^1.10.2",
